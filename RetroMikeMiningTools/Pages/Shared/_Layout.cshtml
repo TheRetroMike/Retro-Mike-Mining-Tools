@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | Retro Mike</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProfitSwitcher.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/adminlte.min.css">
+
+    <link href="https://cdn.kendostatic.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdn.kendostatic.com/2022.3.913/styles/kendo.moonlight.min.css" rel="stylesheet" type="text/css" />
+	
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/adminlte.min.js"></script>
+    <script src="https://cdn.kendostatic.com/2022.3.913/js/jquery.min.js"></script>
+	<script src="https://cdn.kendostatic.com/2022.3.913/js/jszip.min.js"></script>
+	<script src="https://cdn.kendostatic.com/2022.3.913/js/kendo.all.min.js"></script>
+    <script src="~/js/kendo-ui-license.js"></script>
+	<script src="https://cdn.kendostatic.com/2022.3.913/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/js/MaskedPassword.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</head>
+<body class="hold-transition sidebar-mini">
+
+
+
+    <!-- Site wrapper -->
+<div class="wrapper">
+
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="https://youtube.com/retromikecrypto" class="brand-link" target="_blank">
+      <img src="~/img/RetroMikeLogo-nobg.png" alt="Retro Mike Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Retro Mike Crypto</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user (optional) -->
+
+      <!-- SidebarSearch Form -->
+      @*<div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>*@
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a asp-area="" asp-page="/Index" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a asp-area="" asp-page="/Core" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Core Configuration
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a asp-area="" asp-page="/MiningGroupings" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Mining Groups
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a asp-area="" asp-page="/HiveOsRigs" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Hive OS Rigs
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+          @*<li class="nav-item">
+            <a asp-area="" asp-page="/AutoExchanging" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Auto Exchanging
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>*@
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            @*<h1>@ViewData["Title"]</h1>*@
+          </div>
+          <div class="col-sm-6">
+              
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="k-card-header">
+            <h3>@ViewData["Title"]</h3>
+            </div>
+        <div class="k-card-body">
+            @RenderBody()
+        </div>
+        <div class="k-card-footer">
+          
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> @System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version
+    </div>
+    <strong>Copyright &copy; 2022 Retro Mike Crypto</strong> All rights reserved.
+  </footer>
+</div>
+</body>
+</html>

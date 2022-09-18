@@ -1,0 +1,225 @@
+﻿@page
+@model HiveOsRigsModel
+@{
+    ViewData["Title"] = "Hive OS Rig Settings";
+    ViewData["CardTitle"] = "Configuration";
+}
+@using Kendo.Mvc.UI
+@using RetroMikeMiningTools.DO
+@using RetroMikeMiningTools.DTO
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+<style>
+  #logGrid > table
+  {
+      table-layout: fixed;
+  }
+  .k-grid td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width : 150px;
+}
+
+</style>
+<script>
+    function groupsTemplate(groups) {
+        var template = "<ul>";
+        for (var i = 0; i < groups.length; i++){
+            template += "<li>" + groups[i].Name + "</li>";
+        }
+        template += "</ul>";
+        return template;
+    }
+</script>
+
+<div class="k-card-header">
+    <h4>Hive OS Rigs</h4>
+    Configure the rigs that you want to use for coin switching and then select the row to set the coins for that rig
+</div>
+<div class="k-card-body">
+    @(Html.Kendo().Grid<HiveOsRigConfig>
+        ().Name("rigsGrid")
+        .Selectable()
+        .Groupable()
+        .Sortable()
+        .Editable()
+        .Events(x => x.Change("handleRigSelection"))
+        .ToolBar(toolbar=> {
+            toolbar.Create();
+            toolbar.Custom().Text("Import Hive OS Rigs").HtmlAttributes(new { id = "importRigs" });
+        })
+        .Columns(columns =>
+        {
+            columns.Bound(column => column.Name);
+            columns.Bound(column => column.MiningMode).Width(200);
+            columns.Bound(column => column.DonationAmount).Width(100);
+            columns.Bound(column => column.WhatToMineEndpoint);
+            columns.Bound(column => column.Enabled);
+            columns.Command(column =>
+            {
+                column.Edit();
+                column.Destroy();
+            });
+        })
+        .DataSource(ds => ds.Ajax()
+        .Sort(x => x.Add("Name"))
+        .Read(r => r.Url("/HiveOsRigs?handler=Read").Data("forgeryToken"))
+        .Update(u => u.Url("/HiveOsRigs?handler=Update").Data("forgeryToken"))
+        .Create(c => c.Url("/HiveOsRigs?handler=Create").Data("forgeryToken"))
+        .Destroy(d => d.Url("/HiveOsRigs?handler=Destroy").Data("forgeryToken"))
+        .Model(m => {
+            m.Id(id => id.Id);
+            m.Field(x => x.DonationAmount).DefaultValue("1%");
+        })
+        )
+    )
+</div>
+<div class="k-card-footer"></div>
+    
+    
+<div id="coinContainer">
+    <br />
+    <div class="k-card-header">
+        <h4>Rig Coins</h4>
+        Configure the coins that you want the selected rig to switch between
+    </div>
+    <div class="k-card-body">
+        @(Html.Kendo().Grid<HiveOsRigCoinConfig>
+            ().Name("rigCoinsGrid")
+            .Groupable()
+            .Sortable()
+            .Editable()
+            .ToolBar(toolbar=> {
+                toolbar.Create();
+                toolbar.Custom().Text("Import Coins").HtmlAttributes(new { id = "importCoins" });
+            })
+            .Columns(columns =>
+            {
+                columns.Bound(column => column.Ticker);
+                columns.Bound(column => column.Flightsheet).ClientTemplate("#: FlightsheetName ?? '' #");
+                columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
+                columns.Bound(column => column.Enabled);
+                columns.Command(column =>
+                {
+                    column.Edit();
+                    column.Destroy();
+                });
+            })
+            .DataSource(ds => ds.Ajax()
+            .Sort(x => x.Add("Ticker"))
+            .Read(r => r.Url("/HiveOsRigs?handler=ReadCoins").Data("forgeryToken"))
+            .Update(u => u.Url("/HiveOsRigs?handler=UpdateCoins").Data("forgeryToken"))
+            .Create(c => c.Url("/HiveOsRigs?handler=CreateCoins").Data("forgeryToken"))
+            .Destroy(d => d.Url("/HiveOsRigs?handler=DestroyCoins").Data("forgeryToken"))
+            .Model(m => {
+                m.Id(id => id.Id);
+                m.Field(o => o.Groups).DefaultValue(new List<LinkedGroup>());
+            })
+            )
+        )
+    </div>
+</div>
+<script>
+    function forgeryToken() {
+        return kendo.antiForgeryTokens();
+    }
+
+    function handleRigSelection(){
+        var dataItem = this.dataItem(this.select());
+        $.ajax({
+            url: "/HiveOsRigs?handler=HiveOsRowSelect",
+            type: 'POST',
+            data: {
+                Name: dataItem.Name,
+                Id: dataItem.Id,
+                WhatToMineEndpoint: dataItem.WhatToMineEndpoint
+            },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {    
+                $("#coinContainer").show();
+                $('#rigCoinsGrid').data('kendoGrid').dataSource.read();
+                $('#rigCoinsGrid').data('kendoGrid').refresh();
+                $("#rigCoinsGrid").show();
+            },
+            failure: function (response) {
+                $('#rigCoinsGrid').data('kendoGrid').dataSource.read();
+                $('#rigCoinsGrid').data('kendoGrid').refresh();
+                $("#rigCoinsGrid").hide();
+            },
+            error: function (response) {
+                $('#rigCoinsGrid').data('kendoGrid').dataSource.read();
+                $('#rigCoinsGrid').data('kendoGrid').refresh();
+                $("#rigCoinsGrid").hide();
+            }
+        });
+    }
+
+    function refreshCoinGrid(e){
+        $("#rigCoinsGrid").data("kendoGrid").bind("dataBound", onGridEdit(e));
+    }
+
+    function onGridEdit(e) {
+        e.sender.one("dataBound", function (e) {
+        e.sender.dataSource.read();
+    });
+}
+
+    $(document).ready(function(){
+
+        $("#rigCoinsGrid").hide();
+        $("#coinContainer").hide();
+        $("#rigCoinsGrid").data("kendoGrid").bind("save", refreshCoinGrid);
+
+        $("#importRigs").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                    url: "/HiveOsRigs?handler=ImportHiveRigs",
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {                        
+                        var grid = $("#rigsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                        //alert(response);
+                    },
+                    failure: function (response) {
+                        var grid = $("#rigsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                        //alert(response);
+                    },
+                    error: function (response) {
+                        var grid = $("#rigsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    }
+                });
+        });
+
+        $("#importCoins").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                    url: "/HiveOsRigs?handler=ImportCoins",
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {                        
+                        var grid = $("#rigCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                        //alert(response);
+                    },
+                    failure: function (response) {
+                        var grid = $("#rigCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                        //alert(response);
+                    },
+                    error: function (response) {
+                        var grid = $("#rigCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    }
+                });
+        });
+    })
+</script>

@@ -1,0 +1,13 @@
+﻿@using Kendo.Mvc.UI
+@model List<DO.LinkedGroup>
+
+@(
+        Html.Kendo().MultiSelectFor(m => m)
+            .DataTextField("Name")
+            .DataValueField("Name")
+            .AutoBind(false)
+            .TagMode(MultiSelectTagMode.Multiple)
+            .DataSource(d=> {
+                d.Read(r => r.Url("/HiveOsRigs?handler=MasterGroupList").Data("forgeryToken"));
+            })
+)

@@ -1,0 +1,153 @@
+﻿@page
+@model CoreModel
+@{
+    ViewData["Title"] = "Core Settings";
+	ViewData["CardTitle"] = "Configuration";
+}
+@using Kendo.Mvc.UI
+@inject IHostApplicationLifetime AppLifetime
+<form method="post">
+    <div class="k-card">
+        <div class="k-card-body">
+        
+            <div class="form-group">
+                <label>Hive OS API Key</label>  
+                <input asp-for=Settings.HiveApiKey class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Hive OS Farm ID</label>
+                <input asp-for=Settings.HiveFarmID class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Profitability Difference Threshold</label>
+                <input asp-for=Settings.CoinDifferenceThreshold class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>CoinDesk API Endpoint</label>
+                <input asp-for=Settings.CoinDeskApi class="form-control" />
+            </div> 
+            
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" asp-for=Settings.ProfitSwitchingEnabled onselect="handleProfitSwitchingSelect()">
+                <label>Enable Profit Switching?</label>
+            </div>
+            <div id="profitSwitchingContainer">
+                <hr />
+                <div class="form-group">
+                    <label>Profit Switching Cron Schedule (Change Requires a restart)</label>
+                    <input asp-for=Settings.ProfitSwitchingCronSchedule class="form-control" />
+                    <div id="profitSwitchingCronUpcomingContainer"></div>
+                </div>
+                <hr />
+            </div>
+            @*<div class="form-check">
+                <input type="checkbox" class="form-check-input" asp-for=Settings.AutoExchangingEnabled>
+                <label>Enable Auto Exchanging?</label>
+            </div>*@
+        </div>
+        <div class="k-card-footer">
+        @*<h5 class="k-card-title">Card Title</h5>
+        <h6 class="k-card-subtitle">Card Subtitle</h6>*@
+        <input type="submit" value="Save" class="btn btn-primary" asp-page-handler="Submit" onclick="alert('Settings Saved');"/>
+        &nbsp;
+        <input type="button" value="Restart Service" class="btn btn-primary" onclick="Restart()"/>
+        </div>
+    </div>
+</form>
+<script>
+    function Restart(){
+        $.ajax({
+                url: "/Core?handler=Restart",
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {   
+                    alert("All Retro Mike Crypto Tools Restarted");
+                },
+            });
+    }
+    $(document).ready(function() {
+        new MaskedPassword(document.getElementById("Settings_HiveApiKey"), '\u25CF');
+        $.ajax({
+            url: "/Core?handler=HiveKey",
+            type: 'POST',
+            data: null,
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {   
+                if(response){
+                    $('#Settings_HiveApiKey').val(response);
+                    $('#Settings_HiveApiKey').focus();
+                    $('#Settings_HiveApiKey').trigger({type: 'keypress', keyCode: 35});
+                    $('#Settings_HiveFarmID').focus();
+                }
+            },
+        });         
+
+        if($("#Settings_ProfitSwitchingEnabled").is(':checked')){
+            var cronExpression = $("#Settings_ProfitSwitchingCronSchedule").val();
+            $.ajax({
+                url: "/Core?handler=CronCalculator",
+                type: 'POST',
+                data: {cronExpression: cronExpression},
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {   
+                    if(response){
+                        var htmlCron = '<br /><p>Next 5 Runs</p><ul>';
+                        if(response.length==0){
+                            var htmlCron = '<br /><p style="color:red;">Invalid Cron Expression. You can generate one <a href="http://www.cronmaker.com/" target="_blank"><b>here</b></a></p>';
+                        }else{
+                            jQuery.each(response, function(index, value){
+                                console.log(value);
+                                htmlCron = htmlCron + "<li>" + value + '</li>';
+                            });
+                            htmlCron = htmlCron + '</ul>';
+                        }
+                        $('#profitSwitchingCronUpcomingContainer').html(htmlCron);
+                    }
+                },
+            });
+            $("#profitSwitchingContainer").show();
+        }else{
+            $("#profitSwitchingContainer").hide();
+        }
+
+    $('#Settings_ProfitSwitchingEnabled').change(function() {
+        if(this.checked){
+            $("#profitSwitchingContainer").show();
+        }else{
+            $("#profitSwitchingContainer").hide();
+        }        
+    });
+
+    $("#Settings_ProfitSwitchingCronSchedule").on("change keyup paste", function(){
+        $.ajax({
+            url: "/Core?handler=CronCalculator",
+            type: 'POST',
+            data: {cronExpression: this.value},
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {   
+                if(response){
+                    var htmlCron = '<br /><p>Next 5 Runs</p><ul>';
+                    if(response.length==0){
+                        var htmlCron = '<br /><p style="color:red;">Invalid Cron Expression. You can generate one <a href="http://www.cronmaker.com/" target="_blank"><b>here</b></a></p>';
+                    }else{
+                        jQuery.each(response, function(index, value){
+                            console.log(value);
+                            htmlCron = htmlCron + "<li>" + value + '</li>';
+                        });
+                        htmlCron = htmlCron + '</ul>';
+                    }
+                    $('#profitSwitchingCronUpcomingContainer').html(htmlCron);
+                }
+            },
+        });
+    })
+});
+</script>
