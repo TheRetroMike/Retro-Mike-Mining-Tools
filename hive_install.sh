@@ -22,7 +22,7 @@ if [ -f "$SERVICE_FILE" ] ; then
                 systemctl daemon-reload
                 systemctl reset-failed
         fi
-        rm "$SERVICE_FILE"
+        sudo rm "$SERVICE_FILE"
 fi
 
 cat > /etc/systemd/system/${SERVICE_NAME//'"'/}.service << EOF
