@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 /RetroMikeMiningTools/profitswitcher-test.db
 /RetroMikeMiningTools/profitswitcher.db
+/RetroMikeMiningTools/retromikeminingtools.db

@@ -51,16 +51,15 @@
     </div>*@
     @(Html.Kendo().Dialog()
         .Name("updateDialog")
-        .Title("Application Update")
-        .Content("<p>Would you like to confirm updating the data?<p>")
+        .Title("Application Update Available")
         //.Width(400)
         .Modal(false)
         .Visible(false)
         .Actions(actions =>
         {
-            actions.Add().Text("Ignore This Version");
+            actions.Add().Text("Ignore This Version").Action("ignoreCurrentVersionUpdate");
             actions.Add().Text("Remind Me Later");
-            actions.Add().Text("Install Update").Primary(true).Action("onSendData");
+            actions.Add().Text("Install Update").Primary(true).Action("executeCurrentVersionUpdate");
         })
     )
     <div class="row">
@@ -107,15 +106,72 @@
 
 <script>
     var refreshInterval = 1500;
-
+    var newVersion = "";
     $(document).ready(function() {
+        checkForUpgrade();
         //$("#updateDialog").data("kendoDialog").content("test");
         //$("#updateDialog").data("kendoDialog").open();
     });
 
-    function onSendData(){
-
+    function checkForUpgrade(){
+        $.ajax({
+            url: "/Index?handler=UpgradeCheck",
+            type: 'POST',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {    
+                if(response && response.Version){
+                    var version = response.Version;
+                    newVersion = version;
+                    var name = response.Name;
+                    var description = response.Description;
+                    $("#updateDialog").data("kendoDialog").title(version + " Available");
+                    $("#updateDialog").data("kendoDialog").content("<p><b>" + name + "</b><br />" + description + "</p>");
+                    $("#updateDialog").data("kendoDialog").open();
+                }
+            },
+        });
     }
+
+    function ignoreCurrentVersionUpdate(){
+        $.ajax({
+            url: "/Index?handler=IgnoreUpgrade",
+            type: 'POST',
+            data: {
+                version: newVersion
+            },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {    
+                
+            },
+        });
+    }
+
+    function executeCurrentVersionUpdate(){
+        $.ajax({
+            url: "/Index?handler=ExecuteUpgrade",
+            type: 'POST',
+            data: {
+                version: newVersion
+            },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {    
+                alert('Upgrade Completed');
+            },
+            failure: function (response) {
+                alert('Unable to execute upgrade. Please backup your retromikeminingtools.db file and reinstall manually');
+            },
+            error: function (response) {
+                alert('Unable to execute upgrade. Please backup your retromikeminingtools.db file and reinstall manually');
+            }
+        });
+    }
+
     function forgeryToken() {
         return kendo.antiForgeryTokens();
     }

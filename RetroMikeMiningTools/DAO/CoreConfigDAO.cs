@@ -57,11 +57,11 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.HiveFarmID = coreConfig.HiveFarmID;
                 existingRecord.CoinDeskApi = coreConfig.CoinDeskApi;
                 existingRecord.ProfitSwitchingCronSchedule = coreConfig.ProfitSwitchingCronSchedule;
+                existingRecord.IgnoredVersion = coreConfig.IgnoredVersion;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
                     rigExecutionsCollection.Update(existingRecord);
-                    db.Commit();
                 }
             }
         }

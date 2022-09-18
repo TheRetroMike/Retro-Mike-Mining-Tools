@@ -44,7 +44,6 @@ namespace RetroMikeMiningTools.Pages
                 };
                 appLifetime.StopApplication();
                 newProcess.Start();
-
             }
         }
 

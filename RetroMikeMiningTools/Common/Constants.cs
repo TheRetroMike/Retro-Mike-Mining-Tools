@@ -4,7 +4,7 @@ namespace RetroMikeMiningTools.Common
 {
     public static class Constants
     {
-        public static readonly string DB_FILE = "profitswitcher.db";
+        public static readonly string DB_FILE = "retromikeminingtools.db";
         public static readonly string DEFAULT_DONATION = "1.00%";
 
         public static List<FlightsheetRecord> DONATION_FLIGHTSHEET_DATA
