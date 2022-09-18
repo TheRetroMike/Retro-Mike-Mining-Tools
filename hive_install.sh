@@ -11,7 +11,7 @@ rm packages-microsoft-prod.deb
 sudo apt-get update
 sudo apt-get install -y dotnet-sdk-6.0
 wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/download/RetroMikeMiningTools.zip
-unzip RetroMikeMiningTools.zip -o /usr/retro-mike-mining-tools
+unzip -o -d /usr/retro-mike-mining-tools RetroMikeMiningTools.zip
 rm RetroMikeMiningTools.zip
 
 if [ -f "$SERVICE_FILE" ] ; then
