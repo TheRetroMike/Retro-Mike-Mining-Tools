@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroMikeMiningTools", "RetroMikeMiningTools\RetroMikeMiningTools.csproj", "{7EB55A58-0C36-4286-8819-AA761A18592D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetroMikeMiningTools", "RetroMikeMiningTools\RetroMikeMiningTools.csproj", "{7EB55A58-0C36-4286-8819-AA761A18592D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{208959D6-357B-47D7-B445-3E6AC0F4C510}"
+	ProjectSection(SolutionItems) = preProject
+		hive_install.sh = hive_install.sh
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -101,7 +101,6 @@ function MaskedPassword(passfield, symbol)
 	//then apply the core events to the visible field
 	this.addListener(passfield, 'change', function(e) 
 	{
-		//alert('test');
 		self.fullmask = false; 
 		self.doPasswordMasking(self.getTarget(e)); 
 	});
@@ -214,7 +213,6 @@ MaskedPassword.prototype =
 	//convert a plain-text password to a masked password
 	encodeMaskedPassword : function(passwordstring, fullmask, textbox)
 	{
-		//alert('test');
 		//the character limit is nominally 1
 		//this is how many characters to leave plain at the end
 		//but if the fullmask flag is true the limit is zero

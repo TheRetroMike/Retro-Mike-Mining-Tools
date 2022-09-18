@@ -109,8 +109,6 @@
     var newVersion = "";
     $(document).ready(function() {
         checkForUpgrade();
-        //$("#updateDialog").data("kendoDialog").content("test");
-        //$("#updateDialog").data("kendoDialog").open();
     });
 
     function checkForUpgrade(){
@@ -160,14 +158,15 @@
             headers: {
                 RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
             },
-            success: function (response) {    
-                alert('Upgrade Completed');
+            success: function (response) {   
+                $("#notification").data("kendoNotification").show("Upgrade Completed and Services Restarted", "success");
+                location.reload();
             },
             failure: function (response) {
-                alert('Unable to execute upgrade. Please backup your retromikeminingtools.db file and reinstall manually');
+                $("#notification").data("kendoNotification").show("Unable to execute upgrade. Please backup your retromikeminingtools.db file and reinstall manually", "error");
             },
             error: function (response) {
-                alert('Unable to execute upgrade. Please backup your retromikeminingtools.db file and reinstall manually');
+                $("#notification").data("kendoNotification").show("Unable to execute upgrade. Please backup your retromikeminingtools.db file and reinstall manually", "error");
             }
         });
     }

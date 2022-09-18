@@ -3,12 +3,12 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Octokit;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
 using RetroMikeMiningTools.Utilities;
-using System.IO.Compression;
-using System.Net;
+
 
 namespace RetroMikeMiningTools.Pages
 {
@@ -71,7 +71,7 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(String.Empty);
         }
 
-        public async Task<JsonResult> OnPostExecuteUpgrade(string version)
+        public async Task<JsonResult> OnPostExecuteUpgrade()
         {
             var client = new GitHubClient(new ProductHeaderValue("retro-mike-mining-tools"));
             var latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools");
@@ -87,15 +87,35 @@ namespace RetroMikeMiningTools.Pages
                         string localZipFile = Path.Combine(appFilesDirectory, installerAsset.Name);
                         string destinationFolder = appFilesDirectory;
                         await WebUtilities.DownloadFile(installerRemoteZip, appFilesDirectory, installerAsset.Name);
-                        using (ZipArchive zip = ZipFile.OpenRead(localZipFile))
+                        using (System.IO.Compression.ZipArchive zip = System.IO.Compression.ZipFile.OpenRead(localZipFile))
                         {
                             zip.ExtractToDirectory(destinationFolder, true);
                         }
                         System.IO.File.Delete(localZipFile);
+
+
+
                         if (appHost != null)
                         {
                             System.Diagnostics.Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
                             System.Diagnostics.Process newProcess = new System.Diagnostics.Process();
+
+                            if (systemConfiguration != null)
+                            {
+                                var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
+                                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                                if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform == Constants.PLATFORM_HIVE_OS)
+                                {
+                                    newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
+                                    {
+                                        Arguments = String.Format("{0} {1}", Constants.LINUX_RESTART_SERVICE_CMD, serviceName),
+                                        FileName = Constants.LINUX_SERVICE_CONTROLLER_CMD
+                                    };
+                                    newProcess.Start();
+                                    return new JsonResult(String.Empty);
+                                }
+                            }
+
                             newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
                             {
                                 WorkingDirectory = Environment.CurrentDirectory,

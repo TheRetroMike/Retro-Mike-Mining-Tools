@@ -6,6 +6,12 @@ namespace RetroMikeMiningTools.Common
     {
         public static readonly string DB_FILE = "retromikeminingtools.db";
         public static readonly string DEFAULT_DONATION = "1.00%";
+        public static readonly string LINUX_SERVICE_CONTROLLER_CMD = "systemctl";
+        public static readonly string LINUX_RESTART_SERVICE_CMD = "restart";
+        public static readonly string PLATFORM_HIVE_OS = "restart";
+
+        public static readonly string PARAMETER_SERVICE_NAME = "--service_name";
+        public static readonly string PARAMETER_PLATFORM_NAME = "--platform_name";
 
         public static List<FlightsheetRecord> DONATION_FLIGHTSHEET_DATA
         {

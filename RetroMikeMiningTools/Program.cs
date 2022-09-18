@@ -25,7 +25,7 @@ builder.Services.AddQuartz(q =>
 
     var coreConfig = CoreConfigDAO.GetCoreConfig();
 
-    if (coreConfig.ProfitSwitchingEnabled)
+    if (coreConfig.ProfitSwitchingEnabled && !String.IsNullOrEmpty(coreConfig.ProfitSwitchingCronSchedule))
     {
         q.ScheduleJob<HiveOsRigProfitSwitchingJob>(trigger => trigger
             .WithIdentity("Hive OS Rig Profit Switching Trigger")

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DTO;
 
@@ -11,9 +12,11 @@ namespace RetroMikeMiningTools.Pages
         public CoreConfig? Settings { get; set; }
         
         IHostApplicationLifetime appLifetime;
-        public CoreModel(IHostApplicationLifetime hostLifetime)
+        private static IConfiguration systemConfiguration;
+        public CoreModel(IHostApplicationLifetime hostLifetime, IConfiguration configuration)
         {
             appLifetime = hostLifetime;
+            systemConfiguration = configuration;
         }
 
         
@@ -34,8 +37,25 @@ namespace RetroMikeMiningTools.Pages
         {
             if (appLifetime != null)
             {
-                System.Diagnostics.Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
                 System.Diagnostics.Process newProcess = new System.Diagnostics.Process();
+
+                if (systemConfiguration != null)
+                {
+                    var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
+                    var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                    if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform==Constants.PLATFORM_HIVE_OS)
+                    {
+                        //restart the service
+                        newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
+                        {
+                            Arguments = String.Format("{0} {1}", Constants.LINUX_RESTART_SERVICE_CMD, serviceName),
+                            FileName = Constants.LINUX_SERVICE_CONTROLLER_CMD
+                        };
+                        newProcess.Start();
+                        return;
+                    }
+                }
+                
                 newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
                 {
                     WorkingDirectory = Environment.CurrentDirectory,
@@ -51,12 +71,14 @@ namespace RetroMikeMiningTools.Pages
         {
             if (Settings != null)
             {
+                
                 var oldSettings = CoreConfigDAO.GetCoreConfig();
                 CoreConfigDAO.UpdateCoreConfig(Settings);
-
-                if (oldSettings?.ProfitSwitchingCronSchedule != Settings?.ProfitSwitchingCronSchedule)
+                ViewData["SettingsSaveMessage"] = "Settings Saved";
+                if (oldSettings?.ProfitSwitchingCronSchedule != Settings?.ProfitSwitchingCronSchedule || oldSettings?.ProfitSwitchingEnabled != Settings.ProfitSwitchingEnabled)
                 {
                     RestartServices();
+                    ViewData["SettingsSaveMessage"] = "Settings Saved and Services Restarted";
                 }
             }
         }

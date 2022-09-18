@@ -34,7 +34,7 @@
             <div id="profitSwitchingContainer">
                 <hr />
                 <div class="form-group">
-                    <label>Profit Switching Cron Schedule (Change Requires a restart)</label>
+                    <label>Profit Switching Cron Schedule</label>
                     <input asp-for=Settings.ProfitSwitchingCronSchedule class="form-control" />
                     <div id="profitSwitchingCronUpcomingContainer"></div>
                 </div>
@@ -48,13 +48,16 @@
         <div class="k-card-footer">
         @*<h5 class="k-card-title">Card Title</h5>
         <h6 class="k-card-subtitle">Card Subtitle</h6>*@
-        <input type="submit" value="Save" class="btn btn-primary" asp-page-handler="Submit" onclick="alert('Settings Saved');"/>
+        <input type="submit" value="Save" class="btn btn-primary" asp-page-handler="Submit" />
         &nbsp;
-        <input type="button" value="Restart Service" class="btn btn-primary" onclick="Restart()"/>
+        <input type="button" value="Restart Services" class="btn btn-primary" onclick="Restart()"/>
         </div>
     </div>
 </form>
 <script>
+    @{
+    var message = ViewData["SettingsSaveMessage"];
+}
     function Restart(){
         $.ajax({
                 url: "/Core?handler=Restart",
@@ -63,12 +66,17 @@
                     RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
                 },
                 success: function (response) {   
-                    alert("All Retro Mike Crypto Tools Restarted");
+                    $("#notification").data("kendoNotification").show("All Retro Mike Crypto Tools Restarted", "success");
+                    location.reload();
                 },
             });
     }
     $(document).ready(function() {
         new MaskedPassword(document.getElementById("Settings_HiveApiKey"), '\u25CF');
+        var message = '@message';
+        if(message){
+            $("#notification").data("kendoNotification").show(message, "success");
+        }
         $.ajax({
             url: "/Core?handler=HiveKey",
             type: 'POST',
