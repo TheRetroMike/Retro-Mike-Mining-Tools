@@ -3,7 +3,7 @@
 SERVICE_NAME="retro_mike_mining_tools"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 APP_PATH="/usr/retro-mike-mining-tools/RetroMikeMiningTools.dll"
-LAUNCH_PATH="/usr/bin/dotnet $APP_PATH --urls=http://0.0.0.0:7002 --service_name=$SERVICE_NAME --platform_name=hive_os"
+LAUNCH_PATH="/usr/bin/dotnet $APP_PATH --urls=http://0.0.0.0:7000 --service_name=$SERVICE_NAME --platform_name=hive_os"
 
 wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
