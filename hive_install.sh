@@ -62,5 +62,13 @@ EOF
 systemctl daemon-reload
 systemctl enable ${SERVICE_NAME//'.service'/}
 systemctl start ${SERVICE_NAME//'.service'/}
+SYSTEM_IP=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}')
 
+echo "------------------------------------------------------"
+echo "------------------------------------------------------"
+echo "------------------------------------------------------"
+echo "Retro Mike Mining Tools has been installed. Please navigate to http://$SYSTEM_IP:7000/ to configure. 
+echo "------------------------------------------------------"
+echo "------------------------------------------------------"
+echo "------------------------------------------------------"
 exit 0
