@@ -28,17 +28,17 @@ builder.Services.AddQuartz(q =>
     if (coreConfig.ProfitSwitchingEnabled && !String.IsNullOrEmpty(coreConfig.ProfitSwitchingCronSchedule))
     {
         q.ScheduleJob<HiveOsRigProfitSwitchingJob>(trigger => trigger
-            .WithIdentity("Hive OS Rig Profit Switching Trigger")
+            .WithIdentity("Profit Switching Trigger")
             .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
             .WithCronSchedule(coreConfig?.ProfitSwitchingCronSchedule ?? "0 0/1 * 1/1 * ? *")
-            .WithDescription("HiveOS Rig Profit Switching Trigger")
+            .WithDescription("Profit Switching Trigger")
         );
 
         q.ScheduleJob<HiveOsRigDonationJob>(trigger => trigger
-                .WithIdentity("Hive OS Rig Donation Trigger")
+                .WithIdentity("Donation Trigger")
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
                 .WithCronSchedule("30 0/1 * 1/1 * ? *")
-                .WithDescription("Hive OS Rig Donation Trigger")
+                .WithDescription("Donation Trigger")
             );
     }
     

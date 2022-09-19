@@ -1,0 +1,12 @@
+﻿@using Kendo.Mvc.UI
+@(
+        Html.Kendo().MultiSelectFor(m => m)
+            .DataTextField("Name")
+            .DataValueField("Ticker")
+            .AutoBind(false)
+            .TagMode(MultiSelectTagMode.Multiple)
+            .DataSource(d=> {
+                d.Read(r => r.Url("/GoldshellAsics?handler=MasterCoinList").Data("forgeryToken"));
+            })
+)
+

@@ -3,16 +3,37 @@
 SERVICE_NAME="retro_mike_mining_tools"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 APP_PATH="/usr/retro-mike-mining-tools/RetroMikeMiningTools.dll"
+APP_FOLDER="/usr/retro-mike-mining-tools"
 LAUNCH_PATH="/usr/bin/dotnet $APP_PATH --urls=http://0.0.0.0:7002 --service_name=$SERVICE_NAME --platform_name=hive_os"
+CHROME_DRIVER="$APP_FOLDER/chromedriver"
+
+EXE_FOLDER=/usr/profit-switcher/HiveProfitSwitcher/bin/Debug/
+CONFIG_PATH="$EXE_FOLDER/HiveProfitSwitcher.exe.config"
+
 
 wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
+dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
-sudo apt-get update
-sudo apt-get install -y dotnet-sdk-6.0
+apt-get update
+apt-get install -y dotnet-sdk-6.0
 wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/download/RetroMikeMiningTools.zip
 unzip RetroMikeMiningTools.zip -o /usr/retro-mike-mining-tools
 rm RetroMikeMiningTools.zip
+
+if [ -f "$CHROME_DRIVER" ]; then
+    echo "Chromedriver already installed"
+else
+    cd "$APP_FOLDER"
+    apt-get install -y libappindicator1 fonts-liberation
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    apt-get -f install
+    dpkg --configure -a
+    dpkg -i google-chrome*.deb
+    wget https://chromedriver.storage.googleapis.com/105.0.5195.52/chromedriver_linux64.zip
+    unzip chromedriver_linux64.zip
+    rm chromedriver_linux64.zip
+    rm google-chrome-stable_current_amd64.deb
+fi
 
 if [ -f "$SERVICE_FILE" ] ; then
         IS_ACTIVE=$(systemctl is-active $SERVICE_NAME)

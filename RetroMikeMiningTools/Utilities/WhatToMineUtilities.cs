@@ -115,6 +115,21 @@ namespace RetroMikeMiningTools.Utilities
                     case "ZHASH":
                         powerConsumption = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndpoint)).Query).Get("factor[zh_p]");
                         break;
+                    case "SCRYPT":
+                        powerConsumption = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndpoint)).Query).Get("factor[scrypt_power]");
+                        break;
+                    case "EAGLESONG":
+                        powerConsumption = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndpoint)).Query).Get("factor[esg_p]");
+                        break;
+                    case "LBRY":
+                        powerConsumption = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndpoint)).Query).Get("factor[lbry_p]");
+                        break;
+                    case "HANDSHAKE":
+                        powerConsumption = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndpoint)).Query).Get("factor[hk_p]");
+                        break;
+                    case "SIA":
+                        powerConsumption = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndpoint)).Query).Get("factor[sia_p]");
+                        break;
                     default:
                         break;
                 }

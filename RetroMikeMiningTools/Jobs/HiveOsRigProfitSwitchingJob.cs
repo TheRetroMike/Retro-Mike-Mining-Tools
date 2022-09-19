@@ -5,6 +5,7 @@ using RetroMikeMiningTools.Enums;
 using RetroMikeMiningTools.Utilities;
 using Quartz;
 using System.Web;
+using RetroMikeMiningTools.ProfitSwitching;
 
 namespace RetroMikeMiningTools.Jobs
 {
@@ -34,6 +35,9 @@ namespace RetroMikeMiningTools.Jobs
                         }
                     }
                 }
+
+                Common.Logger.Log("Executing Goldshell ASIC Profit Switching Job", LogType.System);
+                GoldshellAsicProcessor.Process(config);
             }
 
             return Task.CompletedTask;

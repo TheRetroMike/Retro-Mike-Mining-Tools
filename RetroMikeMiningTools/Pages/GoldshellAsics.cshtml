@@ -1,0 +1,312 @@
+﻿@page
+@model GoldshellAsicsModel
+@{
+    ViewData["Title"] = "Goldshell ASIC Settings";
+    ViewData["CardTitle"] = "Configuration";
+}
+@using Kendo.Mvc.UI
+@using RetroMikeMiningTools.DO
+@using RetroMikeMiningTools.DTO
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+<style>
+  #logGrid > table
+  {
+      table-layout: fixed;
+  }
+  .k-grid td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width : 150px;
+}
+
+</style>
+    <style>
+    #progressbar {
+        position: absolute;
+        margin: 3em;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        opacity: 1
+    }
+    </style>
+<script>
+    function groupsTemplate(groups) {
+        var template = "<ul>";
+        for (var i = 0; i < groups.length; i++){
+            template += "<li>" + groups[i].Name + "</li>";
+        }
+        template += "</ul>";
+        return template;
+    }
+
+    function coinsTemplate(coins) {
+        var template = "<ul>";
+        for (var i = 0; i < coins.length; i++){
+            template += "<li>" + coins[i].Name + "</li>";
+        }
+        template += "</ul>";
+        return template;
+    }
+</script>
+
+@(Html.Kendo().CircularProgressBar()
+    .Name("progressbar")
+    .Value(0)
+    .Colors(c =>
+    {
+        c.Add().Color("#C0392B").To(25);
+        c.Add().Color("#D35400").From(25).To(50);
+        c.Add().Color("#D4AC0D").From(50).To(75);
+        c.Add().Color("#58D68D").From(75).To(99);
+        c.Add().Color("#229954").From(99);
+    })
+    .CenterTemplate("<b><span style='color: #: color #;'>#= value == 100 ? \"<span class='k-icon k-i-check'></span>\" : value + '%' #</span></b>")
+)
+<div id="mainContentPanel">
+    <div class="k-card-header">
+        <h4>Goldshell ASIC's</h4>
+        Configure the Goldshell ASIC's that you want to use for coin switching and then select the row to set the coins for that rig
+    </div>
+    <div class="k-card-body">
+     
+            
+            @(Html.Kendo().Grid<GoldshellAsicConfig>
+                ().Name("asicsGrid")
+                .Selectable()
+                .Groupable()
+                .Sortable()
+                .Editable()
+                .Events(x => x.Change("handleRigSelection"))
+                .ToolBar(toolbar=> {
+                    toolbar.Create();
+                    toolbar.Custom().Text("Import Goldshell ASIC's").HtmlAttributes(new { id = "importAsics" });
+                })
+                .Columns(columns =>
+                {
+                    columns.Bound(column => column.Name);
+                    columns.Bound(column => column.MiningMode).Width(200);
+                    columns.Bound(column => column.DonationAmount).Width(100);
+                    columns.Bound(column => column.ApiBasePath).ClientHeaderTemplate("API Base Path");
+                    columns.Bound(column => column.ApiPassword).ClientHeaderTemplate("API Password").ClientTemplate("<span>#: ApiPassword == null ? ' ' : '●'.repeat( ApiPassword.length) #</span>");
+                    columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint");
+                    columns.Bound(column => column.Enabled);
+                    columns.Command(column =>
+                    {
+                        column.Edit();
+                        column.Destroy();
+                    }).Width(200);
+                })
+                .DataSource(ds => ds.Ajax()
+                .Sort(x => x.Add("Name"))
+                .Read(r => r.Url("/GoldshellAsics?handler=Read").Data("forgeryToken"))
+                .Update(u => u.Url("/GoldshellAsics?handler=Update").Data("forgeryToken"))
+                .Create(c => c.Url("/GoldshellAsics?handler=Create").Data("forgeryToken"))
+                .Destroy(d => d.Url("/GoldshellAsics?handler=Destroy").Data("forgeryToken"))
+                .Model(m => {
+                    m.Id(id => id.Id);
+                    m.Field(x => x.DonationAmount).DefaultValue("1%");
+                })
+                )
+            )
+    </div>
+    <div class="k-card-footer"></div>
+    
+    
+    <div id="coinContainer">
+        <br />
+        <div class="k-card-header">
+            <h4>Rig Coins</h4>
+            Configure the coins that you want the selected rig to switch between
+        </div>
+        <div class="k-card-body">
+        
+            @(Html.Kendo().Grid<GoldshellAsicCoinConfig>
+                ().Name("asicCoinsGrid")
+                .Groupable()
+                .Sortable()
+                .Editable()
+                .ToolBar(toolbar=> {
+                    toolbar.Create();
+                    toolbar.Custom().Text("Import Coins").HtmlAttributes(new { id = "importCoins" });
+                })
+                .Columns(columns =>
+                {
+                    columns.Bound(column => column.Ticker);
+                    columns.Bound(e => e.MergedTickers).ClientTemplate("#=coinsTemplate(MergedTickers)#");
+                    columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
+                    columns.Bound(column => column.CoinAlgo);
+                    columns.Bound(column => column.PoolUrl);
+                    columns.Bound(column => column.PoolUser);
+                    columns.Bound(column => column.PoolPassword);
+                    columns.Bound(column => column.Enabled);
+                    columns.Command(column =>
+                    {
+                        column.Edit();
+                        column.Destroy();
+                    }).Width(200);
+                })
+                .DataSource(ds => ds.Ajax()
+                .Sort(x => x.Add("Ticker"))
+                .Read(r => r.Url("/GoldshellAsics?handler=ReadCoins").Data("forgeryToken"))
+                .Update(u => u.Url("/GoldshellAsics?handler=UpdateCoins").Data("forgeryToken"))
+                .Create(c => c.Url("/GoldshellAsics?handler=CreateCoins").Data("forgeryToken"))
+                .Destroy(d => d.Url("/GoldshellAsics?handler=DestroyCoins").Data("forgeryToken"))
+                .Model(m => {
+                    m.Id(id => id.Id);
+                    m.Field(o => o.Groups).DefaultValue(new List<LinkedGroup>());
+                    m.Field(x => x.MergedTickers).DefaultValue(new List<Coin>());
+                })
+                )
+            )
+        
+        </div>
+    
+    </div>
+</div>
+<script>
+    function forgeryToken() {
+        return kendo.antiForgeryTokens();
+    }
+
+    function handleRigSelection(){
+        var dataItem = this.dataItem(this.select());
+        $.ajax({
+            url: "/GoldshellAsics?handler=AsicRowSelect",
+            type: 'POST',
+            data: {
+                Name: dataItem.Name,
+                Id: dataItem.Id,
+                WhatToMineEndpoint: dataItem.WhatToMineEndpoint
+            },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {    
+                $("#coinContainer").show();
+                $('#asicCoinsGrid').data('kendoGrid').dataSource.read();
+                $('#asicCoinsGrid').data('kendoGrid').refresh();
+                $("#asicCoinsGrid").show();
+            },
+            failure: function (response) {
+                $('#asicCoinsGrid').data('kendoGrid').dataSource.read();
+                $('#asicCoinsGrid').data('kendoGrid').refresh();
+                $("#asicCoinsGrid").hide();
+            },
+            error: function (response) {
+                $('#asicCoinsGrid').data('kendoGrid').dataSource.read();
+                $('#asicCoinsGrid').data('kendoGrid').refresh();
+                $("#asicCoinsGrid").hide();
+            }
+        });
+    }
+
+    function refreshCoinGrid(e){
+        $("#asicCoinsGrid").data("kendoGrid").bind("dataBound", onGridEdit(e));
+    }
+
+    function onGridEdit(e) {
+        e.sender.one("dataBound", function (e) {
+        e.sender.dataSource.read();
+    });
+}
+
+    $(document).ready(function(){
+        
+        $("#asicCoinsGrid").hide();
+        $("#coinContainer").hide();
+        $("#asicCoinsGrid").data("kendoGrid").bind("save", refreshCoinGrid);
+        $("#progressbar").hide();
+        
+        $("#importAsics").click(function (e) {
+            $("#mainContentPanel").fadeTo(500, .5);
+            $("#progressbar").show();
+            $("#progressbar").data("kendoCircularProgressBar").value(0);
+            $("#progressbar").data("kendoCircularProgressBar").redraw();
+            
+            let progressRefresher = setInterval(function () {
+
+                if ($("#progressbar").data("kendoCircularProgressBar").value() >= 100) {
+                    clearInterval(progressRefresher);
+                    return;
+                }
+
+                $.ajax({
+                    url: "/GoldshellAsics?handler=ImportAsicsProgress",
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {                        
+                        $("#progressbar").data("kendoCircularProgressBar").value(response);
+                    }
+                });
+            }, 50);
+
+            e.preventDefault();
+            $("#notification").data("kendoNotification").show("Starting Goldshell ASIC scan and import. Be patient! This may take several minutes to complete", "info");
+            
+            $.ajax({
+                url: "/GoldshellAsics?handler=ImportAsics",
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {                        
+                    var grid = $("#asicsGrid").data("kendoGrid");
+                    grid.dataSource.read();
+                    $("#progressbar").data("kendoCircularProgressBar").value(100);
+                    $("#progressbar").hide();
+                    $("#mainContentPanel").fadeTo(1000, 1);
+                    $("#notification").data("kendoNotification").show("Goldshell ASIC Import Complete", "success");
+                },
+                failure: function (response) {
+                    var grid = $("#asicsGrid").data("kendoGrid");
+                    grid.dataSource.read();
+                    $("#progressbar").data("kendoCircularProgressBar").value(100);
+                    $("#progressbar").hide();
+                    $("#mainContentPanel").fadeTo(1000, 1);
+                    $("#notification").data("kendoNotification").show("Unable to import ASIC's. Please add manually", "error");
+                    grid.dataSource.read();
+                },
+                error: function (response) {
+                    var grid = $("#asicsGrid").data("kendoGrid");
+                    grid.dataSource.read();
+                    $("#progressbar").data("kendoCircularProgressBar").value(100);
+                    $("#progressbar").hide();
+                    $("#mainContentPanel").fadeTo(1000, 1);
+                    $("#notification").data("kendoNotification").show("Unable to import ASIC's. Please add manually", "error");
+                }
+            });
+                
+        });
+
+        $("#importCoins").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                    url: "/GoldshellAsics?handler=ImportCoins",
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {                        
+                        var grid = $("#asicCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    },
+                    failure: function (response) {
+                        var grid = $("#asicCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    },
+                    error: function (response) {
+                        var grid = $("#asicCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    }
+                });
+        });
+    })
+</script>

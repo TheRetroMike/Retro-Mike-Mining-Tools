@@ -2,11 +2,13 @@
 {
     public class Coin
     {
+        public int Id { get; set; }
         public string Ticker { get; set; }
         public string Name { get; set; }
         public string Algorithm { get; set; }
         public string CoinRevenue { get; set; }
         public string BtcRevenue { get; set; }
         public string PowerConsumption { get; set; }
+        public string WhatToMineEndpoint { get; set; }
     }
 }
