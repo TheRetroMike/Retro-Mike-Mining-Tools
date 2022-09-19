@@ -17,7 +17,7 @@ rm packages-microsoft-prod.deb
 apt-get update
 apt-get install -y dotnet-sdk-6.0
 wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/download/RetroMikeMiningTools.zip
-unzip RetroMikeMiningTools.zip -o /usr/retro-mike-mining-tools
+unzip  -o -d /usr/retro-mike-mining-tools RetroMikeMiningTools.zip
 rm RetroMikeMiningTools.zip
 
 if [ -f "$CHROME_DRIVER" ]; then
