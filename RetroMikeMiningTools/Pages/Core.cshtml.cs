@@ -13,6 +13,7 @@ namespace RetroMikeMiningTools.Pages
         
         IHostApplicationLifetime appLifetime;
         private static IConfiguration systemConfiguration;
+
         public CoreModel(IHostApplicationLifetime hostLifetime, IConfiguration configuration)
         {
             appLifetime = hostLifetime;
@@ -75,10 +76,15 @@ namespace RetroMikeMiningTools.Pages
                 var oldSettings = CoreConfigDAO.GetCoreConfig();
                 CoreConfigDAO.UpdateCoreConfig(Settings);
                 ViewData["SettingsSaveMessage"] = "Settings Saved";
-                if (oldSettings?.ProfitSwitchingCronSchedule != Settings?.ProfitSwitchingCronSchedule || oldSettings?.ProfitSwitchingEnabled != Settings.ProfitSwitchingEnabled)
+                if (
+                    oldSettings?.ProfitSwitchingCronSchedule != Settings?.ProfitSwitchingCronSchedule || 
+                    oldSettings?.ProfitSwitchingEnabled != Settings.ProfitSwitchingEnabled ||
+                    oldSettings?.Port != Settings.Port
+                    )
                 {
                     RestartServices();
                     ViewData["SettingsSaveMessage"] = "Settings Saved and Services Restarted";
+                    ViewData["NewUrl"] = String.Format("{0}://{1}:{2}", Request.Scheme, Request.Host.Host, Settings.Port);
                 }
             }
         }

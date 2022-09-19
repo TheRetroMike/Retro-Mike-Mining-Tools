@@ -14,5 +14,6 @@ namespace RetroMikeMiningTools.DTO
         public bool AutoExchangingEnabled { get; set; }
         public string? ProfitSwitchingCronSchedule { get; set; }
         public string? IgnoredVersion { get; set; }
+        public int Port { get; set; }
     }
 }

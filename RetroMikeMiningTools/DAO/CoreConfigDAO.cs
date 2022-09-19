@@ -23,7 +23,8 @@ namespace RetroMikeMiningTools.DAO
                         CoinDifferenceThreshold = "5%",
                         HiveApiKey = null,
                         HiveFarmID = null,
-                        ProfitSwitchingCronSchedule = "0 0/1 * 1/1 * ? *"
+                        ProfitSwitchingCronSchedule = "0 0/1 * 1/1 * ? *",
+                        Port=7000
                     });
                     db.Commit();
                 }
@@ -58,6 +59,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.CoinDeskApi = coreConfig.CoinDeskApi;
                 existingRecord.ProfitSwitchingCronSchedule = coreConfig.ProfitSwitchingCronSchedule;
                 existingRecord.IgnoredVersion = coreConfig.IgnoredVersion;
+                existingRecord.Port = coreConfig.Port;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

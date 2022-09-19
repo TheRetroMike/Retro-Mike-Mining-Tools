@@ -4,7 +4,7 @@ SERVICE_NAME="retro_mike_mining_tools"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 APP_PATH="/usr/retro-mike-mining-tools/RetroMikeMiningTools.dll"
 APP_FOLDER="/usr/retro-mike-mining-tools"
-LAUNCH_PATH="/usr/bin/dotnet $APP_PATH --urls=http://0.0.0.0:7002 --service_name=$SERVICE_NAME --platform_name=hive_os"
+LAUNCH_PATH="/usr/bin/dotnet $APP_PATH --service_name=$SERVICE_NAME --platform_name=hive_os"
 CHROME_DRIVER="$APP_FOLDER/chromedriver"
 
 EXE_FOLDER=/usr/profit-switcher/HiveProfitSwitcher/bin/Debug/

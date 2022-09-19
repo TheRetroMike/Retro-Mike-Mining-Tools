@@ -8,7 +8,15 @@ CancellationTokenSource cancelTokenSource = new System.Threading.CancellationTok
 CoreConfigDAO.InitialConfiguration();
 LogDAO.InitialConfiguration();
 
+var coreConfig = CoreConfigDAO.GetCoreConfig();
+
 var builder = WebApplication.CreateBuilder(args);
+if (coreConfig.Port == 0)
+{
+    coreConfig.Port = 7000;
+    CoreConfigDAO.UpdateCoreConfig(coreConfig);
+}
+builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
 builder.Services.AddRazorPages().AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver());
 builder.Services.AddKendo();
 builder.Services.AddQuartz(q =>
@@ -23,7 +31,7 @@ builder.Services.AddQuartz(q =>
         tp.MaxConcurrency = 10;
     });
 
-    var coreConfig = CoreConfigDAO.GetCoreConfig();
+    
 
     if (coreConfig.ProfitSwitchingEnabled && !String.IsNullOrEmpty(coreConfig.ProfitSwitchingCronSchedule))
     {

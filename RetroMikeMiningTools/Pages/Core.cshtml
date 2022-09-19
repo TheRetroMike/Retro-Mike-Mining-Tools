@@ -9,7 +9,10 @@
 <form method="post">
     <div class="k-card">
         <div class="k-card-body">
-        
+            <div class="form-group">
+                <label>Port</label>  
+                <input asp-for=Settings.Port class="form-control" />
+            </div>
             <div class="form-group">
                 <label>Hive OS API Key</label>  
                 <input asp-for=Settings.HiveApiKey class="form-control" />
@@ -58,6 +61,9 @@
     @{
     var message = ViewData["SettingsSaveMessage"];
 }
+@{
+    var newUrl = ViewData["NewUrl"];
+}
     function Restart(){
         $.ajax({
                 url: "/Core?handler=Restart",
@@ -74,8 +80,12 @@
     $(document).ready(function() {
         new MaskedPassword(document.getElementById("Settings_HiveApiKey"), '\u25CF');
         var message = '@message';
+        var newUrl = '@newUrl';
         if(message){
             $("#notification").data("kendoNotification").show(message, "success");
+        }
+        if(newUrl){
+            $(location).prop('href', newUrl);
         }
         $.ajax({
             url: "/Core?handler=HiveKey",
