@@ -26,7 +26,7 @@ else
     cd "$APP_FOLDER"
     apt-get install -y libappindicator1 fonts-liberation
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    apt-get -f install
+    apt-get -f install -y
     dpkg --configure -a
     dpkg -i google-chrome*.deb
     wget https://chromedriver.storage.googleapis.com/105.0.5195.52/chromedriver_linux64.zip
