@@ -10,6 +10,8 @@ namespace RetroMikeMiningTools.Pages
     {
         [BindProperty]
         public CoreConfig? Settings { get; set; }
+        public string? Platform { get; set; }
+        public bool PortReadOnly = false;
         
         IHostApplicationLifetime appLifetime;
         private static IConfiguration systemConfiguration;
@@ -32,6 +34,23 @@ namespace RetroMikeMiningTools.Pages
             {
                 Settings = currentSettings;
             }
+            if (Platform==null)
+            {
+                Platform = "General";
+            }
+
+            if (systemConfiguration != null)
+            {
+                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                if (hostPlatform != null)
+                {
+                    Platform = hostPlatform;
+                    if (Platform.ToUpper()==Constants.PLATFORM_DOCKER.ToUpper())
+                    {
+                        PortReadOnly = true;
+                    }
+                }
+            }
         }
 
         private void RestartServices()
@@ -44,9 +63,8 @@ namespace RetroMikeMiningTools.Pages
                 {
                     var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
                     var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
-                    if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform==Constants.PLATFORM_HIVE_OS)
+                    if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform.ToUpper()==Constants.PLATFORM_HIVE_OS.ToUpper())
                     {
-                        //restart the service
                         newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
                         {
                             Arguments = String.Format("{0} {1}", Constants.LINUX_RESTART_SERVICE_CMD, serviceName),

@@ -23,8 +23,13 @@ namespace RetroMikeMiningTools.Pages
         public static GoldshellAsicConfig? selectedWorker;
         private static double? importProgress;
         private static List<String> networkDevices;
-
+        private static IConfiguration systemConfiguration;
         private static CountdownEvent countdown;
+
+        public GoldshellAsicsModel(IConfiguration configuration)
+        {
+            systemConfiguration = configuration;
+        }
 
         public void OnGet()
         {
@@ -205,121 +210,143 @@ namespace RetroMikeMiningTools.Pages
         }
         public JsonResult OnPostImportAsics()
         {
-            importProgress = 0;
-            networkDevices = new List<string>();
-            countdown = new CountdownEvent(1);
-            var gateway = WebUtilities.GetDefaultGateway();
-            if (gateway != null)
+            try
             {
-                
-                var ipv4Gateway = gateway.MapToIPv4().ToString();
-                var ipPrefix = ipv4Gateway.Substring(0, ipv4Gateway.LastIndexOf("."));
-                for (int i = 1; i <= 255; i++)
-                {
-                    var ipToCheck = IPAddress.Parse(ipPrefix + String.Format(".{0}", i));
-                    Ping pinger = new Ping();
-                    pinger.PingCompleted += Pinger_PingCompleted;
-                    pinger.SendAsync(ipToCheck, 100, ipToCheck);
-                    countdown.AddCount();
-                }
+                importProgress = 0;
+                networkDevices = new List<string>();
+                countdown = new CountdownEvent(1);
 
-                countdown.Signal();
-                countdown.Wait();
-            }
-
-            if (networkDevices.Count > 0)
-            {
-                var progressIncrementer = 50 / networkDevices.Count;
-                foreach (var ip in networkDevices)
+                IPAddress? gateway = null;
+                if (systemConfiguration != null)
                 {
-                    var goldshellStatsUrl = String.Format("http://{0}/mcb/status", ip);
-                    var client = new RestClient(goldshellStatsUrl);
-                    var request = new RestRequest();
-                    try
+                    var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                    var coreConfig = CoreConfigDAO.GetCoreConfig();
+                    if (!String.IsNullOrEmpty(hostPlatform) && !String.IsNullOrEmpty(coreConfig.DockerHostIp))
                     {
-                        var response = client.Get(request);
-                        if (response != null && response.StatusCode == HttpStatusCode.OK)
+                        gateway = IPAddress.Parse(coreConfig.DockerHostIp);
+                    }
+                }
+                if (gateway == null)
+                {
+                    gateway = WebUtilities.GetDefaultGateway();
+                }
+                
+                if (gateway != null)
+                {
+
+                    var ipv4Gateway = gateway.MapToIPv4().ToString();
+
+                    var ipPrefix = ipv4Gateway.Substring(0, ipv4Gateway.LastIndexOf("."));
+                    for (int i = 1; i <= 255; i++)
+                    {
+                        var ipToCheck = IPAddress.Parse(ipPrefix + String.Format(".{0}", i));
+                        Ping pinger = new Ping();
+                        pinger.PingCompleted += Pinger_PingCompleted;
+                        pinger.SendAsync(ipToCheck, 100, ipToCheck);
+                        countdown.AddCount();
+                    }
+
+                    countdown.Signal();
+                    countdown.Wait();
+                }
+                if (networkDevices.Count > 0)
+                {
+                    var progressIncrementer = 50 / networkDevices.Count;
+                    foreach (var ip in networkDevices)
+                    {
+                        var goldshellStatsUrl = String.Format("http://{0}/mcb/status", ip);
+                        var client = new RestClient(goldshellStatsUrl);
+                        var request = new RestRequest();
+                        try
                         {
-                            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
-                            var deviceModel = responseContent?.model.ToString();
-                            bool isHnsSiaDevice = false;
-                            if (deviceModel != null)
+                            var response = client.Get(request);
+                            if (response != null && response.StatusCode == HttpStatusCode.OK)
                             {
-                                string? defaultWtmEndpoint = "";
-                                if (Constants.GOLDSHELL_ASIC_DEFAULT_WTM.ContainsKey(deviceModel))
-                                {
-                                    defaultWtmEndpoint = Constants.GOLDSHELL_ASIC_DEFAULT_WTM[deviceModel];
-                                }
+                                dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+                                var deviceModel = responseContent?.model.ToString();
+                                bool isHnsSiaDevice = false;
                                 if (deviceModel != null)
                                 {
-                                    if (deviceModel.ToString() == "Goldshell-HSBox")
+                                    string? defaultWtmEndpoint = "";
+                                    if (Constants.GOLDSHELL_ASIC_DEFAULT_WTM.ContainsKey(deviceModel))
                                     {
-                                        isHnsSiaDevice = true;
+                                        defaultWtmEndpoint = Constants.GOLDSHELL_ASIC_DEFAULT_WTM[deviceModel];
                                     }
-                                    if (GoldshellAsicDAO.GetRecord(deviceModel) != null)
+                                    if (deviceModel != null)
                                     {
-                                        int index = 1;
-                                        while (GoldshellAsicDAO.GetRecord(deviceModel) != null)
+                                        if (deviceModel.ToString() == "Goldshell-HSBox")
                                         {
-                                            index++;
-                                            deviceModel = String.Format("{0}-{1}", deviceModel, index.ToString());
+                                            isHnsSiaDevice = true;
                                         }
-                                    }
-                                    GoldshellAsicDAO.AddRig(new GoldshellAsicConfig()
-                                    {
-                                        Name = deviceModel,
-                                        ApiBasePath = String.Format("http://{0}", ip),
-                                        ApiPassword = "123456789",
-                                        WhatToMineEndpoint = defaultWtmEndpoint,
-                                        DonationAmount = "1%",
-                                        MiningMode = Enums.MiningMode.Profit
-                                    });
-
-                                    var newRecord = GoldshellAsicDAO.GetRecord(deviceModel);
-                                    if (newRecord != null && !String.IsNullOrEmpty(newRecord.WhatToMineEndpoint))
-                                    {
-                                        var wtmCoins = WhatToMineUtilities.GetCoinList(newRecord.WhatToMineEndpoint);
-                                        foreach (var coin in wtmCoins)
+                                        if (GoldshellAsicDAO.GetRecord(deviceModel) != null)
                                         {
-                                            try
+                                            int index = 1;
+                                            while (GoldshellAsicDAO.GetRecord(deviceModel) != null)
                                             {
-                                                string? coinAlgo = null;
-                                                if (isHnsSiaDevice && coin.Ticker.ToString().ToUpper()=="SC")
-                                                {
-                                                    coinAlgo = "blake2b(SC)";
-                                                }
-
-                                                if (isHnsSiaDevice && coin.Ticker.ToString().ToUpper() == "HNS")
-                                                {
-                                                    coinAlgo = "blake2bsha3(HNS)";
-                                                }
-
-                                                GoldshellAsicCoinDAO.AddRecord(new GoldshellAsicCoinConfig()
-                                                {
-                                                    Ticker = coin.Ticker,
-                                                    Enabled = false,
-                                                    WorkerId = newRecord.Id,
-                                                    CoinAlgo = coinAlgo
-                                                });
-                                            }
-                                            catch
-                                            {
+                                                index++;
+                                                deviceModel = String.Format("{0}-{1}", deviceModel, index.ToString());
                                             }
                                         }
-                                    }
+                                        GoldshellAsicDAO.AddRig(new GoldshellAsicConfig()
+                                        {
+                                            Name = deviceModel,
+                                            ApiBasePath = String.Format("http://{0}", ip),
+                                            ApiPassword = "123456789",
+                                            WhatToMineEndpoint = defaultWtmEndpoint,
+                                            DonationAmount = "1%",
+                                            MiningMode = Enums.MiningMode.Profit
+                                        });
 
+                                        var newRecord = GoldshellAsicDAO.GetRecord(deviceModel);
+                                        if (newRecord != null && !String.IsNullOrEmpty(newRecord.WhatToMineEndpoint))
+                                        {
+                                            var wtmCoins = WhatToMineUtilities.GetCoinList(newRecord.WhatToMineEndpoint);
+                                            foreach (var coin in wtmCoins)
+                                            {
+                                                try
+                                                {
+                                                    string? coinAlgo = null;
+                                                    if (isHnsSiaDevice && coin.Ticker.ToString().ToUpper() == "SC")
+                                                    {
+                                                        coinAlgo = "blake2b(SC)";
+                                                    }
+
+                                                    if (isHnsSiaDevice && coin.Ticker.ToString().ToUpper() == "HNS")
+                                                    {
+                                                        coinAlgo = "blake2bsha3(HNS)";
+                                                    }
+
+                                                    GoldshellAsicCoinDAO.AddRecord(new GoldshellAsicCoinConfig()
+                                                    {
+                                                        Ticker = coin.Ticker,
+                                                        Enabled = false,
+                                                        WorkerId = newRecord.Id,
+                                                        CoinAlgo = coinAlgo
+                                                    });
+                                                }
+                                                catch
+                                                {
+                                                }
+                                            }
+                                        }
+
+                                    }
                                 }
                             }
                         }
-                    }
-                    catch { }
-                    finally
-                    {
-                        importProgress = importProgress + progressIncrementer;
+                        catch { }
+                        finally
+                        {
+                            importProgress = importProgress + progressIncrementer;
+                        }
                     }
                 }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
             importProgress = 100;
             data = GoldshellAsicDAO.GetRecords();
             

@@ -10,8 +10,16 @@
     <div class="k-card">
         <div class="k-card-body">
             <div class="form-group">
-                <label>Port</label>  
-                <input asp-for=Settings.Port class="form-control" />
+                <label>Platform: </label>
+                <input asp-for=Platform class="form-control" readonly="true" />
+            </div>
+            <div class="form-group">
+                <label>Port: </label>  
+                <input asp-for=Settings.Port class="form-control" readonly="@Model.PortReadOnly" />
+            </div>
+            <div class="form-group" visible="false" id="dockerHostContainer">
+                <label>Docker Host IP: </label>  
+                <input asp-for=Settings.DockerHostIp class="form-control" />
             </div>
             <div class="form-group">
                 <label>Hive OS API Key</label>  
@@ -81,11 +89,15 @@
         new MaskedPassword(document.getElementById("Settings_HiveApiKey"), '\u25CF');
         var message = '@message';
         var newUrl = '@newUrl';
+        var isDocker = '@Model.PortReadOnly';
         if(message){
             $("#notification").data("kendoNotification").show(message, "success");
         }
         if(newUrl){
             $(location).prop('href', newUrl);
+        }
+        if(isDocker==='false'){
+            $("#dockerHostContainer").hide();
         }
         $.ajax({
             url: "/Core?handler=HiveKey",

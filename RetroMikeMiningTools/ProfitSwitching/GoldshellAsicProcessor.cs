@@ -139,13 +139,13 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                 //TODO: Apply new pool settings with ui automation
                                 new DriverManager().SetUpDriver(new ChromeConfig());
                                 var options = new ChromeOptions();
-                                //options.AddArgument("--headless");
-                                //options.AddArgument("--window-size=1920,1080");
-                                //options.AddArgument("--disable-extensions");
-                                //options.AddArgument("--no-sandbox");
-                                //options.AddArgument("--disable-gpu");
-                                //options.AddArgument("--start-maximized");
-                                //options.AddArgument("--disable-dev-shm-usage");
+                                options.AddArgument("--headless");
+                                options.AddArgument("--window-size=1920,1080");
+                                options.AddArgument("--disable-extensions");
+                                options.AddArgument("--no-sandbox");
+                                options.AddArgument("--disable-gpu");
+                                options.AddArgument("--start-maximized");
+                                options.AddArgument("--disable-dev-shm-usage");
                                 var driver = new ChromeDriver(options);
                                 driver.Manage().Timeouts().PageLoad = new TimeSpan(0, 0, 30);
                                 driver.Navigate().GoToUrl(String.Format("{0}/#/login", asic.ApiBasePath));

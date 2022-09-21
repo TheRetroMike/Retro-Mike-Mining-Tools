@@ -3,6 +3,16 @@ using RetroMikeMiningTools.Enums;
 using RetroMikeMiningTools.Jobs;
 using Quartz;
 
+
+if (!Directory.Exists("db"))
+{
+    Directory.CreateDirectory("db");
+    if (File.Exists("retromikeminingtools.db"))
+    {
+        File.Copy("retromikeminingtools.db", RetroMikeMiningTools.Common.Constants.DB_FILE);
+    }
+}
+
 CancellationTokenSource cancelTokenSource = new System.Threading.CancellationTokenSource();
 
 CoreConfigDAO.InitialConfiguration();

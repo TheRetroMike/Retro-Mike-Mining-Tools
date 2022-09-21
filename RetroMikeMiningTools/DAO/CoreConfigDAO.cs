@@ -59,6 +59,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.CoinDeskApi = coreConfig.CoinDeskApi;
                 existingRecord.ProfitSwitchingCronSchedule = coreConfig.ProfitSwitchingCronSchedule;
                 existingRecord.IgnoredVersion = coreConfig.IgnoredVersion;
+                existingRecord.DockerHostIp = coreConfig.DockerHostIp;
                 existingRecord.Port = coreConfig.Port;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {

@@ -81,6 +81,9 @@ namespace RetroMikeMiningTools.Common
                     new Coin(){ Ticker = "QRL", Name = "Quantum R L (QRL)"},
                     new Coin(){ Ticker = "XMR", Name = "Monero (XMR)"},
                     new Coin(){ Ticker = "EGEM", Name = "EtherGem (EGEM)"},
+                    new Coin(){ Ticker = "Nicehash-Octopus", Name = "Nicehash-Octopus"},
+                    new Coin(){ Ticker = "Nicehash-Ethash", Name = "Nicehash-Ethash"},
+                    new Coin(){ Ticker = "ETHW", Name = "EthereumPoW (ETHW)"},
                 };
             }
         }

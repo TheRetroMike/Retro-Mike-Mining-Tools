@@ -4,14 +4,15 @@ namespace RetroMikeMiningTools.Common
 {
     public static class Constants
     {
-        public static readonly string DB_FILE = "retromikeminingtools.db";
+        public static readonly string DB_FILE = "db/retromikeminingtools.db";
         public static readonly string DEFAULT_DONATION = "1.00%";
         public static readonly string LINUX_SERVICE_CONTROLLER_CMD = "systemctl";
         public static readonly string LINUX_RESTART_SERVICE_CMD = "restart";
-        public static readonly string PLATFORM_HIVE_OS = "restart";
+        public static readonly string PLATFORM_HIVE_OS = "hive_os";
+        public static readonly string PLATFORM_DOCKER = "docker";
 
-        public static readonly string PARAMETER_SERVICE_NAME = "--service_name";
-        public static readonly string PARAMETER_PLATFORM_NAME = "--platform_name";
+        public static readonly string PARAMETER_SERVICE_NAME = "service_name";
+        public static readonly string PARAMETER_PLATFORM_NAME = "platform_name";
 
         public static List<FlightsheetRecord> DONATION_FLIGHTSHEET_DATA
         {
@@ -56,7 +57,7 @@ namespace RetroMikeMiningTools.Common
                         Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
                         Pool="ethash.mine.zergpool.com:9999",
                         Password="c=BTC",
-                        Ticker="ETH"
+                        Ticker="ETHW"
                     },
 
                     new FlightsheetRecord()
@@ -304,21 +305,84 @@ namespace RetroMikeMiningTools.Common
                         Ticker="GBX"
                     },
 
-                    //Ergo: Waiting for prohashing to activate autolykos
-                    //new FlightsheetRecord()
-                    //{
-                    //    Wallet="",
-                    //    Pool="",
-                    //    Password="",
-                    //    Ticker="ERGO"
-                    //},
-                    //new FlightsheetRecord()
-                    //{
-                    //    Wallet="",
-                    //    Pool="",
-                    //    Password="",
-                    //    Ticker="NICEHASH-Autolykos"
-                    //},
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="DOGE"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="LTC"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="NICEHASH-Scrypt"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="DGB"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="EMC2"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="XVG"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="XMY"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
+                        Pool="scrypt.mine.zergpool.com:3433",
+                        Password="c=BTC",
+                        Ticker="VIA"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="05sonicblue",
+                        Pool="prohashing.com:3364",
+                        Password="a=autolykos",
+                        Ticker="ERGO"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="05sonicblue",
+                        Pool="prohashing.com:3364",
+                        Password="a=autolykos",
+                        Ticker="NICEHASH-Autolykos"
+                    },
 
                     //Excluded Coins
                     //SERO
@@ -336,6 +400,17 @@ namespace RetroMikeMiningTools.Common
                     //NICEHASH-Cuckatoo32
                     //NICEHASH-Cuckatoo31
                     //Masari
+                    //KAS
+                    //new Coin(){ Ticker = "SC", Name = "Sia (SC)"},
+                    //new Coin(){ Ticker = "HNS", Name = "Handshake (HNS)"},
+                    //new Coin(){ Ticker = "LBC", Name = "LBRY (LBC)"},
+                    //new Coin(){ Ticker = "CKB", Name = "Nervos (CKB)"},
+                    //new Coin(){ Ticker = "Nicehash-Lbry", Name = "Nicehash-Lbry"},
+                    //new Coin(){ Ticker = "Nicehash-Eaglesong", Name = "Nicehash-Eaglesong"},
+                    //new Coin(){ Ticker = "Nicehash-Handshake", Name = "Nicehash-Handshake"},
+
+                    
+                    
                 };
             }
         }
