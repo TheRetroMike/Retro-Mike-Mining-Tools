@@ -41,10 +41,10 @@ builder.Services.AddQuartz(q =>
         tp.MaxConcurrency = 10;
     });
 
-    
 
     if (coreConfig.ProfitSwitchingEnabled && !String.IsNullOrEmpty(coreConfig.ProfitSwitchingCronSchedule))
     {
+        //HiveOS ProfitSwitching
         q.ScheduleJob<HiveOsRigProfitSwitchingJob>(trigger => trigger
             .WithIdentity("Profit Switching Trigger")
             .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
@@ -52,6 +52,7 @@ builder.Services.AddQuartz(q =>
             .WithDescription("Profit Switching Trigger")
         );
 
+        //Donation Job
         q.ScheduleJob<HiveOsRigDonationJob>(trigger => trigger
                 .WithIdentity("Donation Trigger")
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
@@ -59,14 +60,22 @@ builder.Services.AddQuartz(q =>
                 .WithDescription("Donation Trigger")
             );
     }
-    
+
+    if (coreConfig.AutoExchangingEnabled && !String.IsNullOrEmpty(coreConfig.AutoExchangingCronSchedule))
+    {
+        //Auto Exchanging
+        q.ScheduleJob<AutoExchangingJob>(trigger => trigger
+            .WithIdentity("Auto Exchanging Trigger")
+            .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
+            .WithCronSchedule(coreConfig?.AutoExchangingCronSchedule ?? "0 0/1 * 1/1 * ? *")
+            .WithDescription("Auto Exchanging Trigger")
+        );
+    }
 });
 
-// ASP.NET Core hosting
 builder.Services.AddQuartzServer(options =>
 {
     options.AwaitApplicationStarted = true;
-    // when shutting down we want jobs to complete gracefully
     options.WaitForJobsToComplete = true;
 });
 

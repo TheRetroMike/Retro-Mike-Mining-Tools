@@ -39,7 +39,7 @@
             </div> 
             
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" asp-for=Settings.ProfitSwitchingEnabled onselect="handleProfitSwitchingSelect()">
+                <input type="checkbox" class="form-check-input" asp-for=Settings.ProfitSwitchingEnabled>
                 <label>Enable Profit Switching?</label>
             </div>
             <div id="profitSwitchingContainer">
@@ -51,14 +51,22 @@
                 </div>
                 <hr />
             </div>
-            @*<div class="form-check">
+
+            <div class="form-check">
                 <input type="checkbox" class="form-check-input" asp-for=Settings.AutoExchangingEnabled>
                 <label>Enable Auto Exchanging?</label>
-            </div>*@
+            </div>
+            <div id="autoExchangingContainer">
+                <hr />
+                <div class="form-group">
+                    <label>Auto Exchanging Cron Schedule</label>
+                    <input asp-for=Settings.AutoExchangingCronSchedule class="form-control" />
+                    <div id="autoExchangingCronUpcomingContainer"></div>
+                </div>
+                <hr />
+            </div>
         </div>
         <div class="k-card-footer">
-        @*<h5 class="k-card-title">Card Title</h5>
-        <h6 class="k-card-subtitle">Card Subtitle</h6>*@
         <input type="submit" value="Save" class="btn btn-primary" asp-page-handler="Submit" />
         &nbsp;
         <input type="button" value="Restart Services" class="btn btn-primary" onclick="Restart()"/>
@@ -146,6 +154,37 @@
             $("#profitSwitchingContainer").hide();
         }
 
+        if($("#Settings_AutoExchangingEnabled").is(':checked')){
+            var cronExpression = $("#Settings_AutoExchangingCronSchedule").val();
+            $.ajax({
+                url: "/Core?handler=CronCalculator",
+                type: 'POST',
+                data: {cronExpression: cronExpression},
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {   
+                    if(response){
+                        var htmlCron = '<br /><p>Next 5 Runs</p><ul>';
+                        if(response.length==0){
+                            var htmlCron = '<br /><p style="color:red;">Invalid Cron Expression. You can generate one <a href="http://www.cronmaker.com/" target="_blank"><b>here</b></a></p>';
+                        }else{
+                            jQuery.each(response, function(index, value){
+                                console.log(value);
+                                htmlCron = htmlCron + "<li>" + value + '</li>';
+                            });
+                            htmlCron = htmlCron + '</ul>';
+                        }
+                        $('#autoExchangingCronUpcomingContainer').html(htmlCron);
+                    }
+                },
+            });
+            $("#autoExchangingContainer").show();
+        }else{
+            $("#autoExchangingContainer").hide();
+        }
+    });
+
     $('#Settings_ProfitSwitchingEnabled').change(function() {
         if(this.checked){
             $("#profitSwitchingContainer").show();
@@ -179,5 +218,40 @@
             },
         });
     })
-});
+
+    $('#Settings_AutoExchangingEnabled').change(function() {
+        if(this.checked){
+            $("#autoExchangingContainer").show();
+        }else{
+            $("#autoExchangingContainer").hide();
+        }        
+    });
+
+    
+
+    $("#Settings_AutoExchangingCronSchedule").on("change keyup paste", function(){
+        $.ajax({
+            url: "/Core?handler=CronCalculator",
+            type: 'POST',
+            data: {cronExpression: this.value},
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {   
+                if(response){
+                    var htmlCron = '<br /><p>Next 5 Runs</p><ul>';
+                    if(response.length==0){
+                        var htmlCron = '<br /><p style="color:red;">Invalid Cron Expression. You can generate one <a href="http://www.cronmaker.com/" target="_blank"><b>here</b></a></p>';
+                    }else{
+                        jQuery.each(response, function(index, value){
+                            console.log(value);
+                            htmlCron = htmlCron + "<li>" + value + '</li>';
+                        });
+                        htmlCron = htmlCron + '</ul>';
+                    }
+                    $('#autoExchangingCronUpcomingContainer').html(htmlCron);
+                }
+            },
+        });
+    })
 </script>

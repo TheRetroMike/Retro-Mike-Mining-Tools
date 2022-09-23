@@ -57,35 +57,20 @@ namespace RetroMikeMiningTools.Utilities
                             Id = item.id.Value
                         });
                     }
-
                 }
             }
 
             return result;
         }
 
-        public static string GetFlightsheetName(string hiveApiKey, string farmId, long? flightSheetId)
-        {
-            string? result = null;
-            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            var response = client.Get(request);
-            dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
-            if (!String.IsNullOrEmpty(response?.Content))
-            {
-                result = responseContent?.name?.Value;
 
-            }
-
-            return result;
-        }
 
         public static void DeleteFlightsheet(string hiveApiKey, string farmId, long? flightSheetId)
         {
             string? result = null;
             RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
             RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
+            
             request.AddHeader("Authorization", "Bearer " + hiveApiKey);
             var response = client.Delete(request);
             dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
@@ -114,6 +99,20 @@ namespace RetroMikeMiningTools.Utilities
                 }
             }
             return result;
+        }
+
+        public static long? GetFlightsheetWorkerCount(string hiveApiKey, string farmId, string flightSheetId)
+        {
+            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
+            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+            var response = client.Get(request);
+            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+            if (responseContent != null && responseContent.workers_count != null)
+            {
+                return Convert.ToInt64(responseContent?.workers_count);
+            }
+            return null;
         }
 
         public static string GetWalletBalance(string walletId, string hiveApiKey, string farmId)
@@ -147,7 +146,7 @@ namespace RetroMikeMiningTools.Utilities
             return result;
         }
 
-        public static void UpdateFlightSheetID(string workerId, string flightSheetId, string flightSheetName, string profit, string hiveApiKey, string farmId, string workerName, bool donation=false)
+        public static void UpdateFlightSheetID(string workerId, string flightSheetId, string flightSheetName, string profit, string hiveApiKey, string farmId, string workerName, bool donation, MiningMode miningMode, string ticker)
         {
             if (String.IsNullOrEmpty(workerId) && !String.IsNullOrEmpty(workerName))
             {
@@ -169,7 +168,14 @@ namespace RetroMikeMiningTools.Utilities
                     }
                     else
                     {
-                        Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching);
+                        if (miningMode == MiningMode.Profit || miningMode == MiningMode.DiversificationByProfit)
+                        {
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching);
+                        }
+                        if (miningMode == MiningMode.CoinStacking || miningMode == MiningMode.DiversificationByStacking)
+                        {
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Amount: {1} {3}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName, ticker), LogType.ProfitSwitching);
+                        }
                     }
                 }
                 else

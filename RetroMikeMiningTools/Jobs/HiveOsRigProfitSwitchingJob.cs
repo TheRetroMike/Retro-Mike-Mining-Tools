@@ -30,7 +30,7 @@ namespace RetroMikeMiningTools.Jobs
                         {
                             if (!rig.DonationRunning)
                             {
-                                ProfitSwitching.HiveOsGpuRigProcessor.Process(rig, config);
+                                HiveOsGpuRigProcessor.Process(rig, config);
                             }                        
                         }
                     }

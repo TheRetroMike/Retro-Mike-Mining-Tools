@@ -16,5 +16,6 @@ namespace RetroMikeMiningTools.DTO
         public string? IgnoredVersion { get; set; }
         public int Port { get; set; }
         public string? DockerHostIp { get; set; }
+        public string? AutoExchangingCronSchedule { get; set; }
     }
 }

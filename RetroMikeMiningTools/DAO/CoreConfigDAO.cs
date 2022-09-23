@@ -24,7 +24,8 @@ namespace RetroMikeMiningTools.DAO
                         HiveApiKey = null,
                         HiveFarmID = null,
                         ProfitSwitchingCronSchedule = "0 0/1 * 1/1 * ? *",
-                        Port=7000
+                        AutoExchangingCronSchedule = "0 0/1 * 1/1 * ? *",
+                        Port =7000
                     });
                     db.Commit();
                 }
@@ -61,6 +62,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.IgnoredVersion = coreConfig.IgnoredVersion;
                 existingRecord.DockerHostIp = coreConfig.DockerHostIp;
                 existingRecord.Port = coreConfig.Port;
+                existingRecord.AutoExchangingCronSchedule = coreConfig.AutoExchangingCronSchedule;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

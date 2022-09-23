@@ -56,7 +56,7 @@ namespace RetroMikeMiningTools.Common
                     new Coin(){ Ticker = "GBX", Name = "Go Byte (GBX)"},
                     new Coin(){ Ticker = "Nicehash-Autolykos", Name = "Nicehash-Autolykos"},
                     new Coin(){ Ticker = "AION", Name = "Aion (AION)"},
-                    new Coin(){ Ticker = "Nicehash-Zelhash", Name = "Nicehash-Zelhash"},
+                    new Coin(){ Ticker = "Nicehash-ZelHash", Name = "Nicehash-ZelHash"},
                     new Coin(){ Ticker = "UBQ", Name = "Ubiq (UBQ)"},
                     new Coin(){ Ticker = "FLUX", Name = "Flux (FLUX)"},
                     new Coin(){ Ticker = "GRIN", Name = "Grin (GRIN)"},

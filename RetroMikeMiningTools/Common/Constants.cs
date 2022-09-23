@@ -14,6 +14,12 @@ namespace RetroMikeMiningTools.Common
         public static readonly string PARAMETER_SERVICE_NAME = "service_name";
         public static readonly string PARAMETER_PLATFORM_NAME = "platform_name";
 
+        public static readonly string TX_BIT_API_BASE_PATH = "https://api.txbit.io/api";
+        public static readonly string TX_BIT_TRADE_FEE = "0.2%";
+        
+        public static readonly string TRADE_OGRE_API_BASE_PATH = "https://tradeogre.com/api/v1";
+        public static readonly string TRADE_OGRE_TRADE_FEE = "0.2%";
+
         public static List<FlightsheetRecord> DONATION_FLIGHTSHEET_DATA
         {
             get

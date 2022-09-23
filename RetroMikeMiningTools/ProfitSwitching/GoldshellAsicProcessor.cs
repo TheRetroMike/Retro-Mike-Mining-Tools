@@ -214,7 +214,15 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                                         poolPasswordField.SendKeys(bestCoin.PoolPassword);
                                                         poolApplyButton.Click();
                                                         Thread.Sleep(1000);
-                                                        Common.Logger.Log(String.Format("{0} Goldshell pool config updated for coin {1}. Projected Profit: ${2}", asic.Name, bestCoin.Ticker, newCoinBestPrice), Enums.LogType.ProfitSwitching);
+                                                        if (asic.MiningMode == MiningMode.Profit || asic.MiningMode == MiningMode.DiversificationByProfit)
+                                                        {
+                                                            Common.Logger.Log(String.Format("{0} Goldshell pool config updated for coin {1}. Projected Profit: ${2}", asic.Name, bestCoin.Ticker, newCoinBestPrice), Enums.LogType.ProfitSwitching);
+                                                        }
+
+                                                        if (asic.MiningMode == MiningMode.CoinStacking || asic.MiningMode == MiningMode.DiversificationByStacking)
+                                                        {
+                                                            Common.Logger.Log(String.Format("{0} Goldshell pool config updated for coin {1}. Projected Profit: {2} {1}", asic.Name, bestCoin.Ticker, newCoinBestPrice), Enums.LogType.ProfitSwitching);
+                                                        }
                                                     }
                                                 }
                                                 catch (Exception ex)
@@ -222,7 +230,6 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                                     Common.Logger.Log(String.Format("Unable to update {0} Goldshell miner config. Please set manually", asic.Name), Enums.LogType.ProfitSwitching);
                                                 }
                                             }
-
                                         }
                                         catch { }
                                     }
@@ -235,12 +242,6 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                 {
                                     driver.Close();
                                 }
-                                //var newFlightsheet = configuredCoins.Where(x => x.Ticker == newTopCoinTicker && x.Enabled).FirstOrDefault();
-
-                                //if (newFlightsheet != null && newFlightsheet.Flightsheet != null && newFlightsheet.Flightsheet.ToString() != currentFlightsheet)
-                                //{
-                                //    HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name);
-                                //}
                             }
                         }
                     }

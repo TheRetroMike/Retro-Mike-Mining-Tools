@@ -4,6 +4,6 @@
     {
         System,
         ProfitSwitching,
-        AutoExchaning
+        AutoExchanging
     }
 }

@@ -1,0 +1,8 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().DropDownListFor(m => m)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Events(x => x.Change("exchangeIdChanged"))
+        .BindTo(Html.GetEnumSelectList<Enums.Exchange>())
+    )

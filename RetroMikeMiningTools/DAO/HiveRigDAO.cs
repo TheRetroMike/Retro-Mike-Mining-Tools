@@ -85,6 +85,7 @@ namespace RetroMikeMiningTools.DAO
             var existingRecord = GetRecord(record.Id);
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
             {
+                var table = db.GetCollection<HiveOsRigConfig>(tableName);
                 if (existingRecord != null)
                 {
                     if (!existingRecord.Enabled && record.Enabled)
@@ -99,12 +100,11 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.DonationStartTime = record.DonationStartTime;
                     existingRecord.DonationEndTime = record.DonationEndTime;
                     existingRecord.DonationRunning = record.DonationRunning;
-                    var table = db.GetCollection<HiveOsRigConfig>(tableName);
+                    
                     table.Update(existingRecord);
                 }
                 else
                 {
-                    var table = db.GetCollection<HiveOsRigConfig>(tableName);
                     table.Insert(new HiveOsRigConfig()
                     {
                         Name = record.Name,

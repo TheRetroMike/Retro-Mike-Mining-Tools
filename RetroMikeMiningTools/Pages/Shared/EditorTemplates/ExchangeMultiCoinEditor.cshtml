@@ -1,0 +1,14 @@
+﻿@using Kendo.Mvc.UI
+@using RetroMikeMiningTools.DTO
+
+@(Html.Kendo().MultiSelectFor(m => m)
+    .DataTextField("Name")
+    .DataValueField("Ticker")
+    //.TagMode(MultiSelectTagMode.Multiple)
+    .AutoBind(false)
+    .Events(x => x.Open("multiListOpen"))
+    .DataSource(d=> {
+        d.ServerFiltering(false);
+        d.Read(r => r.Url("/AutoExchanging?handler=MasterCoinList").Data("forgeryToken"));
+    })      
+)

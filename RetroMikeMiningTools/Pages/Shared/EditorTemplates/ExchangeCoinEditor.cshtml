@@ -1,0 +1,12 @@
+﻿@using Kendo.Mvc.UI
+@using RetroMikeMiningTools.DTO
+
+@(Html.Kendo().DropDownListFor(m => m)
+    .DataTextField("Name")
+    .DataValueField("Ticker")
+    .AutoBind(false)
+    .Events(x => x.Open("ddlOpen"))
+    .DataSource(d=> {
+        d.Read(r => r.Url("/AutoExchanging?handler=MasterCoinList").Data("forgeryToken"));
+    })      
+)
