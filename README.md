@@ -36,6 +36,24 @@ wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools
 sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools
 ```
 
+## Screenshots
+### Dashboard
+![image](https://user-images.githubusercontent.com/1271856/191880384-08ca2b4a-d584-4bb2-a5c2-b3b479b355f0.png)
+
+### Mining Groups
+![image](https://user-images.githubusercontent.com/1271856/191880556-b12059a5-5cca-4736-b0ac-1f62d2553c79.png)
+
+### Hive OS Rigs
+![image](https://user-images.githubusercontent.com/1271856/191880644-9307603d-93f6-44b9-9df4-bd0a89cd3ce3.png)
+
+### Goldshell ASIC's
+![image](https://user-images.githubusercontent.com/1271856/191880727-3ad72a5d-7039-4bd4-b553-a37298cc7870.png)
+
+### Auto Exchanging
+![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)
+
+
+
 ## Support Me
 If you would like to support me:
 - Youtube Channel: https://www.youtube.com/retromikecrypto
