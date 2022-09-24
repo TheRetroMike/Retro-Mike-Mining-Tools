@@ -18,11 +18,26 @@ The following mining modes are supported and can be set on each rig / ASIC
 - DiversificationByProfit - Mine whichever coin has the best current profitability based on current difficulty, network hashrates, coin price, and power consumption until you have obtained a desired amount of the coin and then move onto the next most profitable coin. 
 - DiversificationByCoinStacking - Mine whichever coin will net you the most coins based on current difficulty and network hashrates until you have obtained a desired amount of the coin and then move onto the next most netable coin
 
+### Pinned Coin
+You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanted to mine something like a newly released coin to accumulate as many coins as possible early-on.
+
 ## Auto Exchanging
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
-- TxBit
-- TradeOgre
+
 - CoinEx
+- Kucoin
+- SouthXchange
+- TradeOgre
+- TxBit
+
+### Configuration
+- Destination - This is the ultimate coin that you want to exchange into.
+- Exclusions - These are coins that you don't want to auto exchange from
+- Trading Pair - This is the coin that may be needed to trade through to get to your destination coin. i.e., you should set this to BTC if you needed to go ETH -> BTC -> LTC. In most cases, this would either be BTC or USDT, since those are the most common pricing currencies on exchanges
+- Api Key - API Key you can get from your account settings on the exchange
+- Api Secret - API Secret Key you can get from your account settings on the exchange
+- Passphrase - Some exchanges, like Kucoin, also require a passphrase in addition to your API Keys
+- Auto Move To Trading Account - For exchanges that have a main and trading account, like Kucoin, setting this on will auto move your assets from your main account into your trading account prior to executing the auto exchanging
 
 ## Hive OS Installer
 Install Video / Walkthrough: https://youtu.be/A3J7Ax6jtlk
@@ -58,7 +73,6 @@ sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMike
 
 ### Auto Exchanging
 ![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)
-
 
 
 ## Support Me
