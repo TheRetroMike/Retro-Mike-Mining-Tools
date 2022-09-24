@@ -24,7 +24,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                 });
                 var balances = await client.SpotApi.Account.GetBalancesAsync();
                 var markets = await client.SpotApi.ExchangeData.GetSymbolInfoAsync();
-                foreach (var balance in balances.Data.Where(x => !exchange.ExcludedSourceCoins.Any(y => y.Ticker==x.Key)))
+                foreach (var balance in balances.Data.Where(x => !exchange.ExcludedSourceCoins.Any(y => y.Ticker.Equals(x.Key, StringComparison.OrdinalIgnoreCase))))
                 {
                     string ticker = balance.Key;
                     var balanceVal = balance.Value.Available;
@@ -32,7 +32,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                     {
                         if (ticker != exchange.DestinationCoin?.Ticker && ticker != exchange.TradingPairCurrency?.Ticker)
                         {
-                            var tickerMarketDirect = markets.Data.Where(x => x.Value.TradingName == ticker && x.Value.PricingName == exchange.DestinationCoin?.Ticker).FirstOrDefault();
+                            var tickerMarketDirect = markets.Data.Where(x => x.Value.TradingName.Equals(ticker,StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals(exchange.DestinationCoin?.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                             if (tickerMarketDirect.Key != null)
                             {
                                 var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketDirect.Key, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderType.Market, balanceVal);
@@ -40,7 +40,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             }
                             else
                             {
-                                var tickerMarketIntermediate = markets.Data.Where(x => x.Value.TradingName == ticker && x.Value.PricingName == exchange.TradingPairCurrency.Ticker).FirstOrDefault();
+                                var tickerMarketIntermediate = markets.Data.Where(x => x.Value.TradingName.Equals(ticker, StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                                 if (tickerMarketIntermediate.Key != null)
                                 {
                                     if (balanceVal > tickerMarketIntermediate.Value.MinQuantity)
@@ -55,11 +55,11 @@ namespace RetroMikeMiningTools.AutoExchanging
                 }
 
                 balances = await client.SpotApi.Account.GetBalancesAsync();
-                var intermediateTradingBalance = balances.Data.Where(x => x.Key == exchange.TradingPairCurrency.Ticker).FirstOrDefault();
+                var intermediateTradingBalance = balances.Data.Where(x => x.Key.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 if (intermediateTradingBalance.Key != null)
                 {
                     var balanceVal = intermediateTradingBalance.Value.Available;
-                    var finalMarket = markets.Data.Where(x => x.Value.TradingName == exchange.DestinationCoin.Ticker && x.Value.PricingName == exchange.TradingPairCurrency.Ticker).FirstOrDefault();
+                    var finalMarket = markets.Data.Where(x => x.Value.TradingName.Equals(exchange.DestinationCoin.Ticker,StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                     if (finalMarket.Key != null)
                     {
                         var orderBook = await client.SpotApi.ExchangeData.GetOrderBookAsync(finalMarket.Key, 1);

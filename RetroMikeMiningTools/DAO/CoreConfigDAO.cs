@@ -19,13 +19,13 @@ namespace RetroMikeMiningTools.DAO
                     {
                         ProfitSwitchingEnabled = false,
                         AutoExchangingEnabled = false,
-                        CoinDeskApi = "https://api.coindesk.com/v1/bpi/currentprice.json",
                         CoinDifferenceThreshold = "5%",
                         HiveApiKey = null,
                         HiveFarmID = null,
                         ProfitSwitchingCronSchedule = "0 0/1 * 1/1 * ? *",
                         AutoExchangingCronSchedule = "0 0/1 * 1/1 * ? *",
-                        Port =7000
+                        Port = 7000,
+                        ReleaseType = Enums.ReleaseType.Production
                     });
                     db.Commit();
                 }
@@ -57,12 +57,12 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.ProfitSwitchingEnabled = coreConfig.ProfitSwitchingEnabled;
                 existingRecord.HiveApiKey = coreConfig.HiveApiKey;
                 existingRecord.HiveFarmID = coreConfig.HiveFarmID;
-                existingRecord.CoinDeskApi = coreConfig.CoinDeskApi;
                 existingRecord.ProfitSwitchingCronSchedule = coreConfig.ProfitSwitchingCronSchedule;
                 existingRecord.IgnoredVersion = coreConfig.IgnoredVersion;
                 existingRecord.DockerHostIp = coreConfig.DockerHostIp;
                 existingRecord.Port = coreConfig.Port;
                 existingRecord.AutoExchangingCronSchedule = coreConfig.AutoExchangingCronSchedule;
+                existingRecord.ReleaseType = coreConfig.ReleaseType;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

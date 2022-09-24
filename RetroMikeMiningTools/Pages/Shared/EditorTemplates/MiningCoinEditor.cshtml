@@ -1,9 +1,10 @@
 ﻿@using Kendo.Mvc.UI
 @(
-        Html.Kendo().DropDownListFor(m => m)
+        Html.Kendo().ComboBoxFor(m => m)
             .DataTextField("Name")
             .DataValueField("Ticker")
             .AutoBind(true)
+            .ValuePrimitive()
             .DataSource(d=> {
                 d.Read(r => r.Url("/HiveOsRigs?handler=MasterCoinList").Data("forgeryToken"));
             })

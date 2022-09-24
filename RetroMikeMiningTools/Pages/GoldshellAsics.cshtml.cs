@@ -86,7 +86,7 @@ namespace RetroMikeMiningTools.Pages
             GoldshellAsicCoinConfig existingRecord = null;
             if (selectedWorker != null)
             {
-                var existingRecords = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id).Where(x => x.Ticker == record.Ticker).ToList();
+                var existingRecords = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id).Where(x => x.Ticker.Equals(record.Ticker,StringComparison.OrdinalIgnoreCase)).ToList();
                 if (existingRecords == null || existingRecords?.Count == 0)
                 {
                     record.WorkerId = selectedWorker.Id;

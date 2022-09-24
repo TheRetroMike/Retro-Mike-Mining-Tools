@@ -2,7 +2,7 @@ using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.Enums;
 using RetroMikeMiningTools.Jobs;
 using Quartz;
-
+using RetroMikeMiningTools.DO;
 
 if (!Directory.Exists("db"))
 {
@@ -12,6 +12,7 @@ if (!Directory.Exists("db"))
         File.Copy("retromikeminingtools.db", RetroMikeMiningTools.Common.Constants.DB_FILE);
     }
 }
+
 
 CancellationTokenSource cancelTokenSource = new System.Threading.CancellationTokenSource();
 
@@ -26,6 +27,7 @@ if (coreConfig.Port == 0)
     coreConfig.Port = 7000;
     CoreConfigDAO.UpdateCoreConfig(coreConfig);
 }
+
 builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
 builder.Services.AddRazorPages().AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver());
 builder.Services.AddKendo();
@@ -90,6 +92,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
-app.Lifetime.ApplicationStarted.Register(() => { RetroMikeMiningTools.Common.Logger.Log("Application Started", LogType.System); });
+app.Lifetime.ApplicationStarted.Register(() => { RetroMikeMiningTools.Common.Logger.Log("Application Started", LogType.System); RetroMikeMiningTools.Utilities.AnalyticUtilities.Startup(); });
 app.Lifetime.ApplicationStopped.Register(() => { RetroMikeMiningTools.Common.Logger.Log("Application Shutdown", LogType.System); });
 app.Run();

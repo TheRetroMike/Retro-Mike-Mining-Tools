@@ -31,16 +31,16 @@ namespace RetroMikeMiningTools.AutoExchanging
             var balances = GenericExchangeApiUtilities.GetWalletBalances(apiBasePath, exchange);
             foreach (var balance in balances.Where(x => x.Balance > 0.00m))
             {
-                if (!excludedCoins.Any(x => x.Ticker == balance.Ticker) && balance.Ticker != exchange.DestinationCoin.Ticker && (!tradingCurrencyStep || (tradingCurrencyStep && balance.Ticker != exchange.TradingPairCurrency?.Ticker)))
+                if (!excludedCoins.Any(x => x.Ticker.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase)) && !balance.Ticker.Equals(exchange.DestinationCoin.Ticker,StringComparison.OrdinalIgnoreCase) && (!tradingCurrencyStep || (tradingCurrencyStep && !balance.Ticker.Equals(exchange.TradingPairCurrency?.Ticker, StringComparison.OrdinalIgnoreCase))))
                 {
                     var currencyMarkets = new List<ExchangeMarket>();
                     if (tradingCurrencyStep)
                     {
-                        currencyMarkets = markets.Where(x => x.MarketCurrency == balance.Ticker && x.BaseCurrency == exchange.TradingPairCurrency.Ticker).ToList();
+                        currencyMarkets = markets.Where(x => x.MarketCurrency.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase) && x.BaseCurrency.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                     }
                     else
                     {
-                        currencyMarkets = markets.Where(x => x.MarketCurrency == exchange.DestinationCoin.Ticker && x.BaseCurrency == balance.Ticker).ToList();
+                        currencyMarkets = markets.Where(x => x.MarketCurrency.Equals(exchange.DestinationCoin.Ticker, StringComparison.OrdinalIgnoreCase) && x.BaseCurrency.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                     }
                     if (currencyMarkets != null && currencyMarkets.Count == 1)
                     {

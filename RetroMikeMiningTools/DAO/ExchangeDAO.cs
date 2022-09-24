@@ -21,7 +21,9 @@ namespace RetroMikeMiningTools.DAO
                     DestinationCoin = record.DestinationCoin,
                     ExcludedSourceCoins = record.ExcludedSourceCoins,
                     TradingPairCurrency = record.TradingPairCurrency,
-                    Enabled = record.Enabled
+                    Enabled = record.Enabled,
+                    AutoMoveToTradingAccount = record.AutoMoveToTradingAccount,
+                    Passphrase = record.Passphrase
                 });
             }
         }
@@ -73,6 +75,8 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.Exchange = record.Exchange;
                     existingRecord.ExcludedSourceCoins = record.ExcludedSourceCoins;
                     existingRecord.TradingPairCurrency = record.TradingPairCurrency;
+                    existingRecord.Passphrase = record.Passphrase;
+                    existingRecord.AutoMoveToTradingAccount = record.AutoMoveToTradingAccount;
                     table.Update(existingRecord);
                 }
                 else
@@ -85,7 +89,9 @@ namespace RetroMikeMiningTools.DAO
                         DestinationCoin = record.DestinationCoin,
                         ExcludedSourceCoins = record.ExcludedSourceCoins,
                         TradingPairCurrency = record.TradingPairCurrency,
-                        Enabled = record.Enabled
+                        Enabled = record.Enabled,
+                        AutoMoveToTradingAccount = record.AutoMoveToTradingAccount,
+                        Passphrase = record.Passphrase
                     });
                 }
 

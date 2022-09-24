@@ -32,8 +32,8 @@ namespace RetroMikeMiningTools.DAO
                     Enabled = rigConfig.Enabled,
                     WhatToMineEndpoint = rigConfig.WhatToMineEndpoint,
                     MiningMode = rigConfig.MiningMode,
-                    EnabledDateTime = rigConfig.Enabled ? DateTime.Now : null
-                    
+                    EnabledDateTime = rigConfig.Enabled ? DateTime.Now : null,
+                    PinnedTicker = rigConfig.PinnedTicker
                 });
             }
         }
@@ -44,7 +44,7 @@ namespace RetroMikeMiningTools.DAO
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
-                result = rigExecutionsCollection.FindOne(x => x.Name == workerName);
+                result = rigExecutionsCollection.FindOne(x => x.Name.Equals(workerName, StringComparison.OrdinalIgnoreCase));
             }
             return result;
         }
@@ -100,6 +100,7 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.DonationStartTime = record.DonationStartTime;
                     existingRecord.DonationEndTime = record.DonationEndTime;
                     existingRecord.DonationRunning = record.DonationRunning;
+                    existingRecord.PinnedTicker = record.PinnedTicker;
                     
                     table.Update(existingRecord);
                 }
@@ -112,7 +113,8 @@ namespace RetroMikeMiningTools.DAO
                         WhatToMineEndpoint = record.WhatToMineEndpoint,
                         MiningMode = record.MiningMode,
                         Enabled = record.Enabled,
-                        EnabledDateTime = record.Enabled ? DateTime.Now : null
+                        EnabledDateTime = record.Enabled ? DateTime.Now : null,
+                        PinnedTicker = record.PinnedTicker
                     });
                 }
             }

@@ -34,7 +34,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                 {
                     bool skipCoin = false;
                     double powerCostOverride = Convert.ToDouble(powerPrice);
-                    var coinGroupings = configuredCoins.Where(x => x.Enabled && x.Ticker == wtmCoin.Ticker)?.FirstOrDefault();
+                    var coinGroupings = configuredCoins.Where(x => x.Enabled && x.Ticker.Equals(wtmCoin.Ticker,StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
                     if (coinGroupings != null)
                     {
                         foreach (var grouping in coinGroupings.Groups)
@@ -59,7 +59,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                     }
                     string walletId = String.Empty;
                     string walletBalance = String.Empty;
-                    var coinData = configuredCoins.Where(x => x.Ticker == wtmCoin.Ticker && x.Enabled).FirstOrDefault();
+                    var coinData = configuredCoins.Where(x => x.Ticker.Equals(wtmCoin.Ticker,StringComparison.OrdinalIgnoreCase) && x.Enabled).FirstOrDefault();
                     var dailyPowerCost = 24 * ((Convert.ToDouble(wtmCoin.PowerConsumption) / 1000) * Convert.ToDouble(powerCostOverride));
                     var dailyRevenue = Convert.ToDouble(wtmCoin.BtcRevenue) * Convert.ToDouble(btcPrice);
                     var dailyProfit = dailyRevenue - dailyPowerCost;
@@ -97,18 +97,39 @@ namespace RetroMikeMiningTools.ProfitSwitching
                 var newCoinBestPrice = stagedCoins.Max(x => x.Amount);
                 var newTopCoinTicker = stagedCoins.Aggregate((x, y) => x.Amount > y.Amount ? x : y).Ticker;
 
-                var newPriceMin = (currentCoinPrice * Convert.ToDouble(threshold)) + currentCoinPrice;
-                if (currentCoinPrice < 0.00)
+                if (!String.IsNullOrEmpty(rig.PinnedTicker))
                 {
-                    newPriceMin = -(currentCoinPrice * Convert.ToDouble(threshold)) + currentCoinPrice;
-                }
-                if (newPriceMin == null || newCoinBestPrice > newPriceMin)
-                {
+                    newTopCoinTicker = rig.PinnedTicker;
                     var newFlightsheet = configuredCoins.Where(x => x.Ticker.Equals(newTopCoinTicker, StringComparison.OrdinalIgnoreCase) && x.Enabled).FirstOrDefault();
-
                     if (newFlightsheet != null && newFlightsheet.Flightsheet != null && newFlightsheet.Flightsheet.ToString() != currentFlightsheet)
                     {
+                        var pinnedProfit = stagedCoins.Where(x => x.Ticker.Equals(newTopCoinTicker)).FirstOrDefault();
+                        if (pinnedProfit != null)
+                        {
+                            newCoinBestPrice = pinnedProfit.Amount;
+                        }
+                        else
+                        {
+                            newCoinBestPrice = 0.00;
+                        }
                         HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker);
+                    }
+                }
+                else
+                {
+                    var newPriceMin = (currentCoinPrice * Convert.ToDouble(threshold)) + currentCoinPrice;
+                    if (currentCoinPrice < 0.00)
+                    {
+                        newPriceMin = -(currentCoinPrice * Convert.ToDouble(threshold)) + currentCoinPrice;
+                    }
+                    if (newPriceMin == null || newCoinBestPrice > newPriceMin)
+                    {
+                        var newFlightsheet = configuredCoins.Where(x => x.Ticker.Equals(newTopCoinTicker, StringComparison.OrdinalIgnoreCase) && x.Enabled).FirstOrDefault();
+
+                        if (newFlightsheet != null && newFlightsheet.Flightsheet != null && newFlightsheet.Flightsheet.ToString() != currentFlightsheet)
+                        {
+                            HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker);
+                        }
                     }
                 }
             }

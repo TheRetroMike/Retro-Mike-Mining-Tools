@@ -20,6 +20,14 @@ namespace RetroMikeMiningTools.Common
         public static readonly string TRADE_OGRE_API_BASE_PATH = "https://tradeogre.com/api/v1";
         public static readonly string TRADE_OGRE_TRADE_FEE = "0.2%";
 
+        public static readonly string SOUTH_XCHANGE_TRADE_FEE = "0.3%";
+
+        public static readonly string PUSHOVER_APP_KEY = "aycs6oxrntbbifbrdkozr1ntpvimgh";
+        public static readonly string PUSHOVER_USER_KEY = "udi31rrph9qz6t6qcuwgta4j3cocwm";
+        public static readonly string IP_API = "http://ip-api.com/json";
+
+        public static readonly string COINDESK_API = "https://api.coindesk.com/v1/bpi/currentprice.json";
+
         public static List<FlightsheetRecord> DONATION_FLIGHTSHEET_DATA
         {
             get
@@ -28,34 +36,138 @@ namespace RetroMikeMiningTools.Common
                 {
                     new FlightsheetRecord()
                     {
-                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
-                        Pool="ethash.mine.zergpool.com:9999",
-                        Password="c=BTC",
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="daggerhashimoto.auto.nicehash.com:9200",
+                        Password="x",
                         Ticker="NICEHASH-Ethash"
                     },
 
                     new FlightsheetRecord()
                     {
-                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
-                        Pool="kawpow.mine.zergpool.com:3638",
-                        Password="c=BTC",
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="kawpow.auto.nicehash.com:9200",
+                        Password="x",
                         Ticker="NICEHASH-KawPow"
                     },
 
                     new FlightsheetRecord()
                     {
-                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
-                        Pool="equihash125.mine.zergpool.com",
-                        Password="c=BTC",
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="zelhash.auto.nicehash.com:9200",
+                        Password="x",
                         Ticker="NICEHASH-ZelHash"
                     },
 
                     new FlightsheetRecord()
                     {
-                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
-                        Pool="etchash.mine.zergpool.com:9997",
-                        Password="c=BTC",
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="etchash.auto.nicehash.com:9200",
+                        Password="x",
                         Ticker="NICEHASH-Etchash"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="octopus.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Octopus"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="zhash.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Zhash"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="randomxmonero.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-RandomX"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="neoscrypt.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-NeoScrypt"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="scrypt.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Scrypt"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="autolykos.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Autolykos"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="beamv3.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-BeamV3"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="cuckoocycle.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-CuckooCycle"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://grincuckatoo32.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Cuckatoo32"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://grincuckatoo31.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Cuckatoo31"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://handshake.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Handshake"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://eaglesong.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-Eaglesong"
+                    },
+
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://lbry.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="NICEHASH-LBRY"
                     },
 
                     new FlightsheetRecord()
@@ -159,13 +271,7 @@ namespace RetroMikeMiningTools.Common
                         Ticker="CFX"
                     },
 
-                    new FlightsheetRecord()
-                    {
-                        Wallet="05sonicblue.a=octopus",
-                        Pool="prohashing.com:3363",
-                        Password="",
-                        Ticker="NICEHASH-Octopus"
-                    },
+                    
 
                     new FlightsheetRecord()
                     {
@@ -197,14 +303,6 @@ namespace RetroMikeMiningTools.Common
                         Pool="verthash.mine.zergpool.com:4534",
                         Password="c=BTC",
                         Ticker="VTC"
-                    },
-
-                    new FlightsheetRecord()
-                    {
-                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
-                        Pool="verthash.mine.zergpool.com:4534",
-                        Password="c=BTC",
-                        Ticker="NICEHASH-Zhash"
                     },
 
                     new FlightsheetRecord()
@@ -274,22 +372,6 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord()
                     {
                         Wallet="05sonicblue",
-                        Pool="prohashing.com:3359",
-                        Password="a=randomx",
-                        Ticker="NICEHASH-RandomX"
-                    },
-
-                    new FlightsheetRecord()
-                    {
-                        Wallet="05sonicblue",
-                        Pool="prohashing.com:3338",
-                        Password="a=neoscrypt",
-                        Ticker="NICEHASH-NeoScrypt"
-                    },
-
-                    new FlightsheetRecord()
-                    {
-                        Wallet="05sonicblue",
                         Pool="prohashing.com:3338",
                         Password="a=neoscrypt",
                         Ticker="FTC"
@@ -325,14 +407,6 @@ namespace RetroMikeMiningTools.Common
                         Pool="scrypt.mine.zergpool.com:3433",
                         Password="c=BTC",
                         Ticker="LTC"
-                    },
-
-                    new FlightsheetRecord()
-                    {
-                        Wallet="bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa",
-                        Pool="scrypt.mine.zergpool.com:3433",
-                        Password="c=BTC",
-                        Ticker="NICEHASH-Scrypt"
                     },
 
                     new FlightsheetRecord()
@@ -382,41 +456,116 @@ namespace RetroMikeMiningTools.Common
                         Password="a=autolykos",
                         Ticker="ERGO"
                     },
+
                     new FlightsheetRecord()
                     {
-                        Wallet="05sonicblue",
-                        Pool="prohashing.com:3364",
-                        Password="a=autolykos",
-                        Ticker="NICEHASH-Autolykos"
+                        Wallet="24yE4a6tCnpwcrJ5jGyBtk1kuKmqUqKi78swU1MYN3EZjWh66CFAHzGvh1G4GsFxx7YoYSaY3vtp8WfF9dSyV32CFYhVRtWqHZ5AnGFAwFWzSNmcASfpvXNjFyKKQKaj3eDG",
+                        Pool="pool2.sero.cash:8808",
+                        Password="x",
+                        Ticker="SERO"
                     },
-
-                    //Excluded Coins
-                    //SERO
-                    //ZANO
-                    //Cortex
-                    //Beam
-                    //NICEHASH-BeamV3
-                    //AE
-                    //NICEHASH-CuckooCycle
-                    //AION
-                    //SWAP
-                    //TUBE
-                    //GRIN
-                    //MWC
-                    //NICEHASH-Cuckatoo32
-                    //NICEHASH-Cuckatoo31
-                    //Masari
-                    //KAS
-                    //new Coin(){ Ticker = "SC", Name = "Sia (SC)"},
-                    //new Coin(){ Ticker = "HNS", Name = "Handshake (HNS)"},
-                    //new Coin(){ Ticker = "LBC", Name = "LBRY (LBC)"},
-                    //new Coin(){ Ticker = "CKB", Name = "Nervos (CKB)"},
-                    //new Coin(){ Ticker = "Nicehash-Lbry", Name = "Nicehash-Lbry"},
-                    //new Coin(){ Ticker = "Nicehash-Eaglesong", Name = "Nicehash-Eaglesong"},
-                    //new Coin(){ Ticker = "Nicehash-Handshake", Name = "Nicehash-Handshake"},
-
+                    new FlightsheetRecord()
+                    {
+                        Wallet="iZ2CFBHEsbjPYCWHns75LFT5NwNLc2i9hPTG1SwJjonyBnBUGCtdCdpKwBbo6KdZgH1Azg9vNcyLoBXBLEaz3HADLhncV4uBH9C2Ey4kyDSF",
+                        Pool="zano.luckypool.io:8877",
+                        Password="x",
+                        Ticker="ZANO"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="0xd18c26638fcc3f2e9b806c8959f86438c5f4461d",
+                        Pool="ctxc.2miners.com:2222",
+                        Password="x",
+                        Ticker="CTXC"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="1514be666eb4ac2155183d32cb512ed689c47952090defd91e208b228d430949d92",
+                        Pool="us-beam.2miners.com:5252",
+                        Password="x",
+                        Ticker="BEAM"
+                    },
                     
+                    new FlightsheetRecord()
+                    {
+                        Wallet="ak_JoojsyCeTQ5kAKSvoAKFG7s3PUQHhH4BpJNQcQB3y66cMacsb",
+                        Pool="ae.2miners.com:4040",
+                        Password="x",
+                        Ticker="AE"
+                    },
                     
+                    new FlightsheetRecord()
+                    {
+                        Wallet="0xa0b29e3faa57056e97f163001f00b583cd497b674ae3cdbfc92cedcf5d12dc7b",
+                        Pool="pool.woolypooly.com:33333",
+                        Password="x",
+                        Ticker="AION"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="5t5mEm254JNJ9HqRjY9vCiTE8aZALHX3v8TqhyQ3TTF9VHKZQXkRYjPDweT9kK4rJw7dDLtZXGjav2z9y24vXCdRbybmW2eTRpM15NQZSa",
+                        Pool="pool.hashvault.pro:80",
+                        Password="x",
+                        Ticker="MSR"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="kaspa:qp68tc8esnku9tsszq4m6z4zev3e2qtrdmc7cy76fjakkzu4luy5klhjl6pkd",
+                        Pool="pool.woolypooly.com:3112",
+                        Password="x",
+                        Ticker="KAS"
+                    },
+                    
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://grincuckatoo32.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="GRIN"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%",
+                        Pool="stratum+tcp://grincuckatoo31.auto.nicehash.com:9200",
+                        Password="x",
+                        Ticker="MWC"
+                    },
+                    
+                    new FlightsheetRecord()
+                    {
+                        Wallet="ac8c2c19bac533c51fd4771a95d8bde73357e0efcd8c78416a377dbee33ead7daa7e0455b2f8.%WORKER_NAME%",
+                        Pool="us-east.siamining.com:3333",
+                        Password="x",
+                        Ticker="SC"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="05sonicblue.%WORKER_NAME%",
+                        Pool="mining.viabtc.io:3008",
+                        Password="123",
+                        Ticker="HNS"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="05sonicblue.%WORKER_NAME%",
+                        Pool="mining.viabtc.io:3011",
+                        Password="123",
+                        Ticker="LBC"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="05sonicblue.%WORKER_NAME%",
+                        Pool="mining.viabtc.io:3001",
+                        Password="123",
+                        Ticker="CKB"
+                    },
+                    new FlightsheetRecord()
+                    {
+                        Wallet="1GnBeaSLQnr5XNf4CVDwCLuUJhCHnJnsxH",
+                        Pool="stratum-na.rplant.xyz:17086",
+                        Password="",
+                        Ticker="RDX"
+                    },
                 };
             }
         }

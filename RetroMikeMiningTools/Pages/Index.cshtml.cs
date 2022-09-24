@@ -37,12 +37,21 @@ namespace RetroMikeMiningTools.Pages
 
         public async Task<JsonResult> OnPostUpgradeCheck()
         {
-            
+            var releaseType = CoreConfigDAO.GetCoreConfig().ReleaseType;
             var updateInfo = new UpdateInfo();
 
             var assemblyVersion = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version;
             var client = new GitHubClient(new ProductHeaderValue("retro-mike-mining-tools"));
-            var latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools");
+            Release latestRelease = null;
+            if (releaseType == Enums.ReleaseType.Development)
+            {
+                latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools-Dev");
+            }
+            else
+            {
+                latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools");
+            }
+
             var githubVersion = Version.Parse(latestRelease.TagName.Remove(0, 1));
             if (githubVersion != null && githubVersion > assemblyVersion)
             {
@@ -73,8 +82,17 @@ namespace RetroMikeMiningTools.Pages
 
         public async Task<JsonResult> OnPostExecuteUpgrade()
         {
+            var releaseType = CoreConfigDAO.GetCoreConfig().ReleaseType;
             var client = new GitHubClient(new ProductHeaderValue("retro-mike-mining-tools"));
-            var latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools");
+            Release latestRelease = null;
+            if (releaseType == Enums.ReleaseType.Development)
+            {
+                latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools-Dev");
+            }
+            else
+            {
+                latestRelease = await client.Repository.Release.GetLatest("TheRetroMike", "Retro-Mike-Mining-Tools");
+            }
             if (latestRelease != null)
             {
                 var installerAsset = latestRelease?.Assets?.Where(x => x.Name == "RetroMikeMiningTools.zip")?.FirstOrDefault();
@@ -104,7 +122,7 @@ namespace RetroMikeMiningTools.Pages
                             {
                                 var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
                                 var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
-                                if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform == Constants.PLATFORM_HIVE_OS)
+                                if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_HIVE_OS, StringComparison.OrdinalIgnoreCase))
                                 {
                                     newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
                                     {

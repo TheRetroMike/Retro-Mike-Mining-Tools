@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RetroMikeMiningTools.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace RetroMikeMiningTools.DTO
 {
@@ -9,7 +10,6 @@ namespace RetroMikeMiningTools.DTO
         public string? HiveApiKey { get; set; }
         public string? HiveFarmID { get; set; }
         public string? CoinDifferenceThreshold { get; set; }
-        public string? CoinDeskApi { get; set; }
         public bool ProfitSwitchingEnabled { get; set; }
         public bool AutoExchangingEnabled { get; set; }
         public string? ProfitSwitchingCronSchedule { get; set; }
@@ -17,5 +17,6 @@ namespace RetroMikeMiningTools.DTO
         public int Port { get; set; }
         public string? DockerHostIp { get; set; }
         public string? AutoExchangingCronSchedule { get; set; }
+        public ReleaseType ReleaseType { get; set; }
     }
 }

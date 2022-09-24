@@ -21,11 +21,11 @@ namespace RetroMikeMiningTools.Utilities
                 {
                     var tradingCurrencyName = item.Value.TradingName;
                     var pricingCurrencyName = item.Value.PricingName;
-                    if (!result.Any(x => x.Ticker==tradingCurrencyName))
+                    if (!result.Any(x => x.Ticker.Equals(tradingCurrencyName,StringComparison.OrdinalIgnoreCase)))
                     {
                         result.Add(new Coin() { Ticker = tradingCurrencyName, Exchange = Enums.Exchange.CoinEx, Name = tradingCurrencyName });
                     }
-                    if (!result.Any(x => x.Ticker == pricingCurrencyName))
+                    if (!result.Any(x => x.Ticker.Equals(pricingCurrencyName, StringComparison.OrdinalIgnoreCase)))
                     {
                         result.Add(new Coin() { Ticker = pricingCurrencyName, Exchange = Enums.Exchange.CoinEx, Name = pricingCurrencyName });
                     }

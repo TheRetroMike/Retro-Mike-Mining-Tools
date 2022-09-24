@@ -1,40 +1,45 @@
-﻿using RetroMikeMiningTools.Common;
+﻿using Newtonsoft.Json;
+using RestSharp;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
 using RetroMikeMiningTools.Enums;
 using RetroMikeMiningTools.Utilities;
+using System.Dynamic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace RetroMikeMiningTools.AutoExchanging
 {
-    public static class TradeOgre
+    public static class SouthXchange
     {
-        public static void Process(ExchangeConfig exchange)
+        public static async void Process(ExchangeConfig exchange)
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for Trade Ogre due to missing API Keys"), LogType.AutoExchanging);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for South Xchange due to missing API Keys"), Enums.LogType.AutoExchanging);
             }
             else
             {
-                TradeOgreTradeForTradingCurrency(exchange, true);
+                HandleTrading(exchange, true);
                 Thread.Sleep(new TimeSpan(0, 0, 5));
                 if (exchange.DestinationCoin != exchange.TradingPairCurrency)
                 {
-                    TradeOgreTradeForTradingCurrency(exchange, false);
+                    HandleTrading(exchange, false);
                 }
             }
         }
 
-        private static void TradeOgreTradeForTradingCurrency(ExchangeConfig exchange, bool tradingCurrencyStep)
+        private static void HandleTrading(ExchangeConfig exchange, bool tradingCurrencyStep)
         {
-            var markets = TradeOgreApiUtilities.GetMarkets();
+            var markets = SouthXchangeUtilities.GetMarkets();
             var excludedCoins = exchange.ExcludedSourceCoins ?? new List<Coin>();
-            var balances = TradeOgreApiUtilities.GetBalances(exchange).Where(x => x.Balance > 0.00m).ToList();
+            var balances = SouthXchangeUtilities.GetBalances(exchange).Where(x => x.Balance > 0.00m).ToList();
             if (balances != null && balances.Count > 0)
             {
                 foreach (var balance in balances)
                 {
-                    if (!excludedCoins.Any(x => x.Ticker.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase)) && !balance.Ticker.Equals(exchange.DestinationCoin.Ticker, StringComparison.OrdinalIgnoreCase) && (!tradingCurrencyStep || (tradingCurrencyStep && !balance.Ticker.Equals(exchange.TradingPairCurrency?.Ticker,StringComparison.OrdinalIgnoreCase))))
+                    if (!excludedCoins.Any(x => x.Ticker.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase)) && !balance.Ticker.Equals(exchange.DestinationCoin.Ticker, StringComparison.OrdinalIgnoreCase) && (!tradingCurrencyStep || (tradingCurrencyStep && !balance.Ticker.Equals(exchange.TradingPairCurrency?.Ticker, StringComparison.OrdinalIgnoreCase))))
                     {
                         var currencyMarkets = new List<ExchangeMarket>();
                         if (tradingCurrencyStep)
@@ -54,13 +59,13 @@ namespace RetroMikeMiningTools.AutoExchanging
                                     decimal rate = 0m;
                                     if (tradingCurrencyStep)
                                     {
-                                        rate = Convert.ToDecimal(tradingMarket.Bid);
+                                        rate = decimal.Parse(tradingMarket.Bid, System.Globalization.NumberStyles.Float);
                                         balance.Balance = MathUtilities.RoundDown(Convert.ToDecimal(balance.Balance), 10);
                                     }
                                     else
                                     {
-                                        rate = Convert.ToDecimal(tradingMarket.Ask);
-                                        var tradingFeeVal = decimal.Parse(Constants.TRADE_OGRE_TRADE_FEE.TrimEnd(new char[] { '%', ' ' })) / 100M;
+                                        rate = decimal.Parse(tradingMarket.Ask, System.Globalization.NumberStyles.Float);
+                                        var tradingFeeVal = decimal.Parse(Constants.SOUTH_XCHANGE_TRADE_FEE.TrimEnd(new char[] { '%', ' ' })) / 100M;
                                         balance.Balance = MathUtilities.RoundDown((balance.Balance * (1m - tradingFeeVal)) / rate, 4);
                                     }
 
@@ -68,7 +73,7 @@ namespace RetroMikeMiningTools.AutoExchanging
 
                                     if (tradeAmount > Convert.ToDecimal(tradingMarket.MinTradeSize))
                                     {
-                                        var orderResult = TradeOgreApiUtilities.PlaceTradeOrder(exchange, tradingCurrencyStep, tradingMarket.BaseCurrency, tradingMarket.MarketCurrency, balance.Balance, rate, tradingMarket.MarketName);
+                                        var orderResult = SouthXchangeUtilities.PlaceTradeOrder(exchange, tradingCurrencyStep, tradingMarket.BaseCurrency, tradingMarket.MarketCurrency, balance.Balance, rate, tradingMarket.MarketName).Result;
                                         if (!String.IsNullOrEmpty(orderResult))
                                         {
                                             Common.Logger.Log(orderResult, LogType.AutoExchanging);

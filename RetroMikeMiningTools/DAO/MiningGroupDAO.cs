@@ -61,7 +61,7 @@ namespace RetroMikeMiningTools.DAO
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var table = db.GetCollection<GroupConfig>(tableName);
-                result = table.FindOne(x => x.Name == groupName);
+                result = table.FindOne(x => x.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
             }
             return result;
         }

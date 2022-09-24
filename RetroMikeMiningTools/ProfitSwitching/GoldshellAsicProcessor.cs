@@ -35,7 +35,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                     if (configuredCoins != null && configuredCoins.Count() > 0)
                     {
                         var currentPool = GoldshellUtilities.GetCurrentPool(asic);
-                        var coin = configuredCoins?.Where(x => x.PoolUrl == currentPool?.Pool && x.PoolUser == currentPool?.PoolUser && x.PoolPassword == currentPool?.PoolPassword)?.FirstOrDefault();
+                        var coin = configuredCoins?.Where(x => x.PoolUrl.Equals(currentPool?.Pool,StringComparison.OrdinalIgnoreCase) && x.PoolUser.Equals(currentPool?.PoolUser, StringComparison.OrdinalIgnoreCase) && x.PoolPassword.Equals(currentPool?.PoolPassword, StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
                         var currentCoin = coin?.Ticker;
                         var currentMergeCoins = coin?.MergedTickers;
                         var btcPrice = CoinDeskUtilities.GetBtcPrice();
@@ -51,11 +51,11 @@ namespace RetroMikeMiningTools.ProfitSwitching
                         }
 
 
-                        foreach (var wtmCoin in wtmCoins.Where(x => configuredCoins.Any(y => y.Ticker == x.Ticker && y.Enabled)))
+                        foreach (var wtmCoin in wtmCoins.Where(x => configuredCoins.Any(y => y.Ticker.Equals(x.Ticker, StringComparison.OrdinalIgnoreCase) && y.Enabled)))
                         {
                             bool skipCoin = false;
                             double powerCostOverride = Convert.ToDouble(powerPrice);
-                            var coinGroupings = configuredCoins.Where(x => x.Enabled && x.Ticker == wtmCoin.Ticker)?.FirstOrDefault();
+                            var coinGroupings = configuredCoins.Where(x => x.Enabled && x.Ticker.Equals(wtmCoin.Ticker, StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
                             if (coinGroupings != null)
                             {
                                 foreach (var grouping in coinGroupings.Groups)
@@ -83,7 +83,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             var btcRevenue = wtmCoin.BtcRevenue ?? "0.00";
                             var algorithm = wtmCoin.Algorithm;
 
-                            var coinData = configuredCoins.Where(x => x.Ticker == wtmCoin.Ticker && x.Enabled).FirstOrDefault();
+                            var coinData = configuredCoins.Where(x => x.Ticker.Equals(wtmCoin.Ticker,StringComparison.OrdinalIgnoreCase) && x.Enabled).FirstOrDefault();
                             var dailyPowerCost = 24 * ((Convert.ToDouble(wtmCoin.PowerConsumption) / 1000) * Convert.ToDouble(powerCostOverride));
                             var dailyRevenue = Convert.ToDouble(wtmCoin.BtcRevenue) * Convert.ToDouble(btcPrice);
 
@@ -121,11 +121,11 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             }
                         }
 
-                        var currentCoinPrice = stagedCoins.Where(x => x.Ticker == currentCoin).FirstOrDefault()?.Amount;
+                        var currentCoinPrice = stagedCoins.Where(x => x.Ticker.Equals(currentCoin, StringComparison.OrdinalIgnoreCase)).FirstOrDefault()?.Amount;
                         var newCoinBestPrice = stagedCoins.Max(x => x.Amount);
                         var newTopCoinTicker = stagedCoins.Aggregate((x, y) => x.Amount > y.Amount ? x : y).Ticker;
 
-                        var bestCoin = DAO.GoldshellAsicCoinDAO.GetRecords(asic.Id).Where(x => x.Ticker == newTopCoinTicker && x.Enabled).FirstOrDefault();
+                        var bestCoin = DAO.GoldshellAsicCoinDAO.GetRecords(asic.Id).Where(x => x.Ticker.Equals(newTopCoinTicker,StringComparison.OrdinalIgnoreCase) && x.Enabled).FirstOrDefault();
 
                         var newPriceMin = (currentCoinPrice * Convert.ToDouble(threshold)) + currentCoinPrice;
                         if (currentCoinPrice < 0.00)

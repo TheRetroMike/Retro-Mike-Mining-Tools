@@ -19,7 +19,7 @@
   .k-grid td{
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width : 150px;
+    max-width : 100px;
   }
   .k-grid .k-dirty {
     display: none;
@@ -29,7 +29,6 @@
 <script>
     function coinsTemplate(items) {
         if(items){
-        //alert(items);
         var template = "<ul>";
         for (var i = 0; i < items.length; i++){
             template += "<li>" + items[i].Ticker + "</li>";
@@ -58,12 +57,14 @@
     .Columns(columns =>
     {
         columns.Bound(column => column.Exchange);
-        columns.Bound(column => column.DestinationCoin).ClientTemplate("#=cleanText(DestinationCoin?.Ticker)#");
-        columns.Bound(column => column.ExcludedSourceCoins).ClientTemplate("#=coinsTemplate(ExcludedSourceCoins)#");
-        columns.Bound(column => column.TradingPairCurrency).ClientTemplate("#=cleanText(TradingPairCurrency?.Ticker)#");
-        columns.Bound(column => column.Enabled);
+        columns.Bound(column => column.DestinationCoin).ClientTemplate("#=cleanText(DestinationCoin?.Ticker)#").ClientHeaderTemplate("Destination");
+        columns.Bound(column => column.ExcludedSourceCoins).ClientTemplate("#=coinsTemplate(ExcludedSourceCoins)#").ClientHeaderTemplate("Exclusions");
+        columns.Bound(column => column.TradingPairCurrency).ClientTemplate("#=cleanText(TradingPairCurrency?.Ticker)#").ClientHeaderTemplate("Trading Pair");
         columns.Bound(column => column.ApiKey);
         columns.Bound(column => column.ApiSecret);
+        columns.Bound(column => column.Passphrase);
+        columns.Bound(column => column.AutoMoveToTradingAccount).ClientHeaderTemplate("<center>Auto Move to <br />Trading Account</center>");
+        columns.Bound(column => column.Enabled);
         columns.Command(column =>
         {
             column.Edit();

@@ -100,7 +100,7 @@ namespace RetroMikeMiningTools.Pages
             HiveOsRigCoinConfig existingRecord = null;
             if (selectedWorker != null)
             {
-                var existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList()).Where(x => x.Ticker == record.Ticker).ToList();
+                var existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList()).Where(x => x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (existingRecords == null || existingRecords?.Count == 0)
                 {
                     record.WorkerId = selectedWorker.Id;
@@ -245,7 +245,7 @@ namespace RetroMikeMiningTools.Pages
                     coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList());
                     foreach (var coin in wtmCoins)
                     {
-                        if (coins.Where(x => x.Ticker==coin.Ticker).FirstOrDefault() == null)
+                        if (coins.Where(x => x.Ticker.Equals(coin.Ticker,StringComparison.OrdinalIgnoreCase)).FirstOrDefault() == null)
                         {
                             try
                             {

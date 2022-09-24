@@ -21,7 +21,7 @@ namespace RetroMikeMiningTools.Common
                     new Coin(){ Ticker = "HNS", Name = "Handshake (HNS)"},
                     new Coin(){ Ticker = "LBC", Name = "LBRY (LBC)"},
                     new Coin(){ Ticker = "CKB", Name = "Nervos (CKB)"},
-                    new Coin(){ Ticker = "Nicehash-Lbry", Name = "Nicehash-Lbry"},
+                    new Coin(){ Ticker = "Nicehash-LBRY", Name = "Nicehash-Lbry"},
                     new Coin(){ Ticker = "Nicehash-Eaglesong", Name = "Nicehash-Eaglesong"},
                     new Coin(){ Ticker = "Nicehash-Handshake", Name = "Nicehash-Handshake"},
                 };
@@ -61,7 +61,7 @@ namespace RetroMikeMiningTools.Common
                     new Coin(){ Ticker = "FLUX", Name = "Flux (FLUX)"},
                     new Coin(){ Ticker = "GRIN", Name = "Grin (GRIN)"},
                     new Coin(){ Ticker = "BTCZ", Name = "Bitcoin Z (BTCZ)"},
-                    new Coin(){ Ticker = "Nicehash-CukooCycle", Name = "Nicehash-CukooCycle"},
+                    new Coin(){ Ticker = "Nicehash-CuckooCycle", Name = "Nicehash-CuckooCycle"},
                     new Coin(){ Ticker = "AE", Name = "Aeternity (AE)"},
                     new Coin(){ Ticker = "GLINK", Name = "Gemlink (GLINK)"},
                     new Coin(){ Ticker = "TUBE", Name = "BitTube Cash (TUBE)"},
@@ -84,6 +84,12 @@ namespace RetroMikeMiningTools.Common
                     new Coin(){ Ticker = "Nicehash-Octopus", Name = "Nicehash-Octopus"},
                     new Coin(){ Ticker = "Nicehash-Ethash", Name = "Nicehash-Ethash"},
                     new Coin(){ Ticker = "ETHW", Name = "EthereumPoW (ETHW)"},
+
+
+
+
+
+                    new Coin(){ Ticker = "RDX", Name = "Radiant (RDX)"},
                 };
             }
         }

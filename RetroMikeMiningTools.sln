@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{208959D6-357B-47D7-B445-3E6AC0F4C510}"
 	ProjectSection(SolutionItems) = preProject
 		hive_install.sh = hive_install.sh
+		README.md = README.md
+		rpi_install.sh = rpi_install.sh
 	EndProjectSection
 EndProject
 Global

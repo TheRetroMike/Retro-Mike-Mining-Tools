@@ -31,6 +31,14 @@ namespace RetroMikeMiningTools.Jobs
                             Common.Logger.Log(String.Format("Executing Auto Exchanging Job for CoinEx"), LogType.System);
                             CoinExExchange.Process(exchange);
                             break;
+                        case Exchange.SouthXchange:
+                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for SouthXchange"), LogType.System);
+                            SouthXchange.Process(exchange);
+                            break;
+                        case Exchange.Kucoin:
+                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Kucoin"), LogType.System);
+                            KucoinExchange.Process(exchange);
+                            break;
                         default:
                             break;
                     }

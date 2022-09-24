@@ -192,82 +192,91 @@ namespace RetroMikeMiningTools.Utilities
         public static string CreateDonationFlightsheet(string flightSheetId, string hiveApiKey, string farmId)
         {
             string result = "";
-            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            var response = client.Get(request);
-            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
-
-            dynamic body = new ExpandoObject();
-            body.name = String.Format("{0}_profit_switcher_donation", responseContent.name);
-            body.items = new ExpandoObject[responseContent.items.Count];
-            
-            for (int i = 0; i < responseContent.items.Count; i++)
+            string debuggingData = String.Empty;
+            try
             {
-                var coin = responseContent.items[i].coin;
-                var donationRecord = Constants.DONATION_FLIGHTSHEET_DATA.Where(x => x.Ticker.ToUpper() == Convert.ToString(coin.Value).ToUpper()).FirstOrDefault();
-                if (donationRecord != null)
+                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                var response = client.Get(request);
+                dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+
+                dynamic body = new ExpandoObject();
+                body.name = String.Format("{0}_profit_switcher_donation", responseContent.name);
+                body.items = new ExpandoObject[responseContent.items.Count];
+
+                for (int i = 0; i < responseContent.items.Count; i++)
                 {
-                    body.items[i] = new ExpandoObject();
-                    body.items[i].coin = responseContent.items[i].coin.Value;
-                    body.items[i].pool_ssl = responseContent.items[i].pool_ssl.Value;
-                    body.items[i].wal_id = responseContent.items[i].wal_id.Value;
-                    body.items[i].dpool_ssl = responseContent.items[i].dpool_ssl.Value;
-                    if (responseContent.items[i].dpool_urls != null && responseContent.items[i].dpool_urls.Count > 0)
+                    var coin = responseContent.items[i].coin;
+                    var donationRecord = Constants.DONATION_FLIGHTSHEET_DATA.Where(x => x.Ticker.Equals(Convert.ToString(coin.Value), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (donationRecord != null)
                     {
-                        body.items[i].dpool_urls = new List<String>();
-
-                        foreach (var item in responseContent.items[i].dpool_urls)
+                        body.items[i] = new ExpandoObject();
+                        body.items[i].coin = responseContent.items[i].coin.Value;
+                        body.items[i].pool_ssl = responseContent.items[i].pool_ssl.Value;
+                        body.items[i].wal_id = responseContent.items[i].wal_id.Value;
+                        body.items[i].dpool_ssl = responseContent.items[i].dpool_ssl.Value;
+                        if (responseContent.items[i].dpool_urls != null && responseContent.items[i].dpool_urls.Count > 0)
                         {
-                            body.items[i].dpool_urls.Add(item.Value);
+                            body.items[i].dpool_urls = new List<String>();
+
+                            foreach (var item in responseContent.items[i].dpool_urls)
+                            {
+                                body.items[i].dpool_urls.Add(item.Value);
+                            }
                         }
+                        body.items[i].miner = responseContent.items[i].miner.Value;
+                        body.items[i].miner_config = new ExpandoObject();
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
+                        {
+                            body.items[i].miner_config.url = donationRecord.Pool;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.algo?.Value))
+                        {
+                            body.items[i].miner_config.algo = responseContent.items[i].miner_config.algo.Value;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
+                        {
+                            body.items[i].miner_config.pass = donationRecord.Password;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.worker?.Value))
+                        {
+                            body.items[i].miner_config.worker = responseContent.items[i].miner_config.worker.Value;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
+                        {
+                            body.items[i].miner_config.template = donationRecord.Wallet;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i]?.miner_config?.user_config?.Value))
+                        {
+                            body.items[i].miner_config.user_config = responseContent.items[i].miner_config.user_config.Value;
+                        }
+
+                        var url = responseContent.items[i].miner_config;
+
                     }
-                    body.items[i].miner = responseContent.items[i].miner.Value;
-                    body.items[i].miner_config = new ExpandoObject();
-
-                    if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
-                    {
-                        body.items[i].miner_config.url = donationRecord.Pool;
-                    }
-
-                    if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.algo?.Value))
-                    {
-                        body.items[i].miner_config.algo = responseContent.items[i].miner_config.algo.Value;
-                    }
-
-                    if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
-                    {
-                        body.items[i].miner_config.pass = donationRecord.Password;
-                    }
-
-                    if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.worker?.Value))
-                    {
-                        body.items[i].miner_config.worker = responseContent.items[i].miner_config.worker.Value;
-                    }
-
-                    if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
-                    {
-                        body.items[i].miner_config.template = donationRecord.Wallet;
-                    }
-
-                    if (!String.IsNullOrEmpty(responseContent.items[i]?.miner_config?.user_config?.Value))
-                    {
-                        body.items[i].miner_config.user_config = responseContent.items[i].miner_config.user_config.Value;
-                    }
-
-                    var url = responseContent.items[i].miner_config;
-
                 }
+
+                client = new RestClient("https://api2.hiveos.farm/api/v2");
+                request = new RestRequest(String.Format("/farms/{0}/fs", farmId));
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                string jsonData = JsonConvert.SerializeObject(body);
+                debuggingData = jsonData;
+                request.AddStringBody(jsonData, DataFormat.Json);
+                response = client.Post(request);
+                responseContent = JsonConvert.DeserializeObject(response.Content);
+                result = responseContent?.id?.Value?.ToString();
             }
-            
-            client = new RestClient("https://api2.hiveos.farm/api/v2");
-            request = new RestRequest(String.Format("/farms/{0}/fs", farmId));
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            string jsonData = JsonConvert.SerializeObject(body);
-            request.AddStringBody(jsonData, DataFormat.Json);
-            response = client.Post(request);
-            responseContent = JsonConvert.DeserializeObject(response.Content);
-            result = responseContent?.id?.Value?.ToString();
+            catch(Exception ex)
+            {
+                Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1}", ex.Message, debuggingData));
+            }
             return result;
         }
     }

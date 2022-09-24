@@ -20,6 +20,9 @@ namespace RetroMikeMiningTools.DTO
         [DataType(DataType.Password)]
         public string? ApiSecret { get; set; }
 
+        [DataType(DataType.Password)]
+        public string? Passphrase { get; set; }
+
         [UIHint("ExchangeCoinEditor")]
 
         public Coin DestinationCoin { get; set; }
@@ -29,5 +32,7 @@ namespace RetroMikeMiningTools.DTO
 
         [UIHint("ExchangeCoinEditor")]
         public Coin? TradingPairCurrency { get; set; }
+
+        public bool AutoMoveToTradingAccount { get; set; }
     }
 }

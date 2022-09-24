@@ -31,7 +31,14 @@ Install Video / Walkthrough: https://youtu.be/A3J7Ax6jtlk
 wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/hive_install.sh | bash
 ```
 
-## Docker Installer
+## Raspberry Pi Installer
+This may work on other ARM platforms utilizing debian based linux like Ubuntu, but has only been tested on a Raspberry Pi 4 running 64-Bit Ubuntu
+
+```
+wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/rpi_install.sh | bash
+```
+
+## Docker Installer (Non-ARM)
 ```
 sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools
 ```

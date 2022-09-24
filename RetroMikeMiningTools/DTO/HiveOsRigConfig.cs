@@ -21,5 +21,8 @@ namespace RetroMikeMiningTools.DTO
         public bool DonationRunning { get; set; }
         public DateTime? DonationStartTime { get; set; }
         public DateTime? DonationEndTime { get; set; }
+
+        [UIHint("MiningCoinEditor")]
+        public string? PinnedTicker { get; set; }
     }
 }

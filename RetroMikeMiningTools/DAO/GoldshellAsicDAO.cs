@@ -33,7 +33,7 @@ namespace RetroMikeMiningTools.DAO
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var table = db.GetCollection<GoldshellAsicConfig>(tableName);
-                result = table.FindOne(x => x.Name == workerName);
+                result = table.FindOne(x => x.Name.Equals(workerName, StringComparison.OrdinalIgnoreCase));
             }
             return result;
         }
