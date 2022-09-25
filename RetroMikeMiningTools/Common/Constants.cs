@@ -9,7 +9,11 @@ namespace RetroMikeMiningTools.Common
         public static readonly string LINUX_SERVICE_CONTROLLER_CMD = "systemctl";
         public static readonly string LINUX_RESTART_SERVICE_CMD = "restart";
         public static readonly string PLATFORM_HIVE_OS = "hive_os";
-        public static readonly string PLATFORM_DOCKER = "docker";
+        public static readonly string PLATFORM_DOCKER_ARM64 = "Docker-linux/arm64";
+        public static readonly string PLATFORM_DOCKER_AMD64 = "Docker-linux/amd64";
+        public static readonly string PLATFORM_DOCKER_AMD64_V2 = "Docker-linux/amd64/v2";
+        public static readonly string PLATFORM_DOCKER_AMD64_V3 = "Docker-linux/amd64/v3";
+        public static readonly string PLATFORM_RPI = "raspberry_pi";
 
         public static readonly string PARAMETER_SERVICE_NAME = "service_name";
         public static readonly string PARAMETER_PLATFORM_NAME = "platform_name";
@@ -561,7 +565,7 @@ namespace RetroMikeMiningTools.Common
                     },
                     new FlightsheetRecord()
                     {
-                        Wallet="1GnBeaSLQnr5XNf4CVDwCLuUJhCHnJnsxH",
+                        Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",
                         Pool="stratum-na.rplant.xyz:17086",
                         Password="",
                         Ticker="RDX"

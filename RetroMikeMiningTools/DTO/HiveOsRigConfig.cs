@@ -24,5 +24,8 @@ namespace RetroMikeMiningTools.DTO
 
         [UIHint("MiningCoinEditor")]
         public string? PinnedTicker { get; set; }
+
+        [UIHint("ZergAlgoEditor")]
+        public string? PinnedZergAlgo { get; set; }
     }
 }

@@ -25,7 +25,8 @@ namespace RetroMikeMiningTools.DAO
                         ProfitSwitchingCronSchedule = "0 0/1 * 1/1 * ? *",
                         AutoExchangingCronSchedule = "0 0/1 * 1/1 * ? *",
                         Port = 7000,
-                        ReleaseType = Enums.ReleaseType.Production
+                        ReleaseType = Enums.ReleaseType.Production,
+                        DefaultPowerPrice = 0.10m
                     });
                     db.Commit();
                 }
@@ -63,6 +64,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.Port = coreConfig.Port;
                 existingRecord.AutoExchangingCronSchedule = coreConfig.AutoExchangingCronSchedule;
                 existingRecord.ReleaseType = coreConfig.ReleaseType;
+                existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

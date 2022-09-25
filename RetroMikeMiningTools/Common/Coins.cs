@@ -1,4 +1,5 @@
 ﻿using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.Utilities;
 
 namespace RetroMikeMiningTools.Common
 {
@@ -25,6 +26,17 @@ namespace RetroMikeMiningTools.Common
                     new Coin(){ Ticker = "Nicehash-Eaglesong", Name = "Nicehash-Eaglesong"},
                     new Coin(){ Ticker = "Nicehash-Handshake", Name = "Nicehash-Handshake"},
                 };
+            }
+        }
+
+        public static List<Coin> ZergAlgoList
+        {
+            get
+            {
+                var result = new List<Coin>();
+                result = result.Concat(ZergUtilities.GetZergAlgos()).ToList();
+                result.Add(new Coin() { Algorithm="k12", Name="k12" });
+                return result;
             }
         }
 

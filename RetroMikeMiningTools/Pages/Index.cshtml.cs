@@ -33,6 +33,15 @@ namespace RetroMikeMiningTools.Pages
             {
                 data = LogDAO.GetLogs();
             }
+
+            if (systemConfiguration != null)
+            {
+                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                if (hostPlatform != null)
+                {
+                    ViewData["Platform"] = hostPlatform;
+                }
+            }
         }
 
         public async Task<JsonResult> OnPostUpgradeCheck()

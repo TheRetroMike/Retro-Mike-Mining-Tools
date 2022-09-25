@@ -15,9 +15,11 @@ namespace RetroMikeMiningTools.Pages
     {
         public static IList<HiveOsRigConfig>? rigs;
         public static IList<HiveOsRigCoinConfig> coins;
+        public static IList<ZergAlgoConfig> zergAlgos;
         //public static int? selectedWorkerId;
         public static HiveOsRigConfig? selectedWorker;
         public static IList<Flightsheet>? flightsheets;
+        private static IConfiguration systemConfiguration;
 
         //private readonly ILogger<ProfitSwitchingModel> _logger;
 
@@ -25,6 +27,11 @@ namespace RetroMikeMiningTools.Pages
         //{
         //    _logger = logger;
         //}
+
+        public HiveOsRigsModel(IConfiguration configuration)
+        {
+            systemConfiguration = configuration;
+        }
 
         public void OnGet()
         {
@@ -39,6 +46,15 @@ namespace RetroMikeMiningTools.Pages
                 if (coreConfig != null && !String.IsNullOrEmpty(coreConfig.HiveApiKey) && !String.IsNullOrEmpty(coreConfig.HiveFarmID))
                 {
                     flightsheets = HiveUtilities.GetAllFlightsheets(coreConfig.HiveApiKey, coreConfig.HiveFarmID);
+                }
+            }
+
+            if (systemConfiguration != null)
+            {
+                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                if (hostPlatform != null)
+                {
+                    ViewData["Platform"] = hostPlatform;
                 }
             }
         }
@@ -65,6 +81,11 @@ namespace RetroMikeMiningTools.Pages
         public JsonResult OnGetMasterCoinList([DataSourceRequest] DataSourceRequest request)
         {
             return new JsonResult(Coins.CoinList.OrderBy(x => x.Name));
+        }
+
+        public JsonResult OnGetMasterZergAlgoList([DataSourceRequest] DataSourceRequest request)
+        {
+            return new JsonResult(Coins.ZergAlgoList.OrderBy(x => x.Name));
         }
 
         public JsonResult OnGetMasterFlightsheetList([DataSourceRequest] DataSourceRequest request)
@@ -95,6 +116,15 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(String.Empty);
         }
 
+        public JsonResult OnPostReadZergAlgos([DataSourceRequest] DataSourceRequest request)
+        {
+            if (coins != null)
+            {
+                return new JsonResult(zergAlgos.ToDataSourceResult(request));
+            }
+            return new JsonResult(String.Empty);
+        }
+
         public JsonResult OnPostCreateCoins([DataSourceRequest] DataSourceRequest request, HiveOsRigCoinConfig record)
         {
             HiveOsRigCoinConfig existingRecord = null;
@@ -111,6 +141,22 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
 
+        public JsonResult OnPostCreateZergAlgos([DataSourceRequest] DataSourceRequest request, ZergAlgoConfig record)
+        {
+            ZergAlgoConfig existingRecord = null;
+            if (selectedWorker != null)
+            {
+                var existingRecords = ZergAlgoDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList()).Where(x => x.Algo.Equals(record.Algo, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (existingRecords == null || existingRecords?.Count == 0)
+                {
+                    record.WorkerId = selectedWorker.Id;
+                    ZergAlgoDAO.AddRecord(record);
+                    zergAlgos = ZergAlgoDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList());
+                }
+            }
+            return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
+        }
+
         public JsonResult OnPostDestroyCoins([DataSourceRequest] DataSourceRequest request, HiveOsRigCoinConfig record)
         {
             if (selectedWorker != null)
@@ -121,12 +167,32 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
 
+        public JsonResult OnPostDestroyZergAlgos([DataSourceRequest] DataSourceRequest request, ZergAlgoConfig record)
+        {
+            if (selectedWorker != null)
+            {
+                ZergAlgoDAO.DeleteRecord(record);
+                zergAlgos = ZergAlgoDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList());
+            }
+            return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
+        }
+
         public JsonResult OnPostUpdateCoins([DataSourceRequest] DataSourceRequest request, HiveOsRigCoinConfig record)
         {
             if (selectedWorker != null)
             {
                 HiveRigCoinDAO.UpdateRecord(record);
                 coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList());
+            }
+            return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
+        }
+
+        public JsonResult OnPostUpdateZergAlgos([DataSourceRequest] DataSourceRequest request, ZergAlgoConfig record)
+        {
+            if (selectedWorker != null)
+            {
+                ZergAlgoDAO.UpdateRecord(record);
+                zergAlgos = ZergAlgoDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList());
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
@@ -232,6 +298,7 @@ namespace RetroMikeMiningTools.Pages
             //selectedWorkerId = workerId.Id;
             selectedWorker = workerId;
             coins = HiveRigCoinDAO.GetRecords(workerId.Id, flightsheets?.ToList());
+            zergAlgos = ZergAlgoDAO.GetRecords(workerId.Id, flightsheets?.ToList());
             return new JsonResult("Data Bound");
         }
 

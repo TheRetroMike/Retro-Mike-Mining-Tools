@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using RestSharp;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
@@ -14,7 +15,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
 {
     public static class GoldshellAsicProcessor
     {
-        public static void Process(CoreConfig config)
+        public static void Process(CoreConfig config, string? platformName)
         {
             decimal threshold = 0.00m;
             if (!String.IsNullOrEmpty(config.CoinDifferenceThreshold))
@@ -137,8 +138,22 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             if (newPriceMin == null || newCoinBestPrice > newPriceMin)
                             {
                                 //TODO: Apply new pool settings with ui automation
-                                new DriverManager().SetUpDriver(new ChromeConfig());
+                                new DriverManager().SetUpDriver(new ChromeConfig() {});
                                 var options = new ChromeOptions();
+
+                                if (!String.IsNullOrEmpty(platformName) && platformName.Equals(Constants.PLATFORM_RPI))
+                                {
+                                    options.BinaryLocation = "chromium-browswer";
+                                }
+                                if (!String.IsNullOrEmpty(platformName) && 
+                                    platformName.Equals(Constants.PLATFORM_DOCKER_AMD64) ||
+                                    platformName.Equals(Constants.PLATFORM_DOCKER_AMD64_V2) ||
+                                    platformName.Equals(Constants.PLATFORM_DOCKER_AMD64_V3) ||
+                                    platformName.Equals(Constants.PLATFORM_DOCKER_ARM64)
+                                    )
+                                {
+                                    options.BinaryLocation = "chromium";
+                                }
                                 options.AddArgument("--headless");
                                 options.AddArgument("--window-size=1920,1080");
                                 options.AddArgument("--disable-extensions");
@@ -146,6 +161,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                 options.AddArgument("--disable-gpu");
                                 options.AddArgument("--start-maximized");
                                 options.AddArgument("--disable-dev-shm-usage");
+                                //options.BinaryLocation = "chromium-browswer";
                                 var driver = new ChromeDriver(options);
                                 driver.Manage().Timeouts().PageLoad = new TimeSpan(0, 0, 30);
                                 driver.Navigate().GoToUrl(String.Format("{0}/#/login", asic.ApiBasePath));

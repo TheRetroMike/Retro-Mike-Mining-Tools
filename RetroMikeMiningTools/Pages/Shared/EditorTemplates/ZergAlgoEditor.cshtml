@@ -1,0 +1,11 @@
+﻿@using Kendo.Mvc.UI
+@(
+        Html.Kendo().ComboBoxFor(m => m)
+            .DataTextField("Name")
+            .DataValueField("Algorithm")
+            .AutoBind(true)
+            .ValuePrimitive()
+            .DataSource(d=> {
+                d.Read(r => r.Url("/HiveOsRigs?handler=MasterZergAlgoList").Data("forgeryToken"));
+            })
+)

@@ -13,12 +13,27 @@ namespace RetroMikeMiningTools.Pages
     public class AutoExchangingModel : PageModel
     {
         public static IList<ExchangeConfig>? data;
+        private static IConfiguration systemConfiguration;
+
+        public AutoExchangingModel(IConfiguration configuration)
+        {
+            systemConfiguration = configuration;
+        }
 
         public void OnGet()
         {
             if (data == null)
             {
                 data = ExchangeDAO.GetRecords();
+            }
+
+            if (systemConfiguration != null)
+            {
+                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                if (hostPlatform != null)
+                {
+                    ViewData["Platform"] = hostPlatform;
+                }
             }
         }
 

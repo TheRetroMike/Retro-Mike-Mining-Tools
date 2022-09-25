@@ -3,6 +3,7 @@ using RetroMikeMiningTools.Enums;
 using RetroMikeMiningTools.Jobs;
 using Quartz;
 using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.Common;
 
 if (!Directory.Exists("db"))
 {
@@ -52,6 +53,7 @@ builder.Services.AddQuartz(q =>
             .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
             .WithCronSchedule(coreConfig?.ProfitSwitchingCronSchedule ?? "0 0/1 * 1/1 * ? *")
             .WithDescription("Profit Switching Trigger")
+            .UsingJobData("platform_name", builder.Configuration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME))
         );
 
         //Donation Job

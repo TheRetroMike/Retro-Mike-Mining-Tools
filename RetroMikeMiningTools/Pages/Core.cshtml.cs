@@ -22,7 +22,7 @@ namespace RetroMikeMiningTools.Pages
             systemConfiguration = configuration;
         }
 
-        
+
         public void OnGet()
         {
             if (Settings == null)
@@ -34,7 +34,7 @@ namespace RetroMikeMiningTools.Pages
             {
                 Settings = currentSettings;
             }
-            if (Platform==null)
+            if (Platform == null)
             {
                 Platform = "General";
             }
@@ -45,12 +45,18 @@ namespace RetroMikeMiningTools.Pages
                 if (hostPlatform != null)
                 {
                     Platform = hostPlatform;
-                    if (Platform.Equals(Constants.PLATFORM_DOCKER, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        Platform.Equals(Constants.PLATFORM_DOCKER_AMD64, StringComparison.OrdinalIgnoreCase) ||
+                        Platform.Equals(Constants.PLATFORM_DOCKER_AMD64_V2, StringComparison.OrdinalIgnoreCase) ||
+                        Platform.Equals(Constants.PLATFORM_DOCKER_AMD64_V3, StringComparison.OrdinalIgnoreCase) ||
+                        Platform.Equals(Constants.PLATFORM_DOCKER_ARM64, StringComparison.OrdinalIgnoreCase)
+                        )
                     {
                         PortReadOnly = true;
                     }
                 }
             }
+            ViewData["Platform"] = Platform;
         }
 
         private void RestartServices()

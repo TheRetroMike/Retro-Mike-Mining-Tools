@@ -18,5 +18,6 @@ namespace RetroMikeMiningTools.DTO
         public string? DockerHostIp { get; set; }
         public string? AutoExchangingCronSchedule { get; set; }
         public ReleaseType ReleaseType { get; set; }
+        public decimal DefaultPowerPrice { get; set; }
     }
 }

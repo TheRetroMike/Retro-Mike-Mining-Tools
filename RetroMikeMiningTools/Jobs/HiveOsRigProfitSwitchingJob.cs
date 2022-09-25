@@ -6,6 +6,7 @@ using RetroMikeMiningTools.Utilities;
 using Quartz;
 using System.Web;
 using RetroMikeMiningTools.ProfitSwitching;
+using RetroMikeMiningTools.Common;
 
 namespace RetroMikeMiningTools.Jobs
 {
@@ -13,6 +14,8 @@ namespace RetroMikeMiningTools.Jobs
     {
         public Task Execute(IJobExecutionContext context)
         {
+            string? platformName = context.JobDetail.JobDataMap.GetString("platform_name") ?? String.Empty;
+
             var config = CoreConfigDAO.GetCoreConfig();
             if (config != null && config.ProfitSwitchingEnabled)
             {
@@ -26,18 +29,31 @@ namespace RetroMikeMiningTools.Jobs
                     var rigs = HiveRigDAO.GetRecords().Where(x => x.Enabled);
                     if (rigs != null && rigs.Count() > 0)
                     {
-                        foreach (var rig in rigs.Where(x => x.Enabled && !String.IsNullOrEmpty(x.WhatToMineEndpoint)))
+                        foreach (var rig in rigs.Where(x => x.Enabled))
                         {
-                            if (!rig.DonationRunning)
+                            if (!rig.DonationRunning && !String.IsNullOrEmpty(rig.WhatToMineEndpoint) && (
+                                rig.MiningMode == MiningMode.Profit ||
+                                rig.MiningMode == MiningMode.CoinStacking ||
+                                rig.MiningMode == MiningMode.DiversificationByProfit ||
+                                rig.MiningMode == MiningMode.DiversificationByStacking
+                                )
+                            )
                             {
                                 HiveOsGpuRigProcessor.Process(rig, config);
-                            }                        
+                            }
+                            else if(!rig.DonationRunning && rig.MiningMode == MiningMode.ZergPoolAlgoProfitBasis)
+                            {
+                                ZergAlgoProcessor.Process(rig, config);
+                            }
                         }
                     }
                 }
 
-                Common.Logger.Log("Executing Goldshell ASIC Profit Switching Job", LogType.System);
-                GoldshellAsicProcessor.Process(config);
+                if (!platformName.Equals(Constants.PLATFORM_DOCKER_ARM64, StringComparison.OrdinalIgnoreCase))
+                {
+                    Common.Logger.Log("Executing Goldshell ASIC Profit Switching Job", LogType.System);
+                    GoldshellAsicProcessor.Process(config, platformName);
+                }
             }
 
             return Task.CompletedTask;

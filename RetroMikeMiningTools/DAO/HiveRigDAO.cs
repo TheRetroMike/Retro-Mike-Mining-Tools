@@ -33,7 +33,8 @@ namespace RetroMikeMiningTools.DAO
                     WhatToMineEndpoint = rigConfig.WhatToMineEndpoint,
                     MiningMode = rigConfig.MiningMode,
                     EnabledDateTime = rigConfig.Enabled ? DateTime.Now : null,
-                    PinnedTicker = rigConfig.PinnedTicker
+                    PinnedTicker = rigConfig.PinnedTicker,
+                    PinnedZergAlgo = rigConfig.PinnedZergAlgo
                 });
             }
         }
@@ -101,6 +102,7 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.DonationEndTime = record.DonationEndTime;
                     existingRecord.DonationRunning = record.DonationRunning;
                     existingRecord.PinnedTicker = record.PinnedTicker;
+                    existingRecord.PinnedZergAlgo = record.PinnedZergAlgo;
                     
                     table.Update(existingRecord);
                 }
@@ -114,7 +116,8 @@ namespace RetroMikeMiningTools.DAO
                         MiningMode = record.MiningMode,
                         Enabled = record.Enabled,
                         EnabledDateTime = record.Enabled ? DateTime.Now : null,
-                        PinnedTicker = record.PinnedTicker
+                        PinnedTicker = record.PinnedTicker,
+                        PinnedZergAlgo = record.PinnedZergAlgo,
                     });
                 }
             }

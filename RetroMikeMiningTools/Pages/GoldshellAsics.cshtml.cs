@@ -41,6 +41,19 @@ namespace RetroMikeMiningTools.Pages
             {
                 importProgress = 0;
             }
+
+            if (systemConfiguration != null)
+            {
+                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                if (hostPlatform != null)
+                {
+                    ViewData["Platform"] = hostPlatform;
+                    if (hostPlatform.Equals(Constants.PLATFORM_DOCKER_ARM64))
+                    {
+                        Response.Redirect("/");
+                    }
+                }
+            }
         }
 
         public JsonResult OnGetMasterGroupList([DataSourceRequest] DataSourceRequest request)

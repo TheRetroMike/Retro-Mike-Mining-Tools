@@ -2,6 +2,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DTO;
 
@@ -11,12 +12,26 @@ namespace RetroMikeMiningTools.Pages
     public class MiningGroupingsModel : PageModel
     {
         public static IList<GroupConfig>? data;
+        private static IConfiguration systemConfiguration;
+
+        public MiningGroupingsModel(IConfiguration configuration)
+        {
+            systemConfiguration = configuration;
+        }
 
         public void OnGet()
         {
             if (data == null)
             {
                 data = MiningGroupDAO.GetRecords();
+            }
+            if (systemConfiguration != null)
+            {
+                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                if (hostPlatform != null)
+                {
+                    ViewData["Platform"] = hostPlatform;
+                }
             }
         }
 

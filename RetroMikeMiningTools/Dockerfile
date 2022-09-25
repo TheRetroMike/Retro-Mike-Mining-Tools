@@ -15,16 +15,12 @@ WORKDIR /app
 EXPOSE 7000
 COPY --from=build /app/out ./
 
-RUN apt-get update -y
-RUN apt install -y wget unzip
-RUN apt-get install -y tzdata
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; exit 0
-RUN apt -f install -y
+ARG TARGETPLATFORM
+ENV DOCKER_PLATFORM=${TARGETPLATFORM}
+RUN if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then apt-get update -y && apt-get install -y wget unzip chromium && CHROME_MAJOR_VERSION=$(chromium --product-version --no-sandbox | sed -E 's/\.[^.]*$//') && CHROME_DRIVER_VERSION=$(wget -O - "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION") && wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip; fi
 
-RUN CHROME_MAJOR_VERSION=$(google-chrome --product-version --no-sandbox | sed -E 's/\.[^.]*$//') && CHROME_DRIVER_VERSION=$(wget -O - "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION") && wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN rm chromedriver_linux64.zip
-RUN rm google-chrome-stable_current_amd64.deb
+ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM}
 
-ENTRYPOINT ["dotnet", "RetroMikeMiningTools.dll","--platform_name=Docker"]
+
+
+#docker buildx build -t theretromike/miningtools . --progress plain --platform linux/amd64,linux/arm64,linux/amd64/v2,linux/amd64/v3 --push
