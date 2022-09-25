@@ -49,11 +49,19 @@ wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools
 ## Raspberry Pi Installer
 This may work on other ARM platforms utilizing debian based linux like Ubuntu, but has only been tested on a Raspberry Pi 4 running 64-Bit Ubuntu
 
+If you are using a raspberry pi, this is the preferred install method as it gives you access to the full functionality
+
 ```
 wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/rpi_install.sh | bash
 ```
 
-## Docker Installer (Non-ARM)
+## Docker Installer
+You can install the mining tools via a docker container. 
+
+All functionality is available on x64 systems. 
+
+If you are running an ARM-based device, such as a raspberry pi, you won't have access to the Goldshell ASIC functionality, but everything else will be fully functional
+
 ```
 sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools
 ```
