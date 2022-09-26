@@ -89,7 +89,6 @@
     <div class="k-card-body">
         @(Html.Kendo().Grid<HiveOsRigCoinConfig>
             ().Name("rigCoinsGrid")
-            .Groupable()
             .Sortable()
             .Editable()
             .ToolBar(toolbar=> {
@@ -102,11 +101,12 @@
                 columns.Bound(column => column.Flightsheet).ClientTemplate("#: FlightsheetName ?? '' #");
                 columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
                 columns.Bound(column => column.Enabled);
+                columns.Bound(column => column.Profit).ClientHeaderTemplate("Approx Profit");
                 columns.Command(column =>
                 {
                     column.Edit();
                     column.Destroy();
-                });
+                }).Width(200);
             })
             .DataSource(ds => ds.Ajax()
             .Sort(x => x.Add("Ticker"))
@@ -117,6 +117,7 @@
             .Model(m => {
                 m.Id(id => id.Id);
                 m.Field(o => o.Groups).DefaultValue(new List<LinkedGroup>());
+                m.Field(x => x.Profit).Editable(false);
             })
             )
         )
@@ -131,7 +132,6 @@
     <div class="k-card-body">
         @(Html.Kendo().Grid<ZergAlgoConfig>
             ().Name("zergAlgoGrid")
-            .Groupable()
             .Sortable()
             .Editable()
             .ToolBar(toolbar=> {
@@ -146,11 +146,12 @@
                 columns.Bound(column => column.Flightsheet).ClientTemplate("#: FlightsheetName ?? '' #");
                 columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
                 columns.Bound(column => column.Enabled);
+                columns.Bound(column => column.Profit).ClientHeaderTemplate("Approx Profit");
                 columns.Command(column =>
                 {
                     column.Edit();
                     column.Destroy();
-                });
+                }).Width(200);
             })
             .DataSource(ds => ds.Ajax()
             .Sort(x => x.Add("Algo"))
@@ -161,6 +162,7 @@
             .Model(m => {
                 m.Id(id => id.Id);
                 m.Field(o => o.Groups).DefaultValue(new List<LinkedGroup>());
+                m.Field(x => x.Profit).Editable(false);
             })
             )
         )
@@ -169,6 +171,14 @@
 <script>
     function forgeryToken() {
         return kendo.antiForgeryTokens();
+    }
+
+    function dataBindStarted(){
+        //alert('started');
+    }
+
+    function dataBindCompleted(){
+        //alert('completed');
     }
 
     function handleRigSelection(){
@@ -218,10 +228,10 @@
                     RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
                 },
                 success: function (response) {    
-                    $("#zergAlgoContainer").show();
                     $('#zergAlgoGrid').data('kendoGrid').dataSource.read();
                     $('#zergAlgoGrid').data('kendoGrid').refresh();
                     $("#zergAlgoGrid").show();
+                    $("#zergAlgoContainer").show();
                 },
                 failure: function (response) {
                     $('#zergAlgoGrid').data('kendoGrid').dataSource.read();

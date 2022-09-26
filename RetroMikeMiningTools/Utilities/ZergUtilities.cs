@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
+using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DO;
 
 namespace RetroMikeMiningTools.Utilities
@@ -63,6 +64,27 @@ namespace RetroMikeMiningTools.Utilities
                         }
                     }
                 }
+            }
+            return result;
+        }
+
+        public static decimal GetProjectedProfitability(string algo, decimal mhHashrate, decimal power)
+        {
+            decimal result = 0;
+            var btcPrice = CoinDeskUtilities.GetBtcPrice();
+            var config = CoreConfigDAO.GetCoreConfig();
+            var algoData = GetZergAlgoData().Where(x => x.Algo.Equals(algo)).FirstOrDefault();
+            if (algoData != null)
+            {
+                var mBtcPerMhAmount = Convert.ToDecimal(algoData.Estimate) / (Convert.ToDecimal(algoData.MhFactor) / 1000);
+                var mBtcRevenue = mhHashrate * mBtcPerMhAmount;
+                var btcRevenue = mBtcRevenue / 1000;
+
+                decimal dailyPowerCost = 24 * (Convert.ToDecimal(power) / 1000m) * Convert.ToDecimal(config?.DefaultPowerPrice ?? 0.10m);
+                decimal dailyRevenue = Convert.ToDecimal(btcRevenue) * Convert.ToDecimal(btcPrice);
+                decimal dailyProfit = dailyRevenue - dailyPowerCost;
+
+                result = dailyProfit;
             }
             return result;
         }

@@ -2,6 +2,7 @@
 using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DTO;
 using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.Utilities;
 
 namespace RetroMikeMiningTools.DAO
 {
@@ -41,6 +42,9 @@ namespace RetroMikeMiningTools.DAO
         public static List<ZergAlgoConfig> GetRecords(int workerId, List<Flightsheet> flightsheets)
         {
             List<ZergAlgoConfig> result = new List<ZergAlgoConfig>();
+            var btcPrice = CoinDeskUtilities.GetBtcPrice();
+            var config = CoreConfigDAO.GetCoreConfig();
+            var algos = ZergUtilities.GetZergAlgoData();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var table = db.GetCollection<ZergAlgoConfig>(tableName);
@@ -51,6 +55,18 @@ namespace RetroMikeMiningTools.DAO
                 if (item.Flightsheet != null)
                 {
                     item.FlightsheetName = flightsheets?.Where(x => x.Id == item.Flightsheet)?.FirstOrDefault()?.Name;
+                }
+                var algo = algos.Where(x => x.Algo.Equals(item.Algo)).FirstOrDefault();
+                if (algo != null)
+                {
+                    var mBtcPerMhAmount = Convert.ToDecimal(algo.Estimate) / (Convert.ToDecimal(algo.MhFactor) / 1000);
+                    var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
+                    var btcRevenue = mBtcRevenue / 1000;
+
+                    decimal dailyPowerCost = 24 * (Convert.ToDecimal(item.Power) / 1000m) * Convert.ToDecimal(config?.DefaultPowerPrice ?? 0.10m);
+                    decimal dailyRevenue = Convert.ToDecimal(btcRevenue) * Convert.ToDecimal(btcPrice);
+                    decimal dailyProfit = dailyRevenue - dailyPowerCost;
+                    item.Profit = Convert.ToDecimal(dailyProfit);
                 }
             }
             return result;

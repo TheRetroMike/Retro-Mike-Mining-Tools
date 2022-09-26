@@ -1,4 +1,5 @@
 ﻿using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.Utilities;
 using System.ComponentModel.DataAnnotations;
 
 namespace RetroMikeMiningTools.DTO
@@ -30,5 +31,8 @@ namespace RetroMikeMiningTools.DTO
 
         public decimal HashRateMH { get; set; }
         public int Power { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal Profit { get; set; }
     }
 }

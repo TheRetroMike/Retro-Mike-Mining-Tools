@@ -176,6 +176,10 @@ namespace RetroMikeMiningTools.Utilities
                         {
                             Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Amount: {1} {3}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName, ticker), LogType.ProfitSwitching);
                         }
+                        if (miningMode == MiningMode.ZergPoolAlgoProfitBasis)
+                        {
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching);
+                        }
                     }
                 }
                 else

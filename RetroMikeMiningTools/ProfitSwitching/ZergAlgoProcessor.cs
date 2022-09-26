@@ -59,13 +59,14 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             continue;
                         }
 
-                        var mBtcPerMhAmount = Convert.ToDecimal(item.Estimate) / Convert.ToDecimal(item.MhFactor);
+                        var mBtcPerMhAmount = Convert.ToDecimal(item.Estimate) / (Convert.ToDecimal(item.MhFactor) / 1000);
                         var mBtcRevenue = configuredCoin.HashRateMH * mBtcPerMhAmount;
-                        var btcRevenue = mBtcPerMhAmount / 1000;
+                        var btcRevenue = mBtcRevenue / 1000;
 
                         decimal dailyPowerCost = 24 * (Convert.ToDecimal(configuredCoin.Power) / 1000m) * Convert.ToDecimal(powerCostOverride);
                         decimal dailyRevenue = Convert.ToDecimal(btcRevenue) * Convert.ToDecimal(btcPrice);
                         decimal dailyProfit = dailyRevenue - dailyPowerCost;
+
                         stagedCoins.Add(new StagedCoin() { Algorithm = item.Algo, Amount = Convert.ToDouble(dailyProfit) });
                     }
                 }

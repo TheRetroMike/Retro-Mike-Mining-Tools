@@ -2,6 +2,8 @@
 using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DTO;
 using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.Utilities;
+using System.Web;
 
 namespace RetroMikeMiningTools.DAO
 {
@@ -38,6 +40,17 @@ namespace RetroMikeMiningTools.DAO
 
         public static List<HiveOsRigCoinConfig> GetRecords(int workerId, List<Flightsheet> flightsheets)
         {
+            var btcPrice = CoinDeskUtilities.GetBtcPrice();
+            List<Coin> coins = new List<Coin>();
+            string powerPrice = String.Empty;
+            var wtmEndPoint = DAO.HiveRigDAO.GetRecord(workerId)?.WhatToMineEndpoint;
+            if (wtmEndPoint != null)
+            {
+                powerPrice = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndPoint)).Query).Get("factor[cost]");
+                coins = WhatToMineUtilities.GetCoinList(wtmEndPoint);
+            }
+            
+
             List<HiveOsRigCoinConfig> result = new List<HiveOsRigCoinConfig>();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
@@ -49,6 +62,15 @@ namespace RetroMikeMiningTools.DAO
                 if (item.Flightsheet != null)
                 {
                     item.FlightsheetName = flightsheets?.Where(x => x.Id == item.Flightsheet)?.FirstOrDefault()?.Name;
+                }
+
+                if (!String.IsNullOrEmpty(wtmEndPoint))
+                {
+                    var coin = coins.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    var dailyPowerCost = 24 * ((Convert.ToDouble(coin.PowerConsumption) / 1000) * Convert.ToDouble(powerPrice));
+                    var dailyRevenue = Convert.ToDouble(coin.BtcRevenue) * Convert.ToDouble(btcPrice);
+                    var dailyProfit = dailyRevenue - dailyPowerCost;
+                    item.Profit = Convert.ToDecimal(dailyProfit);
                 }
             }
             return result;

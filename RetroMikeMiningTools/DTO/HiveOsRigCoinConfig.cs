@@ -1,4 +1,5 @@
 ﻿using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.Utilities;
 using System.ComponentModel.DataAnnotations;
 
 namespace RetroMikeMiningTools.DTO
@@ -29,5 +30,8 @@ namespace RetroMikeMiningTools.DTO
 
         [UIHint("GroupListEditor")]
         public List<LinkedGroup>? Groups { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal Profit { get; set; }
     }
 }

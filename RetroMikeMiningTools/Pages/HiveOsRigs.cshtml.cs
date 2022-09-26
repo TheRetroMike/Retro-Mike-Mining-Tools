@@ -292,6 +292,7 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult("Hive OS Rigs Imported");
         }
 
+
         public JsonResult OnPostHiveOsRowSelect(HiveOsRigConfig workerId)
         {
             //bind coins: HiveOsRigCoinConfig
