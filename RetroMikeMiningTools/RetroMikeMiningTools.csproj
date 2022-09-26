@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>$(VersionPrefix)</Version>
 		<FileVersion>0.0.0.0</FileVersion>
-		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<AssemblyVersion>2.1.0.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

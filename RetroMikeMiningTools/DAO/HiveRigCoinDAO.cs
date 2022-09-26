@@ -67,10 +67,13 @@ namespace RetroMikeMiningTools.DAO
                 if (!String.IsNullOrEmpty(wtmEndPoint))
                 {
                     var coin = coins.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    var dailyPowerCost = 24 * ((Convert.ToDouble(coin.PowerConsumption) / 1000) * Convert.ToDouble(powerPrice));
-                    var dailyRevenue = Convert.ToDouble(coin.BtcRevenue) * Convert.ToDouble(btcPrice);
-                    var dailyProfit = dailyRevenue - dailyPowerCost;
-                    item.Profit = Convert.ToDecimal(dailyProfit);
+                    if (coin != null)
+                    {
+                        var dailyPowerCost = 24 * ((Convert.ToDouble(coin.PowerConsumption) / 1000) * Convert.ToDouble(powerPrice));
+                        var dailyRevenue = Convert.ToDouble(coin.BtcRevenue) * Convert.ToDouble(btcPrice);
+                        var dailyProfit = dailyRevenue - dailyPowerCost;
+                        item.Profit = Convert.ToDecimal(dailyProfit);
+                    }
                 }
             }
             return result;
