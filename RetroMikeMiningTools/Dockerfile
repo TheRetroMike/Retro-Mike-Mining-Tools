@@ -23,4 +23,4 @@ ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATF
 
 
 
-#docker buildx build -t theretromike/miningtools . --progress plain --platform linux/amd64,linux/arm64,linux/amd64/v2,linux/amd64/v3 --push
+#docker buildx build -t theretromike/miningtools:dev . --progress plain --platform linux/amd64,linux/arm64,linux/amd64/v2,linux/amd64/v3 --push

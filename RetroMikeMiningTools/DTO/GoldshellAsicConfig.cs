@@ -25,5 +25,6 @@ namespace RetroMikeMiningTools.DTO
         public bool DonationRunning { get; set; }
         public DateTime? DonationStartTime { get; set; }
         public DateTime? DonationEndTime { get; set; }
+        public string? Username { get; set; }
     }
 }

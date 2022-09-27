@@ -17,7 +17,7 @@ namespace RetroMikeMiningTools.AutoExchanging
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for South Xchange due to missing API Keys"), Enums.LogType.AutoExchanging);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for South Xchange due to missing API Keys"), Enums.LogType.AutoExchanging, exchange.Username);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                                         var orderResult = SouthXchangeUtilities.PlaceTradeOrder(exchange, tradingCurrencyStep, tradingMarket.BaseCurrency, tradingMarket.MarketCurrency, balance.Balance, rate, tradingMarket.MarketName).Result;
                                         if (!String.IsNullOrEmpty(orderResult))
                                         {
-                                            Common.Logger.Log(orderResult, LogType.AutoExchanging);
+                                            Common.Logger.Log(orderResult, LogType.AutoExchanging, exchange.Username);
                                         }
                                     }
                                 }

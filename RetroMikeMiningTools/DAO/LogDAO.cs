@@ -27,8 +27,18 @@ namespace RetroMikeMiningTools.DAO
                 {
                     LogDateTime = record.LogDateTime,
                     LogMessage = record.LogMessage,
-                    LogType = record.LogType
+                    LogType = record.LogType,
+                    Username = record.Username
                 });
+            }
+        }
+
+        public static void DeleteRecord(LogEntry record)
+        {
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
+            {
+                var table = db.GetCollection<LogEntry>(tableName);
+                table.Delete(record.Id);
             }
         }
 

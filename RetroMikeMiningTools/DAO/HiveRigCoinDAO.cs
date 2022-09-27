@@ -22,7 +22,8 @@ namespace RetroMikeMiningTools.DAO
                     Flightsheet = coinConfig.Flightsheet,
                     Enabled = coinConfig.Enabled,
                     WorkerId = coinConfig.WorkerId,
-                    Groups = coinConfig.Groups
+                    Groups = coinConfig.Groups,
+                    Username = coinConfig.Username
                 });
             }
         }

@@ -6,15 +6,22 @@ using RetroMikeMiningTools.DTO;
 
 namespace RetroMikeMiningTools.Pages
 {
+    [ResponseCache(NoStore = true, Duration = 0)]
     public class CoreModel : PageModel
     {
         [BindProperty]
         public CoreConfig? Settings { get; set; }
         public string? Platform { get; set; }
+        
         public bool PortReadOnly = false;
         
         IHostApplicationLifetime appLifetime;
         private static IConfiguration systemConfiguration;
+
+        public bool IsMultiUser { get; set; }
+        public static bool multiUserMode { get;set; }
+
+        public static string? username { get; set; }
 
         public CoreModel(IHostApplicationLifetime hostLifetime, IConfiguration configuration)
         {
@@ -25,11 +32,32 @@ namespace RetroMikeMiningTools.Pages
 
         public void OnGet()
         {
+            if (systemConfiguration != null)
+            {
+                var multiUserModeConfig = systemConfiguration.GetValue<string>(Constants.MULTI_USER_MODE);
+                if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
+                {
+                    username = User?.Identity?.Name;
+                    multiUserMode = true;
+                    IsMultiUser = true;
+                    ViewData["MultiUser"] = true;
+                }
+            }
             if (Settings == null)
             {
                 Settings = new CoreConfig();
             }
             var currentSettings = CoreConfigDAO.GetCoreConfig();
+            if (multiUserMode)
+            {
+                currentSettings = CoreConfigDAO.GetCoreConfig(username);
+                if (currentSettings == null)
+                {
+                    CoreConfigDAO.InitialConfiguration(username);
+                    currentSettings = CoreConfigDAO.GetCoreConfig(username);
+                }
+            }
+            
             if (currentSettings != null)
             {
                 Settings = currentSettings;
@@ -61,34 +89,37 @@ namespace RetroMikeMiningTools.Pages
 
         private void RestartServices()
         {
-            if (appLifetime != null)
+            if (!multiUserMode)
             {
-                System.Diagnostics.Process newProcess = new System.Diagnostics.Process();
+                if (appLifetime != null)
+                {
+                    System.Diagnostics.Process newProcess = new System.Diagnostics.Process();
 
-                if (systemConfiguration != null)
-                {
-                    var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
-                    var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
-                    if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_HIVE_OS, StringComparison.OrdinalIgnoreCase))
+                    if (systemConfiguration != null)
                     {
-                        newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
+                        var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
+                        var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                        if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_HIVE_OS, StringComparison.OrdinalIgnoreCase))
                         {
-                            Arguments = String.Format("{0} {1}", Constants.LINUX_RESTART_SERVICE_CMD, serviceName),
-                            FileName = Constants.LINUX_SERVICE_CONTROLLER_CMD
-                        };
-                        newProcess.Start();
-                        return;
+                            newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
+                            {
+                                Arguments = String.Format("{0} {1}", Constants.LINUX_RESTART_SERVICE_CMD, serviceName),
+                                FileName = Constants.LINUX_SERVICE_CONTROLLER_CMD
+                            };
+                            newProcess.Start();
+                            return;
+                        }
                     }
+
+                    newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
+                    {
+                        WorkingDirectory = Environment.CurrentDirectory,
+                        Arguments = Environment.CommandLine,
+                        FileName = Environment.ProcessPath
+                    };
+                    appLifetime.StopApplication();
+                    newProcess.Start();
                 }
-                
-                newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
-                {
-                    WorkingDirectory = Environment.CurrentDirectory,
-                    Arguments = Environment.CommandLine,
-                    FileName = Environment.ProcessPath
-                };
-                appLifetime.StopApplication();
-                newProcess.Start();
             }
         }
 
@@ -96,19 +127,27 @@ namespace RetroMikeMiningTools.Pages
         {
             if (Settings != null)
             {
-                
-                var oldSettings = CoreConfigDAO.GetCoreConfig();
-                CoreConfigDAO.UpdateCoreConfig(Settings);
-                ViewData["SettingsSaveMessage"] = "Settings Saved";
-                if (
-                    oldSettings?.ProfitSwitchingCronSchedule != Settings?.ProfitSwitchingCronSchedule || 
-                    oldSettings?.ProfitSwitchingEnabled != Settings.ProfitSwitchingEnabled ||
-                    oldSettings?.Port != Settings.Port
-                    )
+                if (multiUserMode)
                 {
-                    RestartServices();
-                    ViewData["SettingsSaveMessage"] = "Settings Saved and Services Restarted";
-                    ViewData["NewUrl"] = String.Format("{0}://{1}:{2}", Request.Scheme, Request.Host.Host, Settings.Port);
+                    CoreConfigDAO.UpdateUserCoreConfig(Settings, username);
+                    ViewData["SettingsSaveMessage"] = "Settings Saved";
+                    IsMultiUser = true;
+                }
+                else
+                {
+                    var oldSettings = CoreConfigDAO.GetCoreConfig();
+                    CoreConfigDAO.UpdateCoreConfig(Settings);
+                    ViewData["SettingsSaveMessage"] = "Settings Saved";
+                    if (
+                        oldSettings?.ProfitSwitchingCronSchedule != Settings?.ProfitSwitchingCronSchedule ||
+                        oldSettings?.ProfitSwitchingEnabled != Settings.ProfitSwitchingEnabled ||
+                        oldSettings?.Port != Settings.Port
+                        )
+                    {
+                        RestartServices();
+                        ViewData["SettingsSaveMessage"] = "Settings Saved and Services Restarted";
+                        ViewData["NewUrl"] = String.Format("{0}://{1}:{2}", Request.Scheme, Request.Host.Host, Settings.Port);
+                    }
                 }
             }
         }
@@ -116,13 +155,22 @@ namespace RetroMikeMiningTools.Pages
         public JsonResult OnPostHiveKey()
         {
             var currentSettings = CoreConfigDAO.GetCoreConfig();
+            if (multiUserMode)
+            {
+                currentSettings = CoreConfigDAO.GetCoreConfig(username);
+            }
+            
             var result = currentSettings.HiveApiKey;
             return new JsonResult(result);
         }
 
         public JsonResult OnPostRestart()
         {
-            RestartServices();
+            if (!multiUserMode)
+            {
+                RestartServices();
+            }
+            
             return new JsonResult("");
         }
 

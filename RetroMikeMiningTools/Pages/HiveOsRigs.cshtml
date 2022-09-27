@@ -17,7 +17,7 @@
   .k-grid td{
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width : 150px;
+    max-width : 200px;
 }
 
 </style>
@@ -71,7 +71,7 @@
         .Destroy(d => d.Url("/HiveOsRigs?handler=Destroy").Data("forgeryToken"))
         .Model(m => {
             m.Id(id => id.Id);
-            m.Field(x => x.DonationAmount).DefaultValue("1%");
+            m.Field(x => x.DonationAmount).DefaultValue("1%").Editable(!Model.IsMultiUser);
             m.Field(x => x.PinnedTicker).DefaultValue("");
         })
         )

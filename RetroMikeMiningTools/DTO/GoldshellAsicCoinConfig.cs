@@ -32,5 +32,6 @@ namespace RetroMikeMiningTools.DTO
         public string? PoolPassword { get; set; }
         public string? CoinWhatToMineEndpoint { get; set; }
         public string? CoinAlgo { get; set; }
+        public string? Username { get; set; }
     }
 }

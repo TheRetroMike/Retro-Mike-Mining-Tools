@@ -23,7 +23,8 @@ namespace RetroMikeMiningTools.DAO
                     WorkerId = record.WorkerId,
                     Groups = record.Groups,
                     HashRateMH = record.HashRateMH,
-                    Power = record.Power
+                    Power = record.Power,
+                    Username = record.Username
                 });
             }
         }
@@ -65,7 +66,7 @@ namespace RetroMikeMiningTools.DAO
 
                     decimal dailyPowerCost = 24 * (Convert.ToDecimal(item.Power) / 1000m) * Convert.ToDecimal(config?.DefaultPowerPrice ?? 0.10m);
                     decimal dailyRevenue = Convert.ToDecimal(btcRevenue) * Convert.ToDecimal(btcPrice);
-                    decimal dailyProfit = dailyRevenue - dailyPowerCost;
+                    decimal dailyProfit = Convert.ToDecimal(dailyRevenue) - Convert.ToDecimal(dailyPowerCost);
                     item.Profit = Convert.ToDecimal(dailyProfit);
                 }
             }

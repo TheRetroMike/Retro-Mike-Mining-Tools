@@ -27,5 +27,7 @@ namespace RetroMikeMiningTools.DTO
 
         [UIHint("ZergAlgoEditor")]
         public string? PinnedZergAlgo { get; set; }
+
+        public string? Username { get; set; }
     }
 }

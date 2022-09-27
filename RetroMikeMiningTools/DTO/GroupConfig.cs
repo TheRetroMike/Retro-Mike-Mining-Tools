@@ -17,5 +17,7 @@ namespace RetroMikeMiningTools.DTO
 
         [DataType(DataType.Currency)]
         public double? PowerCost { get; set; }
+
+        public string? Username { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Identity
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +60,7 @@
           </div>
         </div>
       </div>*@
-
+  
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -118,6 +120,15 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="https://retromike.net" target="_blank" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Community Mining Pool
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -130,10 +141,15 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            @*<h1>@ViewData["Title"]</h1>*@
+            <ol class="breadcrumb float-sm-left">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="breadcrumb-item active">Logged in as @User.Identity.Name</li>
+                    <li class="breadcrumb-item"><a href="/Logout">Logout</a></li>
+                }
+            </ol>
           </div>
           <div class="col-sm-6">
-              
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">@ViewData["Title"]</li>
@@ -169,13 +185,15 @@
   </footer>
 </div>
 <script>
-    @{
-        var platform = ViewData["Platform"];
-    }   
+        @{
+            var platform = ViewData["Platform"];
+            var multiUser = ViewData["MultiUser"];
+        }   
     $(document).ready(function(){
         
         var platform = '@platform';
-        if(platform == 'Docker-linux/arm64'){
+        var multiUser = '@multiUser';
+        if(platform == 'Docker-linux/arm64' || multiUser == 'True'){
             $("#goldshellAsicsSection").hide();
         }
     });

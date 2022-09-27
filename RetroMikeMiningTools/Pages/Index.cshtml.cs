@@ -1,5 +1,6 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Octokit;
@@ -19,6 +20,9 @@ namespace RetroMikeMiningTools.Pages
         private static IConfiguration systemConfiguration;
         private static IWebHostEnvironment systemEnvironment;
         private static IHostApplicationLifetime appHost;
+        private static bool multiUserMode = false;
+        private static string? username;
+
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment env, IHostApplicationLifetime hostLifetime)
         {
@@ -29,23 +33,40 @@ namespace RetroMikeMiningTools.Pages
 
         public void OnGet()
         {
-            if (data == null)
-            {
-                data = LogDAO.GetLogs();
-            }
 
             if (systemConfiguration != null)
             {
+                var multiUserModeConfig = systemConfiguration.GetValue<string>(Constants.MULTI_USER_MODE);
+                if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
+                {
+                    username = User?.Identity?.Name;
+                    multiUserMode = true;
+                    ViewData["MultiUser"] = true;
+                }
+
                 var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
                 if (hostPlatform != null)
                 {
                     ViewData["Platform"] = hostPlatform;
                 }
             }
+
+            if (multiUserMode && username != "admin")
+            {
+                data = LogDAO.GetLogs()?.Where(x => (x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)))?.ToList();
+            }
+            else
+            {
+                data = LogDAO.GetLogs();
+            }
         }
 
         public async Task<JsonResult> OnPostUpgradeCheck()
         {
+            if(multiUserMode && username != "admin")
+            {
+                return new JsonResult("");
+            }
             var releaseType = CoreConfigDAO.GetCoreConfig().ReleaseType;
             var updateInfo = new UpdateInfo();
 
@@ -80,6 +101,10 @@ namespace RetroMikeMiningTools.Pages
 
         public JsonResult OnPostIgnoreUpgrade(string version)
         {
+            if (multiUserMode && username != "admin")
+            {
+                return new JsonResult("");
+            }
             if (!String.IsNullOrEmpty(version))
             {
                 var config = CoreConfigDAO.GetCoreConfig();
@@ -91,6 +116,10 @@ namespace RetroMikeMiningTools.Pages
 
         public async Task<JsonResult> OnPostExecuteUpgrade()
         {
+            if (multiUserMode && username != "admin")
+            {
+                return new JsonResult("");
+            }
             var releaseType = CoreConfigDAO.GetCoreConfig().ReleaseType;
             var client = new GitHubClient(new ProductHeaderValue("retro-mike-mining-tools"));
             Release latestRelease = null;
@@ -164,16 +193,27 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(data.ToDataSourceResult(request));
         }
 
-        public JsonResult OnPostDestroy([DataSourceRequest] DataSourceRequest request, GroupConfig record)
+        public JsonResult OnPostDestroy([DataSourceRequest] DataSourceRequest request, LogEntry record)
         {
-            MiningGroupDAO.DeleteRecord(record);
-            data = LogDAO.GetLogs();
+            LogDAO.DeleteRecord(record);
+            if (multiUserMode && username != "admin")
+            {
+                data = LogDAO.GetLogs()?.Where(x => (x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)))?.ToList();
+            }
+            else
+            {
+                data = LogDAO.GetLogs();
+            }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
 
         public JsonResult OnPostRefreshLogs()
         {
             var newData = LogDAO.GetLogs();
+            if (multiUserMode && username != "admin")
+            {
+                newData = LogDAO.GetLogs()?.Where(x => (x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)))?.ToList();
+            }
             if (newData.Count != data?.Count)
             {
                 data = newData;

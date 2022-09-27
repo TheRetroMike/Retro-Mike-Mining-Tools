@@ -31,20 +31,16 @@ namespace RetroMikeMiningTools.Pages
             systemConfiguration = configuration;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            if (data == null)
-            {
-                data = GoldshellAsicDAO.GetRecords();
-            }
-            if (importProgress == null)
-            {
-                importProgress = 0;
-            }
-
             if (systemConfiguration != null)
             {
-                var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
+                var multiUserModeConfig = systemConfiguration.GetValue<string>(Constants.MULTI_USER_MODE);
+                if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
+                {
+                    return RedirectToPage("/Index");
+                }
+                    var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
                 if (hostPlatform != null)
                 {
                     ViewData["Platform"] = hostPlatform;
@@ -54,6 +50,17 @@ namespace RetroMikeMiningTools.Pages
                     }
                 }
             }
+
+            if (data == null)
+            {
+                data = GoldshellAsicDAO.GetRecords();
+            }
+            if (importProgress == null)
+            {
+                importProgress = 0;
+            }
+            return Page();
+            
         }
 
         public JsonResult OnGetMasterGroupList([DataSourceRequest] DataSourceRequest request)

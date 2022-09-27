@@ -10,5 +10,7 @@ namespace RetroMikeMiningTools.DTO
         public DateTime LogDateTime { get; set; }
         public string LogMessage { get; set; }
         public LogType LogType { get; set; }
+
+        public string? Username { get; set; }
     }
 }

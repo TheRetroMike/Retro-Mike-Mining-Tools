@@ -23,7 +23,8 @@ namespace RetroMikeMiningTools.DAO
                     TradingPairCurrency = record.TradingPairCurrency,
                     Enabled = record.Enabled,
                     AutoMoveToTradingAccount = record.AutoMoveToTradingAccount,
-                    Passphrase = record.Passphrase
+                    Passphrase = record.Passphrase,
+                    Username = record.Username
                 });
             }
         }
@@ -77,6 +78,7 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.TradingPairCurrency = record.TradingPairCurrency;
                     existingRecord.Passphrase = record.Passphrase;
                     existingRecord.AutoMoveToTradingAccount = record.AutoMoveToTradingAccount;
+                    existingRecord.Username = record.Username;
                     table.Update(existingRecord);
                 }
                 else
@@ -91,7 +93,8 @@ namespace RetroMikeMiningTools.DAO
                         TradingPairCurrency = record.TradingPairCurrency,
                         Enabled = record.Enabled,
                         AutoMoveToTradingAccount = record.AutoMoveToTradingAccount,
-                        Passphrase = record.Passphrase
+                        Passphrase = record.Passphrase,
+                        Username = record.Username
                     });
                 }
 

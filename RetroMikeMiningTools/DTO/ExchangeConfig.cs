@@ -34,5 +34,6 @@ namespace RetroMikeMiningTools.DTO
         public Coin? TradingPairCurrency { get; set; }
 
         public bool AutoMoveToTradingAccount { get; set; }
+        public string? Username { get; set; }
     }
 }

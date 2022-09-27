@@ -1,0 +1,33 @@
+﻿@page
+@model RetroMikeMiningTools.Pages.RegisterModel
+@{
+}
+@{
+    ViewData["Title"] = "Registration";
+}
+
+<div class="k-card">
+    <form method="post">
+        <div class="k-card-body">
+            <div>
+                @Model.Message
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="col-form-label col-md-2">Username</label>
+                <div class="col-md-10">
+                    <input asp-for="UserName" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="col-form-label col-md-2">Password</label>
+                <div class="col-md-10">
+                    <input asp-for="Password" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="k-card-footer">
+            <button class="btn btn-primary">Register</button>
+            &nbsp;
+        </div>
+    </form>
+</div>

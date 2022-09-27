@@ -14,48 +14,59 @@ namespace RetroMikeMiningTools.Jobs
     {
         public Task Execute(IJobExecutionContext context)
         {
-            string? platformName = context.JobDetail.JobDataMap.GetString("platform_name") ?? String.Empty;
-
-            var config = CoreConfigDAO.GetCoreConfig();
-            if (config != null && config.ProfitSwitchingEnabled)
+            Common.Logger.Log("Executing HiveOS Rig Profit Switching Job", LogType.System);
+            string? platformName = context.Trigger.JobDataMap.GetString("platform_name") ?? String.Empty;
+            bool multiUserMode = context.Trigger.JobDataMap.GetBoolean("multi_user_mode");
+            List<CoreConfig> configs = new List<CoreConfig>();
+            if (multiUserMode)
             {
-                if (String.IsNullOrEmpty(config.HiveApiKey) || String.IsNullOrEmpty(config.HiveFarmID))
+                configs = CoreConfigDAO.GetCoreConfigs().Where(x => x.Username != null).ToList();
+            }
+            else
+            {
+                configs.Add(CoreConfigDAO.GetCoreConfig());
+            }
+
+            foreach (var config in configs)
+            {
+                if (config != null)
                 {
-                    Common.Logger.Log("Skipping Hive OS Rig Profit Switching because there isno Hive API Key and/or Farm ID configured", LogType.System);
-                }
-                else
-                {
-                    Common.Logger.Log("Executing HiveOS Rig Profit Switching Job", LogType.System);
-                    var rigs = HiveRigDAO.GetRecords().Where(x => x.Enabled);
-                    if (rigs != null && rigs.Count() > 0)
+                    if (String.IsNullOrEmpty(config.HiveApiKey) || String.IsNullOrEmpty(config.HiveFarmID))
                     {
-                        foreach (var rig in rigs.Where(x => x.Enabled))
+                        Common.Logger.Log("Skipping Hive OS Rig Profit Switching because there is no Hive API Key and/or Farm ID configured", LogType.System);
+                    }
+                    else
+                    {
+                        var rigs = HiveRigDAO.GetRecords().Where(x => x.Enabled);
+                        if (rigs != null && rigs.Count() > 0)
                         {
-                            if (!rig.DonationRunning && !String.IsNullOrEmpty(rig.WhatToMineEndpoint) && (
-                                rig.MiningMode == MiningMode.Profit ||
-                                rig.MiningMode == MiningMode.CoinStacking ||
-                                rig.MiningMode == MiningMode.DiversificationByProfit ||
-                                rig.MiningMode == MiningMode.DiversificationByStacking
+                            foreach (var rig in rigs.Where(x => x.Enabled))
+                            {
+                                if (!rig.DonationRunning && !String.IsNullOrEmpty(rig.WhatToMineEndpoint) && (
+                                    rig.MiningMode == MiningMode.Profit ||
+                                    rig.MiningMode == MiningMode.CoinStacking ||
+                                    rig.MiningMode == MiningMode.DiversificationByProfit ||
+                                    rig.MiningMode == MiningMode.DiversificationByStacking
+                                    )
                                 )
-                            )
-                            {
-                                HiveOsGpuRigProcessor.Process(rig, config);
-                            }
-                            else if(!rig.DonationRunning && rig.MiningMode == MiningMode.ZergPoolAlgoProfitBasis)
-                            {
-                                ZergAlgoProcessor.Process(rig, config);
+                                {
+                                    HiveOsGpuRigProcessor.Process(rig, config);
+                                }
+                                else if (!rig.DonationRunning && rig.MiningMode == MiningMode.ZergPoolAlgoProfitBasis)
+                                {
+                                    ZergAlgoProcessor.Process(rig, config);
+                                }
                             }
                         }
                     }
-                }
 
-                if (!platformName.Equals(Constants.PLATFORM_DOCKER_ARM64, StringComparison.OrdinalIgnoreCase))
-                {
-                    Common.Logger.Log("Executing Goldshell ASIC Profit Switching Job", LogType.System);
-                    GoldshellAsicProcessor.Process(config, platformName);
+                    if (!multiUserMode && !platformName.Equals(Constants.PLATFORM_DOCKER_ARM64, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Common.Logger.Log("Executing Goldshell ASIC Profit Switching Job", LogType.System);
+                        GoldshellAsicProcessor.Process(config, platformName);
+                    }
                 }
             }
-
             return Task.CompletedTask;
         }
     }

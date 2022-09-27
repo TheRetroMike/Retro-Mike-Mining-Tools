@@ -19,7 +19,8 @@ namespace RetroMikeMiningTools.DAO
                     StartTime = miningGroup.StartTime,
                     EndTime = miningGroup.EndTime,
                     PowerCost = miningGroup.PowerCost,
-                    Enabled = miningGroup.Enabled
+                    Enabled = miningGroup.Enabled,
+                    Username = miningGroup.Username
                 });
             }
         }
@@ -36,6 +37,7 @@ namespace RetroMikeMiningTools.DAO
                     existingGroup.StartTime = miningGroup.StartTime;
                     existingGroup.EndTime = miningGroup.EndTime;
                     existingGroup.PowerCost = miningGroup.PowerCost;
+                    existingGroup.Username = miningGroup.Username;
                     var table = db.GetCollection<GroupConfig>(tableName);
                     table.Update(existingGroup);
                 }
@@ -48,20 +50,29 @@ namespace RetroMikeMiningTools.DAO
                         StartTime = miningGroup.StartTime,
                         EndTime = miningGroup.EndTime,
                         PowerCost = miningGroup.PowerCost,
-                        Enabled = miningGroup.Enabled
+                        Enabled = miningGroup.Enabled,
+                        Username = miningGroup.Username
                     });
                 }
 
             }
         }
 
-        public static GroupConfig? GetRecord(string groupName)
+        public static GroupConfig? GetRecord(string groupName, string username)
         {
             GroupConfig? result = null;
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var table = db.GetCollection<GroupConfig>(tableName);
-                result = table.FindOne(x => x.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
+                if (username == null)
+                {
+                    result = table.FindOne(x => x.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
+                }
+                else
+                {
+                    result = table.FindOne(x => x.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase) && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                }
+                
             }
             return result;
         }

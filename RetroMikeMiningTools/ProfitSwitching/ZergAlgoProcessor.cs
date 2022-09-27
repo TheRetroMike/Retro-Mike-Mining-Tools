@@ -17,7 +17,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                 threshold = decimal.Parse(config.CoinDifferenceThreshold.TrimEnd(new char[] { '%', ' ' })) / 100M;
             }
             var btcPrice = CoinDeskUtilities.GetBtcPrice();
-            Common.Logger.Log(String.Format("Executing Zergo Algo Profit Switching Job for Rig: {0}", rig.Name), LogType.System);
+            Common.Logger.Log(String.Format("Executing Zergo Algo Profit Switching Job for Rig: {0}", rig.Name), LogType.System, config.Username);
             string currentFlightsheet = HiveUtilities.GetCurrentFlightsheet(rig.HiveWorkerId, config.HiveApiKey, config.HiveFarmID, rig.Name);
             var configuredCoins = ZergAlgoDAO.GetRecords(rig.Id, HiveUtilities.GetAllFlightsheets(config.HiveApiKey, config.HiveFarmID)).Where(x => x.Enabled);
             if (!String.IsNullOrEmpty(currentFlightsheet))
@@ -92,7 +92,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             {
                                 newCoinBestPrice = 0.00;
                             }
-                            HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker);
+                            HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker, config.Username);
                         }
                     }
                     else
@@ -108,7 +108,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
 
                             if (newFlightsheet != null && newFlightsheet.Flightsheet != null && newFlightsheet.Flightsheet.ToString() != currentFlightsheet)
                             {
-                                HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker);
+                                HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker, config.Username);
                             }
                         }
                     }

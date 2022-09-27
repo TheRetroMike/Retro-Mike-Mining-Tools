@@ -34,7 +34,8 @@ namespace RetroMikeMiningTools.DAO
                     MiningMode = rigConfig.MiningMode,
                     EnabledDateTime = rigConfig.Enabled ? DateTime.Now : null,
                     PinnedTicker = rigConfig.PinnedTicker,
-                    PinnedZergAlgo = rigConfig.PinnedZergAlgo
+                    PinnedZergAlgo = rigConfig.PinnedZergAlgo,
+                    Username = rigConfig.Username
                 });
             }
         }
@@ -46,6 +47,17 @@ namespace RetroMikeMiningTools.DAO
             {
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
                 result = rigExecutionsCollection.FindOne(x => x.Name.Equals(workerName, StringComparison.OrdinalIgnoreCase));
+            }
+            return result;
+        }
+
+        public static HiveOsRigConfig? GetRecord(string workerName, string username)
+        {
+            HiveOsRigConfig? result = null;
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
+            {
+                var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
+                result = rigExecutionsCollection.FindOne(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase) && x.Name.Equals(workerName, StringComparison.OrdinalIgnoreCase));
             }
             return result;
         }

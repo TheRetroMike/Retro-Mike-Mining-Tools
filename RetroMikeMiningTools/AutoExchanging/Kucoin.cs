@@ -14,7 +14,7 @@ namespace RetroMikeMiningTools.AutoExchanging
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret) || String.IsNullOrEmpty(exchange?.Passphrase))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for Kucoin due to missing API Keys and/or Passphrase"), LogType.AutoExchanging);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for Kucoin due to missing API Keys and/or Passphrase"), LogType.AutoExchanging, exchange.Username);
             }
             else
             {
@@ -49,7 +49,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             if (tickerMarketDirect?.BaseAsset != null)
                             {
                                 var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketDirect.Symbol, Kucoin.Net.Enums.OrderSide.Sell, Kucoin.Net.Enums.NewOrderType.Market, balanceVal);
-                                Common.Logger.Log(String.Format("Kucoin: Auto Exchanged {0} for {1}", ticker, exchange.TradingPairCurrency.Ticker), LogType.AutoExchanging);
+                                Common.Logger.Log(String.Format("Kucoin: Auto Exchanged {0} for {1}", ticker, exchange.TradingPairCurrency.Ticker), LogType.AutoExchanging, exchange.Username);
                             }
                             else
                             {
@@ -59,7 +59,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                                     if (balanceVal > tickerMarketIntermediate.BaseMinQuantity)
                                     {
                                         var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketIntermediate.Symbol, Kucoin.Net.Enums.OrderSide.Sell, Kucoin.Net.Enums.NewOrderType.Market, balanceVal);
-                                        Common.Logger.Log(String.Format("Kucoin: Auto Exchanged {0} for {1}", ticker, exchange.TradingPairCurrency.Ticker), LogType.AutoExchanging);
+                                        Common.Logger.Log(String.Format("Kucoin: Auto Exchanged {0} for {1}", ticker, exchange.TradingPairCurrency.Ticker), LogType.AutoExchanging, exchange.Username);
                                     }
                                 }
                             }
@@ -85,7 +85,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             {
                                 
                                 var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(finalMarket.Symbol, OrderSide.Buy, NewOrderType.Market, convertedBuyAmount);
-                                Common.Logger.Log(String.Format("Kucoin: Auto Exchanged {0} for {1}", exchange.TradingPairCurrency.Ticker, exchange.DestinationCoin.Ticker), LogType.AutoExchanging);
+                                Common.Logger.Log(String.Format("Kucoin: Auto Exchanged {0} for {1}", exchange.TradingPairCurrency.Ticker, exchange.DestinationCoin.Ticker), LogType.AutoExchanging, exchange.Username);
                             }
                         }
                     }

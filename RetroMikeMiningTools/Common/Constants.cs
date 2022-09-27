@@ -17,6 +17,9 @@ namespace RetroMikeMiningTools.Common
 
         public static readonly string PARAMETER_SERVICE_NAME = "service_name";
         public static readonly string PARAMETER_PLATFORM_NAME = "platform_name";
+        public static readonly string MULTI_USER_MODE = "multi_user_mode";
+        public static readonly string OVERRIDE_PORT = "override_port";
+        public static readonly string MULTI_USER_MODE_DONATION = "5%";
 
         public static readonly string TX_BIT_API_BASE_PATH = "https://api.txbit.io/api";
         public static readonly string TX_BIT_TRADE_FEE = "0.2%";

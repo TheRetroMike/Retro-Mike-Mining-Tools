@@ -146,7 +146,7 @@ namespace RetroMikeMiningTools.Utilities
             return result;
         }
 
-        public static void UpdateFlightSheetID(string workerId, string flightSheetId, string flightSheetName, string profit, string hiveApiKey, string farmId, string workerName, bool donation, MiningMode miningMode, string ticker)
+        public static void UpdateFlightSheetID(string workerId, string flightSheetId, string flightSheetName, string profit, string hiveApiKey, string farmId, string workerName, bool donation, MiningMode miningMode, string ticker, string username)
         {
             if (String.IsNullOrEmpty(workerId) && !String.IsNullOrEmpty(workerName))
             {
@@ -164,32 +164,32 @@ namespace RetroMikeMiningTools.Utilities
                 {
                     if (donation)
                     {
-                        Common.Logger.Log(String.Format("Flightsheet Updated on {0} to Dev Fee / Donation. ", workerName), LogType.ProfitSwitching);
+                        Common.Logger.Log(String.Format("Flightsheet Updated on {0} to Dev Fee / Donation. ", workerName), LogType.ProfitSwitching, username);
                     }
                     else
                     {
                         if (miningMode == MiningMode.Profit || miningMode == MiningMode.DiversificationByProfit)
                         {
-                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching);
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching, username);
                         }
                         if (miningMode == MiningMode.CoinStacking || miningMode == MiningMode.DiversificationByStacking)
                         {
-                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Amount: {1} {3}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName, ticker), LogType.ProfitSwitching);
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Amount: {1} {3}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName, ticker), LogType.ProfitSwitching, username);
                         }
                         if (miningMode == MiningMode.ZergPoolAlgoProfitBasis)
                         {
-                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching);
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching, username);
                         }
                     }
                 }
                 else
                 {
-                    Common.Logger.Log("Flightsheet Failed to Update", LogType.ProfitSwitching);
+                    Common.Logger.Log("Flightsheet Failed to Update", LogType.ProfitSwitching, username);
                 }
             }
             else
             {
-                Common.Logger.Log(String.Format("Unable to determine worker id for rig {0}. Please check Rig name or use import function", workerName), LogType.ProfitSwitching);
+                Common.Logger.Log(String.Format("Unable to determine worker id for rig {0}. Please check Rig name or use import function", workerName), LogType.ProfitSwitching, username);
             }
         }
 

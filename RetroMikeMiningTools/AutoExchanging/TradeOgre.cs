@@ -12,7 +12,7 @@ namespace RetroMikeMiningTools.AutoExchanging
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for Trade Ogre due to missing API Keys"), LogType.AutoExchanging);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for Trade Ogre due to missing API Keys"), LogType.AutoExchanging, exchange.Username);
             }
             else
             {
@@ -71,7 +71,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                                         var orderResult = TradeOgreApiUtilities.PlaceTradeOrder(exchange, tradingCurrencyStep, tradingMarket.BaseCurrency, tradingMarket.MarketCurrency, balance.Balance, rate, tradingMarket.MarketName);
                                         if (!String.IsNullOrEmpty(orderResult))
                                         {
-                                            Common.Logger.Log(orderResult, LogType.AutoExchanging);
+                                            Common.Logger.Log(orderResult, LogType.AutoExchanging, exchange.Username);
                                         }
                                     }
                                 }

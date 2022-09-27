@@ -16,6 +16,17 @@ namespace RetroMikeMiningTools.Common
             });
         }
 
+        public static void Log(string message, LogType logType, string username)
+        {
+            LogDAO.Add(new LogEntry()
+            {
+                LogMessage = message,
+                LogDateTime = DateTime.Now,
+                LogType = logType,
+                Username = username
+            });
+        }
+
         public static void Push(string message)
         {
             try

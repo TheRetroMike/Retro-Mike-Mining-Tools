@@ -34,5 +34,7 @@ namespace RetroMikeMiningTools.DTO
 
         [DataType(DataType.Currency)]
         public decimal Profit { get; set; }
+
+        public string? Username { get; set; }
     }
 }

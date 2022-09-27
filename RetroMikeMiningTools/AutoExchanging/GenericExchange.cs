@@ -11,7 +11,7 @@ namespace RetroMikeMiningTools.AutoExchanging
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for TxBit due to missing API Keys"), LogType.AutoExchanging);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for TxBit due to missing API Keys"), LogType.AutoExchanging, exchange.Username);
             }
             else
             {
@@ -51,7 +51,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             var orderResult = GenericExchangeApiUtilities.SubmitTradeOrder(apiBasePath, tradingCurrencyStep, tradingMarket.MarketName, balance.Balance, exchange, rate, Convert.ToDecimal(tradingMarket.MinTradeSize), tradingFee);
                             if (!String.IsNullOrEmpty(orderResult))
                             {
-                                Common.Logger.Log(orderResult, LogType.AutoExchanging);
+                                Common.Logger.Log(orderResult, LogType.AutoExchanging, exchange.Username);
                             }
                         }
                     }

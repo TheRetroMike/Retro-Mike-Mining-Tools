@@ -12,7 +12,7 @@ namespace RetroMikeMiningTools.AutoExchanging
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for CoinEx due to missing API Keys"), LogType.AutoExchanging);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for CoinEx due to missing API Keys"), LogType.AutoExchanging, exchange.Username);
             }
             else
             {
@@ -36,7 +36,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             if (tickerMarketDirect.Key != null)
                             {
                                 var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketDirect.Key, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderType.Market, balanceVal);
-                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuoteQuantityFilled), LogType.AutoExchanging);
+                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuoteQuantityFilled), LogType.AutoExchanging, exchange.Username);
                             }
                             else
                             {
@@ -46,7 +46,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                                     if (balanceVal > tickerMarketIntermediate.Value.MinQuantity)
                                     {
                                         var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketIntermediate.Key, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderType.Market, balanceVal);
-                                        Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuoteQuantityFilled), LogType.AutoExchanging);
+                                        Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuoteQuantityFilled), LogType.AutoExchanging, exchange.Username);
                                     }
                                 }
                             }
@@ -70,7 +70,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             if (convertedBuyAmount >= finalMarket.Value.MinQuantity)
                             {
                                 var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(finalMarket.Key, CoinEx.Net.Enums.OrderSide.Buy, CoinEx.Net.Enums.OrderType.Market, balanceVal);
-                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", exchange.TradingPairCurrency.Ticker, exchange.DestinationCoin.Ticker, orderOperation?.Data?.Quantity, convertedBuyAmount), LogType.AutoExchanging);
+                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", exchange.TradingPairCurrency.Ticker, exchange.DestinationCoin.Ticker, orderOperation?.Data?.Quantity, convertedBuyAmount), LogType.AutoExchanging, exchange.Username);
                             }
                         }
                     }

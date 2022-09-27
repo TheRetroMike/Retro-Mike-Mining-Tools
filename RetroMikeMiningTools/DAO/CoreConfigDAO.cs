@@ -7,28 +7,42 @@ namespace RetroMikeMiningTools.DAO
     public static class CoreConfigDAO
     {
         private static readonly string tableName = "CoreConfig";
-        public static void InitialConfiguration()
+        public static void InitialConfiguration(string? username=null)
         {
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
             {
                 var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
-                var recordCount = rigExecutionsCollection.Count();
-                if (recordCount == 0)
+                if (username == null)
                 {
-                    var result = rigExecutionsCollection.Insert(new CoreConfig()
+                    var recordCount = rigExecutionsCollection.Find(x => x.Username == null).Count();
+                    if (recordCount == 0)
                     {
-                        ProfitSwitchingEnabled = false,
-                        AutoExchangingEnabled = false,
-                        CoinDifferenceThreshold = "5%",
+                        var result = rigExecutionsCollection.Insert(new CoreConfig()
+                        {
+                            ProfitSwitchingEnabled = false,
+                            AutoExchangingEnabled = false,
+                            CoinDifferenceThreshold = "5%",
+                            HiveApiKey = null,
+                            HiveFarmID = null,
+                            ProfitSwitchingCronSchedule = "0 0/15 * 1/1 * ? *",
+                            AutoExchangingCronSchedule = "0 0/15 * 1/1 * ? *",
+                            Port = 7000,
+                            ReleaseType = Enums.ReleaseType.Production,
+                            DefaultPowerPrice = 0.10m
+                        });
+                        db.Commit();
+                    }
+                }
+                else
+                {
+                    rigExecutionsCollection.Insert(new CoreConfig()
+                    {
+                        Username = username,
+                        DefaultPowerPrice = 0.10m,
                         HiveApiKey = null,
                         HiveFarmID = null,
-                        ProfitSwitchingCronSchedule = "0 0/1 * 1/1 * ? *",
-                        AutoExchangingCronSchedule = "0 0/1 * 1/1 * ? *",
-                        Port = 7000,
-                        ReleaseType = Enums.ReleaseType.Production,
-                        DefaultPowerPrice = 0.10m
+                        CoinDifferenceThreshold = "5%",
                     });
-                    db.Commit();
                 }
             }
         }
@@ -39,11 +53,29 @@ namespace RetroMikeMiningTools.DAO
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly=true }))
             {
                 var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
-                var recordCount = rigExecutionsCollection.Count();
-                if (recordCount == 1)
-                {
-                    result = rigExecutionsCollection.FindAll().FirstOrDefault();
-                }
+                result = rigExecutionsCollection.FindOne(x => x.Username == null);
+            }
+            return result;
+        }
+
+        public static List<CoreConfig>? GetCoreConfigs()
+        {
+            List<CoreConfig>? result = null;
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
+            {
+                var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
+                result = rigExecutionsCollection.FindAll().ToList();
+            }
+            return result;
+        }
+
+        public static CoreConfig? GetCoreConfig(string username)
+        {
+            CoreConfig? result = null;
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
+            {
+                var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
+                result = rigExecutionsCollection.FindOne(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
             }
             return result;
         }
@@ -64,6 +96,23 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.Port = coreConfig.Port;
                 existingRecord.AutoExchangingCronSchedule = coreConfig.AutoExchangingCronSchedule;
                 existingRecord.ReleaseType = coreConfig.ReleaseType;
+                existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
+                using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
+                {
+                    var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
+                    rigExecutionsCollection.Update(existingRecord);
+                }
+            }
+        }
+
+        public static void UpdateUserCoreConfig(CoreConfig coreConfig, string username)
+        {
+            var existingRecord = GetCoreConfig(username);
+            if (existingRecord != null)
+            {
+                existingRecord.CoinDifferenceThreshold = coreConfig.CoinDifferenceThreshold;
+                existingRecord.HiveApiKey = coreConfig.HiveApiKey;
+                existingRecord.HiveFarmID = coreConfig.HiveFarmID;
                 existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
