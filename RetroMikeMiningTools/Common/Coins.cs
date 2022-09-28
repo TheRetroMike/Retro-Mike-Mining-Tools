@@ -48,6 +48,7 @@ namespace RetroMikeMiningTools.Common
                 result.AddRange(ZergUtilities.GetZergAlgos());
                 result.AddRange(WhatToMineUtilities.GetCoinList("https://whattomine.com/"));
                 result.AddRange(WhatToMineUtilities.GetCoinList("https://whattomine.com/asic"));
+                result.AddRange(ProhashingUtilities.GetAlgos());
                 result.Add(new Coin() { Ticker = "RDX", Name = "Radiant (RDX)" });
                 result = result.OrderBy(x => x.Name).ToList();
                 return result.Distinct().ToList();

@@ -1,6 +1,6 @@
 ﻿namespace RetroMikeMiningTools.DO
 {
-    public class ZergAlgo
+    public class AlgoData
     {
         public string Algo { get;set; }
         public string Estimate { get;set; }

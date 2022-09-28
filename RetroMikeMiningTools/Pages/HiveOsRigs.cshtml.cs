@@ -23,7 +23,7 @@ namespace RetroMikeMiningTools.Pages
         public static bool multiUserMode = false;
         private static string? username;
         public bool IsMultiUser { get; set; }
-        public CoreConfig Config { get; set; }
+        public static CoreConfig Config { get; set; }
 
         public HiveOsRigsModel(IConfiguration configuration)
         {
@@ -426,6 +426,10 @@ namespace RetroMikeMiningTools.Pages
 
         public JsonResult OnPostImportCoins()
         {
+            if (Config == null)
+            {
+                Config = CoreConfigDAO.GetCoreConfig();
+            }
             if (selectedWorker != null)
             {
                 if (!String.IsNullOrEmpty(selectedWorker.WhatToMineEndpoint))
@@ -544,6 +548,51 @@ namespace RetroMikeMiningTools.Pages
                 }
 
                 //Import Prohashing Algo's
+                List<Coin> proHashingCoins;
+                //Import Zerg Algo's
+                if (selectedWorker.WhatToMineEndpoint != null)
+                {
+                    proHashingCoins = ProhashingUtilities.GetAlgos(WhatToMineUtilities.GetCoinList(selectedWorker.WhatToMineEndpoint));
+                }
+                else
+                {
+                    proHashingCoins = ProhashingUtilities.GetAlgos().ToList();
+                }
+                if (proHashingCoins != null)
+                {
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                    foreach (var proHashingCoin in proHashingCoins)
+                    {
+                        if (coins.Where(x => x.Ticker.Equals(proHashingCoin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() == null)
+                        {
+                            if (multiUserMode)
+                            {
+                                HiveRigCoinDAO.AddRecord(new HiveOsRigCoinConfig()
+                                {
+                                    Ticker = proHashingCoin.Ticker,
+                                    Enabled = false,
+                                    WorkerId = selectedWorker.Id,
+                                    Username = username,
+                                    Power = Convert.ToDecimal(proHashingCoin.PowerConsumption),
+                                    HashRateMH = Convert.ToDecimal(proHashingCoin.HashRate),
+                                    Algo = proHashingCoin.Algorithm
+                                });
+                            }
+                            else
+                            {
+                                HiveRigCoinDAO.AddRecord(new HiveOsRigCoinConfig()
+                                {
+                                    Ticker = proHashingCoin.Ticker,
+                                    Enabled = false,
+                                    WorkerId = selectedWorker.Id,
+                                    Power = Convert.ToDecimal(proHashingCoin.PowerConsumption),
+                                    HashRateMH = Convert.ToDecimal(proHashingCoin.HashRate),
+                                    Algo = proHashingCoin.Algorithm
+                                });
+                            }
+                        }
+                    }
+                }
 
                 coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
                 if (multiUserMode)

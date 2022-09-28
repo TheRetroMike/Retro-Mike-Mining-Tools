@@ -47,6 +47,7 @@ namespace RetroMikeMiningTools.DAO
             var btcPrice = CoinDeskUtilities.GetBtcPrice();
             List<Coin> wtmCoins = new List<Coin>();
             var zergAlgoData = ZergUtilities.GetZergAlgoData();
+            var proHashingAlgoData = ProhashingUtilities.GetAlgoData();
             string powerPrice = String.Empty;
             var wtmEndPoint = HiveRigDAO.GetRecord(workerId)?.WhatToMineEndpoint;
             if (wtmEndPoint != null)
@@ -102,6 +103,21 @@ namespace RetroMikeMiningTools.DAO
                         var mBtcPerMhAmount = Convert.ToDecimal(algo.Estimate) / (Convert.ToDecimal(algo.MhFactor) / 1000);
                         var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
                         var btcRevenue = mBtcRevenue / 1000;
+
+                        decimal dailyPowerCost = 24 * (Convert.ToDecimal(item.Power) / 1000m) * Convert.ToDecimal(config.DefaultPowerPrice);
+                        decimal dailyRevenue = Convert.ToDecimal(btcRevenue) * Convert.ToDecimal(btcPrice);
+                        decimal dailyProfit = Convert.ToDecimal(dailyRevenue) - Convert.ToDecimal(dailyPowerCost);
+                        item.Profit = Convert.ToDecimal(dailyProfit);
+                    }
+                }
+                else if (item.Ticker.StartsWith("Prohashing-"))
+                {
+                    var algo = proHashingAlgoData.Where(x => x.Algo.Equals(item.Algo, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (algo != null)
+                    {
+                        var mBtcPerMhAmount = Convert.ToDecimal(algo.Estimate);// / (Convert.ToDecimal(algo.MhFactor) / 1000);
+                        var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
+                        var btcRevenue = mBtcRevenue;// / 1000;
 
                         decimal dailyPowerCost = 24 * (Convert.ToDecimal(item.Power) / 1000m) * Convert.ToDecimal(config.DefaultPowerPrice);
                         decimal dailyRevenue = Convert.ToDecimal(btcRevenue) * Convert.ToDecimal(btcPrice);
