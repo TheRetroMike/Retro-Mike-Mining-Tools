@@ -211,9 +211,9 @@ namespace RetroMikeMiningTools.Utilities
 
                 for (int i = 0; i < responseContent.items.Count; i++)
                 {
-                    var coin = responseContent.items[i].coin;
-                    var donationRecord = Constants.DONATION_FLIGHTSHEET_DATA.Where(x => x.Ticker.Equals(Convert.ToString(coin.Value), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    if (donationRecord != null)
+                    string coin = responseContent.items[i].coin.Value;
+                    var donationRecord = Constants.DONATION_FLIGHTSHEET_DATA.Where(x => x.Ticker.Equals(coin, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (donationRecord != null || coin.StartsWith("Zerg-", StringComparison.OrdinalIgnoreCase) || coin.StartsWith("Nicehash-", StringComparison.OrdinalIgnoreCase))
                     {
                         body.items[i] = new ExpandoObject();
                         body.items[i].coin = responseContent.items[i].coin.Value;
@@ -232,45 +232,75 @@ namespace RetroMikeMiningTools.Utilities
                         body.items[i].miner = responseContent.items[i].miner.Value;
                         body.items[i].miner_config = new ExpandoObject();
 
-                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
-                        {
-                            body.items[i].miner_config.url = donationRecord.Pool;
-                        }
-
+                        
                         if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.algo?.Value))
                         {
                             body.items[i].miner_config.algo = responseContent.items[i].miner_config.algo.Value;
                         }
 
-                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
-                        {
-                            body.items[i].miner_config.pass = donationRecord.Password;
-                        }
+                        
 
                         if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.worker?.Value))
                         {
                             body.items[i].miner_config.worker = responseContent.items[i].miner_config.worker.Value;
                         }
 
-                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
-                        {
-                            body.items[i].miner_config.template = donationRecord.Wallet;
-                        }
+                        
 
                         if (!String.IsNullOrEmpty(responseContent.items[i]?.miner_config?.user_config?.Value))
                         {
                             body.items[i].miner_config.user_config = responseContent.items[i].miner_config.user_config.Value;
                         }
 
-                        var url = responseContent.items[i].miner_config;
+                        if (coin.StartsWith("Zerg-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
+                            {
+                                body.items[i].miner_config.pass = "c=BTC";
+                            }
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
+                            {
+                                body.items[i].miner_config.template = "bc1q9cmz2u5ced5fyyavstfyj28pnngwh5pn0vn7aa";
+                            }
+                        }
+                        else if (coin.StartsWith("Nicehash-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
+                            {
+                                body.items[i].miner_config.pass = "x";
+                            }
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
+                            {
+                                body.items[i].miner_config.template = "3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%";
+                            }
+                        }
+                        else
+                        {
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
+                            {
+                                body.items[i].miner_config.url = donationRecord.Pool;
+                            }
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
+                            {
+                                body.items[i].miner_config.pass = donationRecord.Password;
+                            }
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
+                            {
+                                body.items[i].miner_config.template = donationRecord.Wallet;
+                            }
+                        }
 
+                    }
+                    else
+                    {
+                        Common.Logger.Push("Coin in FS Not Configured: " + coin);
                     }
                 }
 
                 client = new RestClient("https://api2.hiveos.farm/api/v2");
                 request = new RestRequest(String.Format("/farms/{0}/fs", farmId));
                 request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-                string jsonData = JsonConvert.SerializeObject(body);
+                string jsonData = JsonConvert.SerializeObject(body).Replace("\\\"", "\\\\\"");
                 debuggingData = jsonData;
                 request.AddStringBody(jsonData, DataFormat.Json);
                 response = client.Post(request);

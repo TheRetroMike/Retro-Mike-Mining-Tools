@@ -59,8 +59,8 @@ namespace RetroMikeMiningTools.Jobs
                                 var currentRecord = HiveRigDAO.GetRecord(item.Id);
 
                                 //currentRecord.DonationRunning = false;
-                                //currentRecord.DonationStartTime = DateTime.Parse("2022-09-24 14:35");
-                                //currentRecord.DonationEndTime = DateTime.Parse("2022-09-24 14:45");
+                                //currentRecord.DonationStartTime = DateTime.Parse("2022-09-27 20:25");
+                                //currentRecord.DonationEndTime = DateTime.Parse("2022-09-27 21:45");
                                 //HiveRigDAO.UpdateRecord(currentRecord);
 
                                 currentRecord = HiveRigDAO.GetRecord(item.Id);

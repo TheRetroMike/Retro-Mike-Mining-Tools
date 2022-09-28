@@ -22,12 +22,43 @@ namespace RetroMikeMiningTools.Utilities
                     var algoName = coinData.algo.Value;
                     if (!result.Any(x => x.Algorithm.Equals(algoName)))
                     {
-                        result.Add(new Coin() { Algorithm = algoName, Name = algoName });
+                        result.Add(new Coin() { Algorithm = algoName, Name = "Zerg-" + algoName, Ticker = "Zerg-" + algoName });
                     }
                 }
             }
             return result;
         }
+
+        public static List<Coin> GetZergAlgos(List<Coin> wtmCoins)
+        {
+            List<Coin> result = new List<Coin>();
+            var client = new RestSharp.RestClient("https://zergpool.com/api/currencies");
+            var request = new RestRequest();
+            var response = client.Get(request);
+            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+            foreach (var item in responseContent)
+            {
+                var coinContainerName = item.Name;
+                foreach (var coinData in item)
+                {
+                    var algoName = coinData.algo.Value;
+                    if (!result.Any(x => x.Algorithm.Equals(algoName, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var wtmCoin = wtmCoins.Where(x => x.Algorithm.Equals(algoName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (wtmCoin != null)
+                        {
+                            result.Add(new Coin() { Algorithm = algoName, Name = algoName, Ticker = "Zerg-" + algoName, PowerConsumption = wtmCoin.PowerConsumption, HashRate = wtmCoin.HashRate });
+                        }
+                        else
+                        {
+                            result.Add(new Coin() { Algorithm = algoName, Name = algoName, Ticker = "Zerg-" + algoName });
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
 
         public static List<ZergAlgo> GetZergAlgoData()
         {

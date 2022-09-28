@@ -10,6 +10,7 @@
         public string BtcRevenue { get; set; }
         public string PowerConsumption { get; set; }
         public string WhatToMineEndpoint { get; set; }
+        public string HashRate { get; set; }
         public Enums.Exchange Exchange { get; set; }
     }
 }

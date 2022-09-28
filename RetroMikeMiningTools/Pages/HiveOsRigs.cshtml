@@ -9,18 +9,6 @@
 @using RetroMikeMiningTools.DTO
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @Html.AntiForgeryToken()
-<style>
-  #logGrid > table
-  {
-      table-layout: fixed;
-  }
-  .k-grid td{
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width : 200px;
-}
-
-</style>
 <script>
     function groupsTemplate(groups) {
         var template = "<ul>";
@@ -29,6 +17,12 @@
         }
         template += "</ul>";
         return template;
+    }
+    function wtmEndpointTemplate(WtmEndPoint) {
+        if(WtmEndPoint){
+            return WtmEndPoint.substring(0,10) + '...';
+        }
+        return '';
     }
 </script>
 
@@ -55,13 +49,13 @@
             columns.Bound(column => column.DonationAmount).Width(100);
             columns.Bound(column => column.PinnedTicker);
             columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned ZergPool Algo");
-            columns.Bound(column => column.WhatToMineEndpoint);
+            columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint").ClientTemplate("#=wtmEndpointTemplate(WhatToMineEndpoint)#");
             columns.Bound(column => column.Enabled);
             columns.Command(column =>
             {
                 column.Edit();
                 column.Destroy();
-            });
+            }).Width(200);
         })
         .DataSource(ds => ds.Ajax()
         .Sort(x => x.Add("Name"))
@@ -94,10 +88,13 @@
             .ToolBar(toolbar=> {
                 toolbar.Create();
                 toolbar.Custom().Text("Import Coins").HtmlAttributes(new { id = "importCoins" });
+                toolbar.Custom().Text("Refresh Coins Hashrates from WTM").HtmlAttributes(new { id = "refreshHashrates" });
             })
             .Columns(columns =>
             {
                 columns.Bound(column => column.Ticker);
+                columns.Bound(column => column.HashRateMH).ClientHeaderTemplate("Hashrate (MH)");
+                columns.Bound(column => column.Power);
                 columns.Bound(column => column.Flightsheet).ClientTemplate("#: FlightsheetName ?? '' #");
                 columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
                 columns.Bound(column => column.Enabled);
@@ -296,6 +293,29 @@
             e.preventDefault();
             $.ajax({
                     url: "/HiveOsRigs?handler=ImportCoins",
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {                        
+                        var grid = $("#rigCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    },
+                    failure: function (response) {
+                        var grid = $("#rigCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    },
+                    error: function (response) {
+                        var grid = $("#rigCoinsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    }
+                });
+        });
+
+        $("#refreshHashrates").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                    url: "/HiveOsRigs?handler=RefreshHashrates",
                     type: 'POST',
                     headers: {
                         RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()

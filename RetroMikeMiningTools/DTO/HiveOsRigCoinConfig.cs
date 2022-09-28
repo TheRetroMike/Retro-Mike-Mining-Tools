@@ -35,5 +35,10 @@ namespace RetroMikeMiningTools.DTO
         public decimal Profit { get; set; }
 
         public string? Username { get; set; }
+
+        public decimal HashRateMH { get; set; }
+        public decimal Power { get; set; }
+        public string Algo { get; set; }
+        public decimal CoinRevenue { get; set; }
     }
 }
