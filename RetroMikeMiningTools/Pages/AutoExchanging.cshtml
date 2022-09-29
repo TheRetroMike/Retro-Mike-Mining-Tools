@@ -51,6 +51,9 @@
     ().Name("grid")
     .Sortable()
     .Editable()
+    .Selectable()
+    .Filterable()
+    .Events(x => x.Change("handleExchangeSelection"))
     .ToolBar(toolbar=> {
         toolbar.Create();
     })
@@ -60,9 +63,9 @@
         columns.Bound(column => column.DestinationCoin).ClientTemplate("#=cleanText(DestinationCoin?.Ticker)#").ClientHeaderTemplate("Destination");
         columns.Bound(column => column.ExcludedSourceCoins).ClientTemplate("#=coinsTemplate(ExcludedSourceCoins)#").ClientHeaderTemplate("Exclusions");
         columns.Bound(column => column.TradingPairCurrency).ClientTemplate("#=cleanText(TradingPairCurrency?.Ticker)#").ClientHeaderTemplate("Trading Pair");
-        columns.Bound(column => column.ApiKey);
-        columns.Bound(column => column.ApiSecret);
-        columns.Bound(column => column.Passphrase);
+        columns.Bound(column => column.ApiKey).ClientTemplate("#=maskData(ApiKey)#");
+        columns.Bound(column => column.ApiSecret).ClientTemplate("#=maskData(ApiSecret)#");
+        columns.Bound(column => column.Passphrase).ClientTemplate("#=maskData(Passphrase)#");
         columns.Bound(column => column.AutoMoveToTradingAccount).ClientHeaderTemplate("<center>Auto Move to <br />Trading Account</center>");
         columns.Bound(column => column.Enabled);
         columns.Command(column =>
@@ -84,6 +87,30 @@
     })
     )
 )
+
+<div id="balanceContainer">
+    <br />
+    <div class="k-card-header">
+        <h4>Balances</h4>
+    </div>
+    <div class="k-card-body">
+        @(Html.Kendo().Grid<ExchangeBalance>
+            ().Name("balancesGrid")
+            .Sortable()
+            .Filterable()
+            .Columns(columns =>
+            {
+                columns.Bound(column => column.Ticker).ClientHeaderTemplate("Coin");
+                columns.Bound(column => column.BalanceDisplayVal).ClientHeaderTemplate("Balance");
+            })
+            .DataSource(ds => ds.Ajax()
+            .Sort(x => x.Add("Ticker"))
+            .Read(r => r.Url("/AutoExchanging?handler=ReadBalances").Data("forgeryToken"))
+            )
+        )
+    </div>
+</div>
+
 <script>
     function forgeryToken() {
         return kendo.antiForgeryTokens();
@@ -106,4 +133,39 @@
             e.sender.dataSource.read({ exchangeId: exchangeId });
         }
     }
+
+    function handleExchangeSelection(){
+        $("#balanceContainer").hide();
+        var dataItem = this.dataItem(this.select());
+        console.log(dataItem);
+        $.ajax({
+            url: "/AutoExchanging?handler=ExchangeRowSelect",
+            type: 'POST',
+            data: {
+                exchangeId: dataItem.Exchange,
+                apiKey: dataItem.ApiKey,
+                apiSecret: dataItem.ApiSecret,
+                passphrase: dataItem.Passphrase
+            },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {    
+                $("#balanceContainer").show();
+                $('#balancesGrid').data('kendoGrid').dataSource.read();
+                $('#balancesGrid').data('kendoGrid').refresh();
+            }
+        });
+    }
+
+    function maskData(data) {
+        if(data){
+            return data.substring(0,3) + '.......';
+        }
+        return '';
+    }
+
+    $(document).ready(function(){
+        $("#balanceContainer").hide();
+    });
 </script>

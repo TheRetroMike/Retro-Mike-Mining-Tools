@@ -68,7 +68,7 @@ namespace RetroMikeMiningTools.Utilities
             {
                 var currency = item.Currency.Value;
                 var balance = Convert.ToDecimal(item.Available.Value);
-                result.Add(new ExchangeBalance() { Ticker = currency, Balance = balance });
+                result.Add(new ExchangeBalance() { Ticker = currency, Balance = balance, BalanceDisplayVal = decimal.Parse(item.Available.Value.ToString(), System.Globalization.NumberStyles.Float).ToString() });
             }
             return result;
         }

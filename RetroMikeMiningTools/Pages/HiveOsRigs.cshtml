@@ -36,6 +36,7 @@
         .Selectable()
         .Sortable()
         .Editable()
+        .Filterable()
         .Events(x => x.Change("handleRigSelection"))
         .ToolBar(toolbar=> {
             toolbar.Create();
@@ -90,6 +91,7 @@
             ().Name("rigCoinsGrid")
             .Sortable()
             .Editable()
+            .Filterable()
             .ToolBar(toolbar=> {
                 toolbar.Create();
                 toolbar.Custom().Text("Import Coins").HtmlAttributes(new { id = "importCoins" });
@@ -136,6 +138,7 @@
             ().Name("zergAlgoGrid")
             .Sortable()
             .Editable()
+            .Filterable()
             .ToolBar(toolbar=> {
                 toolbar.Create();
                 //toolbar.Custom().Text("Import Coins").HtmlAttributes(new { id = "importCoins" });

@@ -55,8 +55,8 @@ namespace RetroMikeMiningTools.Utilities
                 foreach (var item in responseContent)
                 {
                     var ticker = item.Currency.Value;
-                    var balance = item.Available.Value;
-                    result.Add(new ExchangeBalance() { Ticker = ticker, Balance = Convert.ToDecimal(balance) });
+                    var balance = item.Available.Value.ToString().ToLower();
+                    result.Add(new ExchangeBalance() { Ticker = ticker, Balance= decimal.Parse(balance, System.Globalization.NumberStyles.Float), BalanceDisplayVal = decimal.Parse(balance, System.Globalization.NumberStyles.Float).ToString() });
                 }
             }
             return result;

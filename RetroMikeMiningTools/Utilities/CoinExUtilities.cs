@@ -1,6 +1,8 @@
 ﻿using CoinEx.Net.Clients;
 using CoinEx.Net.Objects;
+using CryptoExchange.Net.Authentication;
 using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.DTO;
 
 namespace RetroMikeMiningTools.Utilities
 {
@@ -31,6 +33,30 @@ namespace RetroMikeMiningTools.Utilities
                     }
                 }
             } 
+            return result;
+        }
+
+        public static async Task<List<ExchangeBalance>> GetBalances(ExchangeConfig exchange)
+        {
+            List<ExchangeBalance> result = new List<ExchangeBalance>();
+            var client = new CoinExClient(new CoinExClientOptions()
+            {
+                LogLevel = LogLevel.Error,
+                RequestTimeout = TimeSpan.FromSeconds(60),
+                ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret),
+            });
+            var markets = await client.SpotApi.ExchangeData.GetSymbolInfoAsync();
+            var balances = await client.SpotApi.Account.GetBalancesAsync();
+            foreach (var item in balances.Data)
+            {
+                var usdtAmount = 0.00;
+                //var currencyRates = await client.SpotApi.ExchangeData.GetTickersAsync();
+                var tickerMarketDirect = markets.Data.Where(x => x.Value.TradingName.Equals(item.Value.Asset, StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals("USDT", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                if (item.Value.Available > 0)
+                {
+                    result.Add(new ExchangeBalance() { Balance = item.Value.Available, Ticker = item.Value.Asset, BalanceDisplayVal = item.Value.Available.ToString() });
+                }
+            }
             return result;
         }
     }

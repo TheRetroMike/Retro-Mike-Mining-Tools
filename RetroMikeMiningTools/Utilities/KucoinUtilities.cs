@@ -1,4 +1,8 @@
-﻿using RetroMikeMiningTools.DO;
+﻿using CryptoExchange.Net.Authentication;
+using Kucoin.Net.Clients;
+using Kucoin.Net.Objects;
+using RetroMikeMiningTools.DO;
+using RetroMikeMiningTools.DTO;
 
 namespace RetroMikeMiningTools.Utilities
 {
@@ -27,6 +31,26 @@ namespace RetroMikeMiningTools.Utilities
                     {
                         result.Add(new Coin() { Ticker = pricingCurrencyName, Exchange = Enums.Exchange.Kucoin, Name = pricingCurrencyName });
                     }
+                }
+            }
+            return result;
+        }
+
+        public static async Task<List<ExchangeBalance>> GetBalances(ExchangeConfig exchange)
+        {
+            List<ExchangeBalance> result = new List<ExchangeBalance>();
+            var client = new KucoinClient(new KucoinClientOptions()
+            {
+                LogLevel = LogLevel.Error,
+                RequestTimeout = TimeSpan.FromSeconds(60),
+                ApiCredentials = new KucoinApiCredentials(exchange.ApiKey, exchange.ApiSecret, exchange.Passphrase),
+            });
+            var balances = await client.SpotApi.Account.GetAccountsAsync();
+            foreach (var item in balances.Data)
+            {
+                if (item.Available > 0)
+                {
+                    result.Add(new ExchangeBalance() { Balance = item.Available, Ticker = item.Asset, BalanceDisplayVal = item.Available.ToString() });
                 }
             }
             return result;

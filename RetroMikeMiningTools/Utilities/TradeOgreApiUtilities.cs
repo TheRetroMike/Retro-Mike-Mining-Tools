@@ -109,7 +109,7 @@ namespace RetroMikeMiningTools.Utilities
             dynamic responseData = JsonConvert.DeserializeObject(response.Content);
             foreach (var item in responseData.balances)
             {
-                balances.Add(new ExchangeBalance() { Ticker = item.Name, Balance = Convert.ToDecimal(item.Value) });
+                balances.Add(new ExchangeBalance() { Ticker = item.Name, Balance = Convert.ToDecimal(item.Value), BalanceDisplayVal = item.Value });
             }
             return balances;
         }
