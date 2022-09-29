@@ -232,20 +232,21 @@ namespace RetroMikeMiningTools.Utilities
                         body.items[i].miner = responseContent.items[i].miner.Value;
                         body.items[i].miner_config = new ExpandoObject();
 
-                        
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
+                        {
+                            body.items[i].miner_config.url = responseContent.items[i].miner_config?.url?.Value;
+                        }
+
                         if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.algo?.Value))
                         {
                             body.items[i].miner_config.algo = responseContent.items[i].miner_config.algo.Value;
                         }
 
-                        
-
                         if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.worker?.Value))
                         {
                             body.items[i].miner_config.worker = responseContent.items[i].miner_config.worker.Value;
                         }
-
-                        
 
                         if (!String.IsNullOrEmpty(responseContent.items[i]?.miner_config?.user_config?.Value))
                         {
@@ -274,6 +275,17 @@ namespace RetroMikeMiningTools.Utilities
                                 body.items[i].miner_config.template = "3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U.%WORKER_NAME%";
                             }
                         }
+                        else if (coin.StartsWith("Prohashing-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
+                            {
+                                body.items[i].miner_config.pass = responseContent.items[i].miner_config?.pass?.Value;
+                            }
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
+                            {
+                                body.items[i].miner_config.template = "05sonicblue";
+                            }
+                        }
                         else
                         {
                             if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
@@ -300,7 +312,7 @@ namespace RetroMikeMiningTools.Utilities
                 client = new RestClient("https://api2.hiveos.farm/api/v2");
                 request = new RestRequest(String.Format("/farms/{0}/fs", farmId));
                 request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-                string jsonData = JsonConvert.SerializeObject(body).Replace("\\\"", "\\\\\"");
+                string jsonData = JsonConvert.SerializeObject(body);
                 debuggingData = jsonData;
                 request.AddStringBody(jsonData, DataFormat.Json);
                 response = client.Post(request);
