@@ -58,6 +58,23 @@ namespace RetroMikeMiningTools.Utilities
 
         public static List<AlgoData> GetAlgoData()
         {
+            try
+            {
+                return GetAlgoDataContent();
+            }
+            catch
+            {
+                try
+                {
+                    return GetAlgoDataContent();
+                }
+                catch { }
+            }
+            return new List<AlgoData>();
+        }
+
+        public static List<AlgoData> GetAlgoDataContent()
+        {
             List<AlgoData> result = new List<AlgoData>();
             var client = new RestSharp.RestClient("https://prohashing.com/api/v1/status");
             var request = new RestRequest();

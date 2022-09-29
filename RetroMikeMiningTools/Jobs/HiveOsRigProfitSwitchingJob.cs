@@ -42,7 +42,7 @@ namespace RetroMikeMiningTools.Jobs
                         {
                             foreach (var rig in rigs.Where(x => x.Enabled))
                             {
-                                if (!rig.DonationRunning && !String.IsNullOrEmpty(rig.WhatToMineEndpoint) && (
+                                if (!rig.DonationRunning && (
                                     rig.MiningMode == MiningMode.Profit ||
                                     rig.MiningMode == MiningMode.CoinStacking ||
                                     rig.MiningMode == MiningMode.DiversificationByProfit ||
