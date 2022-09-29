@@ -73,13 +73,22 @@ namespace RetroMikeMiningTools.DAO
             return result;
         }
 
-        public static List<HiveOsRigConfig> GetRecords()
+        public static List<HiveOsRigConfig> GetRecords(CoreConfig config)
         {
             List<HiveOsRigConfig> result = new List<HiveOsRigConfig>();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
                 result = rigExecutionsCollection.FindAll().ToList();
+
+                foreach (var item in result)
+                {
+                    var coins = HiveRigCoinDAO.GetRecords(item.Id, new List<DO.Flightsheet>(), config)?.Where(x => x.Enabled);
+                    if (coins != null && coins.Count() > 0)
+                    {
+                        item.Profit = coins.Max(x => x.Profit);
+                    }
+                }
             }
             return result;
         }

@@ -34,7 +34,6 @@
     @(Html.Kendo().Grid<HiveOsRigConfig>
         ().Name("rigsGrid")
         .Selectable()
-        .Groupable()
         .Sortable()
         .Editable()
         .Events(x => x.Change("handleRigSelection"))
@@ -50,6 +49,7 @@
             columns.Bound(column => column.PinnedTicker);
             columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned ZergPool Algo");
             columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint").ClientTemplate("#=wtmEndpointTemplate(WhatToMineEndpoint)#");
+            columns.Bound(column => column.Profit).ClientFooterTemplate("Profit: #=kendo.toString(sum,'c2')#");
             columns.Bound(column => column.Enabled);
             columns.Command(column =>
             {
@@ -63,10 +63,15 @@
         .Update(u => u.Url("/HiveOsRigs?handler=Update").Data("forgeryToken"))
         .Create(c => c.Url("/HiveOsRigs?handler=Create").Data("forgeryToken"))
         .Destroy(d => d.Url("/HiveOsRigs?handler=Destroy").Data("forgeryToken"))
+        .Aggregates(aggregates =>
+            {
+                aggregates.Add(p => p.Profit).Sum();
+            })
         .Model(m => {
             m.Id(id => id.Id);
             m.Field(x => x.DonationAmount).DefaultValue("1%").Editable(!Model.IsMultiUser);
             m.Field(x => x.PinnedTicker).DefaultValue("");
+            m.Field(x => x.Profit).Editable(false);
         })
         )
     )

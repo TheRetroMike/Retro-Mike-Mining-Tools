@@ -52,13 +52,13 @@ namespace RetroMikeMiningTools.Pages
 
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords().Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                 Config = CoreConfigDAO.GetCoreConfig(username);
+                rigs = HiveRigDAO.GetRecords(Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else
             {
-                rigs = HiveRigDAO.GetRecords();
                 Config = CoreConfigDAO.GetCoreConfig();
+                rigs = HiveRigDAO.GetRecords(Config);
             }
 
             var coreConfig = CoreConfigDAO.GetCoreConfig();
@@ -321,10 +321,10 @@ namespace RetroMikeMiningTools.Pages
                 
             }
             HiveRigDAO.UpdateRecord(record);
-            rigs = HiveRigDAO.GetRecords();
+            rigs = HiveRigDAO.GetRecords(Config);
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords().Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
@@ -373,10 +373,10 @@ namespace RetroMikeMiningTools.Pages
                     }
                 }
             }
-            rigs = HiveRigDAO.GetRecords();
+            rigs = HiveRigDAO.GetRecords(Config);
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords().Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             return new JsonResult("Hive OS Rigs Imported");
         }

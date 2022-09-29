@@ -29,5 +29,8 @@ namespace RetroMikeMiningTools.DTO
         public string? PinnedZergAlgo { get; set; }
 
         public string? Username { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal Profit { get; set; }
     }
 }
