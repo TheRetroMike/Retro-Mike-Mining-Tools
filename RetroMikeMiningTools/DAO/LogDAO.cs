@@ -52,5 +52,21 @@ namespace RetroMikeMiningTools.DAO
             }
             return result;
         }
+
+        public static void PurgeLogs(string username)
+        {
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
+            {
+                var table = db.GetCollection<LogEntry>(tableName);
+                if (!String.IsNullOrEmpty(username) && username!="admin")
+                {
+                    table.DeleteMany(x => x.Username != null && x.Username == username);
+                }
+                else
+                {
+                    table.DeleteAll();
+                }
+            }
+        }
     }
 }

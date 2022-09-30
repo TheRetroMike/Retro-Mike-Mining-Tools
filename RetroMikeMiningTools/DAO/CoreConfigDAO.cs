@@ -28,7 +28,9 @@ namespace RetroMikeMiningTools.DAO
                             AutoExchangingCronSchedule = "0 0/15 * 1/1 * ? *",
                             Port = 7000,
                             ReleaseType = Enums.ReleaseType.Production,
-                            DefaultPowerPrice = 0.10m
+                            DefaultPowerPrice = 0.10m,
+                            UiCoinPriceCalculation = true,
+                            UiRigPriceCalculation = true
                         });
                         db.Commit();
                     }
@@ -42,6 +44,8 @@ namespace RetroMikeMiningTools.DAO
                         HiveApiKey = null,
                         HiveFarmID = null,
                         CoinDifferenceThreshold = "5%",
+                        UiCoinPriceCalculation = true,
+                        UiRigPriceCalculation = true
                     });
                 }
             }
@@ -97,6 +101,8 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.AutoExchangingCronSchedule = coreConfig.AutoExchangingCronSchedule;
                 existingRecord.ReleaseType = coreConfig.ReleaseType;
                 existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
+                existingRecord.UiCoinPriceCalculation = coreConfig.UiCoinPriceCalculation;
+                existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
@@ -114,6 +120,8 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.HiveApiKey = coreConfig.HiveApiKey;
                 existingRecord.HiveFarmID = coreConfig.HiveFarmID;
                 existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
+                existingRecord.UiCoinPriceCalculation = coreConfig.UiCoinPriceCalculation;
+                existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

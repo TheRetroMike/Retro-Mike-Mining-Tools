@@ -53,12 +53,12 @@ namespace RetroMikeMiningTools.Pages
             if (multiUserMode)
             {
                 Config = CoreConfigDAO.GetCoreConfig(username);
-                rigs = HiveRigDAO.GetRecords(Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else
             {
                 Config = CoreConfigDAO.GetCoreConfig();
-                rigs = HiveRigDAO.GetRecords(Config);
+                rigs = HiveRigDAO.GetRecords(Config, true);
             }
 
             var coreConfig = CoreConfigDAO.GetCoreConfig();
@@ -151,20 +151,20 @@ namespace RetroMikeMiningTools.Pages
             HiveOsRigCoinConfig existingRecord = null;
             if (selectedWorker != null)
             {
-                var existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config).Where(x => x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
+                var existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (multiUserMode)
                 {
                     record.Username = username;
-                    existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config).Where(x => x.Username!=null && x.Username.Equals(username,StringComparison.OrdinalIgnoreCase) && x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
+                    existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username!=null && x.Username.Equals(username,StringComparison.OrdinalIgnoreCase) && x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
                 if (existingRecords == null || existingRecords?.Count == 0)
                 {
                     record.WorkerId = selectedWorker.Id;
                     HiveRigCoinDAO.AddRecord(record);
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                     if (multiUserMode)
                     {
-                        coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                        coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                     }
                 }
             }
@@ -201,10 +201,10 @@ namespace RetroMikeMiningTools.Pages
             if (selectedWorker != null)
             {
                 HiveRigCoinDAO.DeleteRecord(record);
-                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                 if (multiUserMode)
                 {
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
@@ -229,10 +229,10 @@ namespace RetroMikeMiningTools.Pages
             if (selectedWorker != null)
             {
                 HiveRigCoinDAO.UpdateRecord(record);
-                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                 if (multiUserMode)
                 {
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
@@ -321,10 +321,10 @@ namespace RetroMikeMiningTools.Pages
                 
             }
             HiveRigDAO.UpdateRecord(record);
-            rigs = HiveRigDAO.GetRecords(Config);
+            rigs = HiveRigDAO.GetRecords(Config, true);
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords(Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
@@ -373,10 +373,10 @@ namespace RetroMikeMiningTools.Pages
                     }
                 }
             }
-            rigs = HiveRigDAO.GetRecords(Config);
+            rigs = HiveRigDAO.GetRecords(Config, true);
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords(Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             return new JsonResult("Hive OS Rigs Imported");
         }
@@ -389,12 +389,12 @@ namespace RetroMikeMiningTools.Pages
                 Config = new CoreConfig();
             }
             selectedWorker = workerId;
-            coins = HiveRigCoinDAO.GetRecords(workerId.Id, flightsheets?.ToList(), Config);
+            coins = HiveRigCoinDAO.GetRecords(workerId.Id, flightsheets?.ToList(), Config, true);
             zergAlgos = ZergAlgoDAO.GetRecords(workerId.Id, flightsheets?.ToList());
 
             if (multiUserMode)
             {
-                coins = HiveRigCoinDAO.GetRecords(workerId.Id, flightsheets?.ToList(), Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                coins = HiveRigCoinDAO.GetRecords(workerId.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                 zergAlgos = ZergAlgoDAO.GetRecords(workerId.Id, flightsheets?.ToList()).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
@@ -408,7 +408,7 @@ namespace RetroMikeMiningTools.Pages
                 if (!String.IsNullOrEmpty(selectedWorker.WhatToMineEndpoint))
                 {
                     var wtmCoins = WhatToMineUtilities.GetCoinList(selectedWorker.WhatToMineEndpoint);
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                     foreach (var coin in wtmCoins)
                     {
                         var coinRecord = coins.Where(x => x.Ticker.Equals(coin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
@@ -435,7 +435,7 @@ namespace RetroMikeMiningTools.Pages
                 if (!String.IsNullOrEmpty(selectedWorker.WhatToMineEndpoint))
                 {
                     var wtmCoins = WhatToMineUtilities.GetCoinList(selectedWorker.WhatToMineEndpoint);
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                     foreach (var coin in wtmCoins)
                     {
                         if (coins.Where(x => x.Ticker.Equals(coin.Ticker,StringComparison.OrdinalIgnoreCase)).FirstOrDefault() == null)
@@ -513,7 +513,7 @@ namespace RetroMikeMiningTools.Pages
                 }
                 if (zergCoins != null)
                 {
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                     foreach (var zergCoin in zergCoins)
                     {
                         if (coins.Where(x => x.Ticker.Equals(zergCoin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() == null)
@@ -560,7 +560,7 @@ namespace RetroMikeMiningTools.Pages
                 }
                 if (proHashingCoins != null)
                 {
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                     foreach (var proHashingCoin in proHashingCoins)
                     {
                         if (coins.Where(x => x.Ticker.Equals(proHashingCoin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() == null)
@@ -594,10 +594,10 @@ namespace RetroMikeMiningTools.Pages
                     }
                 }
 
-                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config);
+                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                 if (multiUserMode)
                 {
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
             }
             return new JsonResult("Rig Coins Imported");

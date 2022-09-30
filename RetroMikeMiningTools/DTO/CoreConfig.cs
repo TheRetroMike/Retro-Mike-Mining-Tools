@@ -19,6 +19,9 @@ namespace RetroMikeMiningTools.DTO
         public string? AutoExchangingCronSchedule { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public decimal DefaultPowerPrice { get; set; }
+
+        public bool UiCoinPriceCalculation { get; set; }
+        public bool UiRigPriceCalculation { get; set; }
         public string? Username { get; set; }
     }
 }

@@ -78,6 +78,9 @@
                             .Sortable()
                             .Filterable()
                             .Pageable()
+                            .ToolBar(toolbar=> {
+                                toolbar.Custom().Text("Purge Logs").HtmlAttributes(new { id = "clearLogs" });
+                            })
                             .Columns(columns =>
                             {
                                 columns.Bound(column => column.LogDateTime).Width(200).Format("{0:g}");
@@ -110,6 +113,21 @@
     var newVersion = "";
     $(document).ready(function() {
         checkForUpgrade();
+
+        $("#clearLogs").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                    url: "/Index?handler=ClearLogs",
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {                        
+                        var grid = $("#logGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                    }
+                });
+        });
     });
 
     function checkForUpgrade(){

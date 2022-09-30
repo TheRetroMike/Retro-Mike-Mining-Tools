@@ -188,7 +188,13 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(String.Empty);
         }
 
-        public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
+        public JsonResult OnPostClearLogs()
+        {
+            LogDAO.PurgeLogs(username);
+            return new JsonResult("Logs Purged");
+        }
+
+            public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
         {
             return new JsonResult(data.ToDataSourceResult(request));
         }

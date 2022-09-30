@@ -48,7 +48,7 @@ namespace RetroMikeMiningTools.Jobs
                         }
                     }
 
-                    foreach (var item in HiveRigDAO.GetRecords(config).Where(x => x.Enabled && x.EnabledDateTime != null))
+                    foreach (var item in HiveRigDAO.GetRecords(config, false).Where(x => x.Enabled && x.EnabledDateTime != null))
                     {
                         if (item.EnabledDateTime <= DateTime.Now.AddHours(-1) && !String.IsNullOrEmpty(item.DonationAmount))
                         {

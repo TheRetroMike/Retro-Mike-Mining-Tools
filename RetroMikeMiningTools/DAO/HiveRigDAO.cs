@@ -73,7 +73,7 @@ namespace RetroMikeMiningTools.DAO
             return result;
         }
 
-        public static List<HiveOsRigConfig> GetRecords(CoreConfig config)
+        public static List<HiveOsRigConfig> GetRecords(CoreConfig config, bool isUi)
         {
             List<HiveOsRigConfig> result = new List<HiveOsRigConfig>();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
@@ -81,12 +81,15 @@ namespace RetroMikeMiningTools.DAO
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
                 result = rigExecutionsCollection.FindAll().ToList();
 
-                foreach (var item in result)
+                if (!isUi || (isUi && config.UiRigPriceCalculation))
                 {
-                    var coins = HiveRigCoinDAO.GetRecords(item.Id, new List<DO.Flightsheet>(), config)?.Where(x => x.Enabled);
-                    if (coins != null && coins.Count() > 0)
+                    foreach (var item in result)
                     {
-                        item.Profit = coins.Max(x => x.Profit);
+                        var coins = HiveRigCoinDAO.GetRecords(item.Id, new List<DO.Flightsheet>(), config, isUi, true)?.Where(x => x.Enabled);
+                        if (coins != null && coins.Count() > 0)
+                        {
+                            item.Profit = coins.Max(x => x.Profit);
+                        }
                     }
                 }
             }

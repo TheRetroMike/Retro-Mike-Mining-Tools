@@ -28,7 +28,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
             {
                 powerPrice = Convert.ToDecimal(HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(rig.WhatToMineEndpoint)).Query).Get("factor[cost]"));
             }
-            var configuredCoins = HiveRigCoinDAO.GetRecords(rig.Id, HiveUtilities.GetAllFlightsheets(config.HiveApiKey, config.HiveFarmID), config).Where(x => x.Enabled);
+            var configuredCoins = HiveRigCoinDAO.GetRecords(rig.Id, HiveUtilities.GetAllFlightsheets(config.HiveApiKey, config.HiveFarmID), config, false).Where(x => x.Enabled);
             if (!String.IsNullOrEmpty(currentFlightsheet))
             {
                 currentCoin = configuredCoins.Where(x => x?.Flightsheet?.ToString() == currentFlightsheet).FirstOrDefault()?.Ticker;
@@ -142,7 +142,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
             Common.Logger.Log(String.Format("Executing HiveOS Rig Profit Switching Job for Rig: {0}", rig.Name), LogType.System, rig.Username);
             string currentFlightsheet = HiveUtilities.GetCurrentFlightsheet(rig.HiveWorkerId, config.HiveApiKey, config.HiveFarmID, rig.Name);
             var powerPrice = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(rig.WhatToMineEndpoint)).Query).Get("factor[cost]");
-            var configuredCoins = HiveRigCoinDAO.GetRecords(rig.Id, HiveUtilities.GetAllFlightsheets(config.HiveApiKey, config.HiveFarmID), config).Where(x => x.Enabled);
+            var configuredCoins = HiveRigCoinDAO.GetRecords(rig.Id, HiveUtilities.GetAllFlightsheets(config.HiveApiKey, config.HiveFarmID), config, false).Where(x => x.Enabled);
             if (!String.IsNullOrEmpty(currentFlightsheet))
             {
                 currentCoin = configuredCoins.Where(x => x?.Flightsheet?.ToString() == currentFlightsheet).FirstOrDefault()?.Ticker;
