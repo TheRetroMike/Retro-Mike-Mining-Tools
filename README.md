@@ -1,3 +1,27 @@
+# Table of Contents
+  * [Summary](#retro-mike-mining-tools)
+  * [Features](#features)
+  * [Profit Switching](#profit-switching)
+    + [Mining Modes](#mining-modes)
+    + [Supported Coins](#supported-coins)
+    + [Pinned Coin](#pinned-coin)
+  * [Auto Exchanging](#auto-exchanging)
+    + [Configuration](#configuration)
+  * [Hive OS Installer](#hive-os-installer)
+  * [Raspberry Pi Installer](#raspberry-pi-installer)
+  * [Docker Installer](#docker-installer)
+  * [Screenshots](#screenshots)
+    + [Dashboard](#dashboard)
+    + [Mining Groups](#mining-groups)
+    + [Hive OS Rigs](#hive-os-rigs)
+    + [Goldshell ASIC's](#goldshell-asics)
+    + [Auto Exchanging](#auto-exchanging-1)
+  * [Support Me](#support-me)
+  * [Support](#support)
+
+
+
+
 # Retro Mike Mining Tools
 This is a web and service based app that can connect to your Hive OS account or Goldshell ASIC's, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
 
@@ -13,11 +37,17 @@ One of the most popular and powerful features is the ability to have the applica
 
 ### Mining Modes
 The following mining modes are supported and can be set on each rig / ASIC  
-- Profit - Mine whichever coin has the best current profitability based on current difficulty, network hashrates, coin price, and power consumption
+- Profit - Mine whichever coin / algo has the best current profitability based on current difficulty, network hashrates, coin price, and power consumption
 - CoinStacking - Mine whichever coin will net you the most coins based on current difficulty and network hashrates
 - DiversificationByProfit - Mine whichever coin has the best current profitability based on current difficulty, network hashrates, coin price, and power consumption until you have obtained a desired amount of the coin and then move onto the next most profitable coin. 
 - DiversificationByCoinStacking - Mine whichever coin will net you the most coins based on current difficulty and network hashrates until you have obtained a desired amount of the coin and then move onto the next most netable coin
 - ZergPoolAlgoProfitBasis - Auto switch algo's based on Zerg Pool real-time calculations. Your flightsheets can be for any pool, but the calculations will be based off of Zerg Pool.
+
+### Supported Coins
+- Any coin listed on WhatToMine under the GPU or ASIC sections
+- All algo's on ZergPool
+- All algo's on Nicehash that are also listed on WhatToMine
+- All algo's on Prohashing
 
 ### Pinned Coin
 You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanted to mine something like a newly released coin to accumulate as many coins as possible early-on.
@@ -77,12 +107,14 @@ sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMike
 ### Hive OS Rigs
 ![image](https://user-images.githubusercontent.com/1271856/191880644-9307603d-93f6-44b9-9df4-bd0a89cd3ce3.png)
 
-### Goldshell ASIC's
+### Goldshell ASICs
 ![image](https://user-images.githubusercontent.com/1271856/191880727-3ad72a5d-7039-4bd4-b553-a37298cc7870.png)
 
 ### Auto Exchanging
 ![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)
 
+## Hosted Version
+http://tools.retromike.net/
 
 ## Support Me
 If you would like to support me:
@@ -91,4 +123,4 @@ If you would like to support me:
 - Just run the profit switcher with any donation amount
 
 ## Support
-Discord: https://discord.gg/HsjJPCP2hp
+This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord: https://discord.gg/HsjJPCP2hp
