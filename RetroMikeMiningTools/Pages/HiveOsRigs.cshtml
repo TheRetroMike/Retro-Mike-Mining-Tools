@@ -101,6 +101,8 @@
             {
                 columns.Bound(column => column.Ticker);
                 columns.Bound(column => column.HashRateMH).ClientHeaderTemplate("Hashrate (MH)");
+                columns.Bound(column => column.SecondaryTicker);
+                columns.Bound(column => column.SecondaryHashRateMH).ClientHeaderTemplate("Hashrate (MH)");
                 columns.Bound(column => column.Power);
                 columns.Bound(column => column.Flightsheet).ClientTemplate("#: FlightsheetName ?? '' #");
                 columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");

@@ -134,6 +134,37 @@ namespace RetroMikeMiningTools.Pages
                 default:
                     break;
             }
+
+            if (balanceData != null)
+            {
+                var coreConfig = CoreConfigDAO.GetCoreConfig();
+                if(multiUserMode)
+                {
+                    coreConfig = CoreConfigDAO.GetCoreConfig(username);
+                    
+                }
+                if (!String.IsNullOrEmpty(coreConfig?.CoinMarketCapApi))
+                {
+                    List<String> marketList = balanceData.Select(x => x.Ticker).Distinct().ToList();
+                    NoobsMuc.Coinmarketcap.Client.CoinmarketcapClient client = new NoobsMuc.Coinmarketcap.Client.CoinmarketcapClient(coreConfig?.CoinMarketCapApi);
+
+                    var marketData = client.GetCurrencyBySymbolList(marketList.ToArray(), "USD");
+                    if (marketData != null)
+                    {
+                        foreach (var item in marketData)
+                        {
+                            var ticker = item.Symbol;
+                            var price = item.Price;
+                            var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                            if (balanceRecord != null)
+                            {
+                                balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
+                            }
+                        }
+                    }
+                }
+            }
+
             return new JsonResult("Data Bound");
         }
     }

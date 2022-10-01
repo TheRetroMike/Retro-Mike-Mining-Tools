@@ -3,8 +3,9 @@
         Html.Kendo().DropDownListFor(m => m)
             .DataTextField("Name")
             .DataValueField("Id")
-            .AutoBind(true)
+            .AutoBind(false)
             .ValuePrimitive(true)
+            .OptionLabel("")
             .DataSource(d=> {
                 d.Read(r => r.Url("/HiveOsRigs?handler=MasterFlightsheetList").Data("forgeryToken"));
             })

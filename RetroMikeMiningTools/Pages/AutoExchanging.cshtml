@@ -102,6 +102,7 @@
             {
                 columns.Bound(column => column.Ticker).ClientHeaderTemplate("Coin");
                 columns.Bound(column => column.BalanceDisplayVal).ClientHeaderTemplate("Balance");
+                columns.Bound(column => column.UsdDisplayVal).ClientHeaderTemplate("Balance (USD)");
             })
             .DataSource(ds => ds.Ajax()
             .Sort(x => x.Add("Ticker"))

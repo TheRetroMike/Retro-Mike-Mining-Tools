@@ -103,6 +103,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
                 existingRecord.UiCoinPriceCalculation = coreConfig.UiCoinPriceCalculation;
                 existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
+                existingRecord.CoinMarketCapApi = coreConfig.CoinMarketCapApi;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
@@ -122,6 +123,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.DefaultPowerPrice = coreConfig.DefaultPowerPrice;
                 existingRecord.UiCoinPriceCalculation = coreConfig.UiCoinPriceCalculation;
                 existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
+                existingRecord.CoinMarketCapApi = coreConfig.CoinMarketCapApi;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

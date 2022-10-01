@@ -23,5 +23,6 @@ namespace RetroMikeMiningTools.DTO
         public bool UiCoinPriceCalculation { get; set; }
         public bool UiRigPriceCalculation { get; set; }
         public string? Username { get; set; }
+        public string CoinMarketCapApi { get; set; }
     }
 }

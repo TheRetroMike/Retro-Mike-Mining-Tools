@@ -115,6 +115,7 @@ namespace RetroMikeMiningTools.Pages
             if (coreConfig != null && !String.IsNullOrEmpty(coreConfig.HiveApiKey) && !String.IsNullOrEmpty(coreConfig.HiveFarmID))
             {
                 flightsheets = HiveUtilities.GetAllFlightsheets(coreConfig.HiveApiKey, coreConfig.HiveFarmID);
+                flightsheets.Add(new Flightsheet() { Id = 0, Name = "" });
                 return new JsonResult(flightsheets?.OrderBy(x => x.Name));
             }
             else
@@ -160,6 +161,25 @@ namespace RetroMikeMiningTools.Pages
                 if (existingRecords == null || existingRecords?.Count == 0)
                 {
                     record.WorkerId = selectedWorker.Id;
+
+                    if (record.Ticker != null && record.Algo==null && record.Ticker.StartsWith("Zerg-"))
+                    {
+                        record.Algo = record.Ticker.Remove(0, 5);
+                    }
+                    if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
+                    {
+                        record.Algo = record.Ticker.Remove(0, 11);
+                    }
+
+                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
+                    {
+                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
+                    }
+                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
+                    {
+                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                    }
+
                     HiveRigCoinDAO.AddRecord(record);
                     coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                     if (multiUserMode)

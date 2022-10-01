@@ -15,6 +15,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
             //LegacyProcessing(rig, config);
 
             string currentCoin = String.Empty;
+            string currentSecondaryCoin = String.Empty;
             decimal threshold = 0.00m;
             if (!String.IsNullOrEmpty(config.CoinDifferenceThreshold))
             {
@@ -31,7 +32,12 @@ namespace RetroMikeMiningTools.ProfitSwitching
             var configuredCoins = HiveRigCoinDAO.GetRecords(rig.Id, HiveUtilities.GetAllFlightsheets(config.HiveApiKey, config.HiveFarmID), config, false).Where(x => x.Enabled);
             if (!String.IsNullOrEmpty(currentFlightsheet))
             {
-                currentCoin = configuredCoins.Where(x => x?.Flightsheet?.ToString() == currentFlightsheet).FirstOrDefault()?.Ticker;
+                var currentConfigged = configuredCoins.Where(x => x?.Flightsheet?.ToString() == currentFlightsheet).FirstOrDefault();
+                if (currentConfigged != null)
+                {
+                    currentCoin = currentConfigged.Ticker;
+                    currentSecondaryCoin = currentConfigged.SecondaryTicker;
+                }
             }
             if (configuredCoins != null && configuredCoins.Count() > 0)
             {
@@ -62,7 +68,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                     switch (rig.MiningMode)
                     {
                         case MiningMode.Profit:
-                            stagedCoins.Add(new StagedCoin() { Ticker = configuredCoin.Ticker, Amount = dailyProfit });
+                            stagedCoins.Add(new StagedCoin() { Ticker = configuredCoin.Ticker, SecondaryTicker=configuredCoin.SecondaryTicker, Amount = dailyProfit });
                             break;
                         case MiningMode.CoinStacking:
                             stagedCoins.Add(new StagedCoin() { Ticker = configuredCoin.Ticker, Amount = Convert.ToDouble(configuredCoin.CoinRevenue) });
@@ -88,7 +94,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                     }
                 }
 
-                var currentCoinPrice = stagedCoins.Where(x => x.Ticker.Equals(currentCoin, StringComparison.OrdinalIgnoreCase)).FirstOrDefault()?.Amount;
+                var currentCoinPrice = stagedCoins.Where(x => x.Ticker.Equals(currentCoin, StringComparison.OrdinalIgnoreCase) && x.SecondaryTicker.Equals(currentSecondaryCoin, StringComparison.OrdinalIgnoreCase)).FirstOrDefault()?.Amount;
                 var newCoinBestPrice = stagedCoins.Max(x => x.Amount);
                 var newTopCoinTicker = stagedCoins.Aggregate((x, y) => x.Amount > y.Amount ? x : y).Ticker;
 

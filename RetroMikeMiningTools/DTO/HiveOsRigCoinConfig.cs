@@ -40,5 +40,10 @@ namespace RetroMikeMiningTools.DTO
         public decimal Power { get; set; }
         public string Algo { get; set; }
         public decimal CoinRevenue { get; set; }
+
+        [UIHint("MiningCoinEditor")]
+        public string? SecondaryTicker { get; set; }
+        public decimal? SecondaryHashRateMH { get; set; }
+        public string? SecondaryAlgo { get; set; }
     }
 }

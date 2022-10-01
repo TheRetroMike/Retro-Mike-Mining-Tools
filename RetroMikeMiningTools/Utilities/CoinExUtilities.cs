@@ -47,6 +47,7 @@ namespace RetroMikeMiningTools.Utilities
             });
             var markets = await client.SpotApi.ExchangeData.GetSymbolInfoAsync();
             var balances = await client.SpotApi.Account.GetBalancesAsync();
+
             foreach (var item in balances.Data)
             {
                 var usdtAmount = 0.00;

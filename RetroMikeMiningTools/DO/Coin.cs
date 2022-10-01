@@ -12,5 +12,6 @@
         public string WhatToMineEndpoint { get; set; }
         public string HashRate { get; set; }
         public Enums.Exchange Exchange { get; set; }
+        public string? SecondaryTicker { get; set; }
     }
 }
