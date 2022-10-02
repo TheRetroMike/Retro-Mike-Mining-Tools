@@ -60,11 +60,10 @@ namespace RetroMikeMiningTools.DAO
                 var btcPrice = CoinDeskUtilities.GetBtcPrice();
                 List<Coin> wtmCoins = new List<Coin>();
 
-                decimal powerPrice = 0.00m;
+                decimal powerPrice = config.DefaultPowerPrice;
                 var wtmEndPoint = HiveRigDAO.GetRecord(workerId)?.WhatToMineEndpoint;
                 if (wtmEndPoint != null)
                 {
-                    powerPrice = Convert.ToDecimal(HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndPoint)).Query).Get("factor[cost]"));
                     wtmCoins = WhatToMineUtilities.GetCoinList(wtmEndPoint);
                 }
                 var zergAlgoData = ZergUtilities.GetZergAlgoData();
@@ -78,7 +77,6 @@ namespace RetroMikeMiningTools.DAO
                     }
 
                     var combinedRevenue = 0.00m;
-                    var dailyPowerCost = 24 * ((Convert.ToDouble(item.Power) / 1000) * Convert.ToDouble(powerPrice));
 
                     //Primary Coin
                     var primaryRevenue = 0.00m;
@@ -87,6 +85,7 @@ namespace RetroMikeMiningTools.DAO
                         var coin = wtmCoins.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                         if (coin != null)
                         {
+                            powerPrice = Convert.ToDecimal(HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(wtmEndPoint)).Query).Get("factor[cost]"));
                             foreach (var grouping in item.Groups)
                             {
                                 var groupingRecord = MiningGroupDAO.GetRecord(grouping.Id);
@@ -99,6 +98,15 @@ namespace RetroMikeMiningTools.DAO
                                 }
                             }
                             primaryRevenue = Convert.ToDecimal(coin.BtcRevenue);
+                            if (!String.IsNullOrEmpty(coin.HashRate))
+                            {
+                                item.HashRateMH = decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float);
+                            }
+
+                            if(!String.IsNullOrEmpty(coin.PowerConsumption) && item.Power==0)
+                            {
+                                item.Power = Convert.ToDecimal(coin.PowerConsumption);
+                            }
                         }
                     }
                     else if (item.Ticker.StartsWith("Zerg-"))
@@ -140,8 +148,12 @@ namespace RetroMikeMiningTools.DAO
                                     }
                                 }
                             }
-                            item.HashRateMH = Convert.ToDecimal(coin.HashRate);
+
                             primaryRevenue = Convert.ToDecimal(coin.BtcRevenue);
+                            if (!String.IsNullOrEmpty(coin.HashRate))
+                            {
+                                item.HashRateMH = decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float);
+                            }
                         }
                     }
 
@@ -168,6 +180,10 @@ namespace RetroMikeMiningTools.DAO
                                     }
                                 }
                                 secondaryRevenue = Convert.ToDecimal(coin.BtcRevenue);
+                                if (!String.IsNullOrEmpty(coin.HashRate))
+                                {
+                                    item.SecondaryHashRateMH = decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float);
+                                }
                             }
                         }
                         else if (item.SecondaryTicker.StartsWith("Zerg-"))
@@ -210,13 +226,18 @@ namespace RetroMikeMiningTools.DAO
                                         }
                                     }
                                 }
-                                item.SecondaryHashRateMH = Convert.ToDecimal(coin.HashRate);
+
                                 secondaryRevenue = Convert.ToDecimal(coin.BtcRevenue);
+                                if (!String.IsNullOrEmpty(coin.HashRate))
+                                {
+                                    item.SecondaryHashRateMH = decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float);
+                                }
                             }
                         }
                     }
                     combinedRevenue += secondaryRevenue;
 
+                    var dailyPowerCost = 24 * ((Convert.ToDouble(item.Power) / 1000) * Convert.ToDouble(powerPrice));
                     decimal dailyRevenue = Convert.ToDecimal(combinedRevenue) * Convert.ToDecimal(btcPrice);
                     decimal dailyProfit = Convert.ToDecimal(dailyRevenue) - Convert.ToDecimal(dailyPowerCost);
                     item.Profit = Convert.ToDecimal(dailyProfit);

@@ -34,7 +34,7 @@ namespace RetroMikeMiningTools.Utilities
             var request = new RestRequest();
             var response = client.Get(request);
             dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
-            foreach (var item in responseContent)
+            foreach (var item in responseContent.data)
             {
                 foreach (var coinData in item)
                 {

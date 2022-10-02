@@ -152,40 +152,35 @@ namespace RetroMikeMiningTools.Pages
             HiveOsRigCoinConfig existingRecord = null;
             if (selectedWorker != null)
             {
-                var existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (multiUserMode)
                 {
                     record.Username = username;
-                    existingRecords = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username!=null && x.Username.Equals(username,StringComparison.OrdinalIgnoreCase) && x.Ticker.Equals(record.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
-                if (existingRecords == null || existingRecords?.Count == 0)
+                record.WorkerId = selectedWorker.Id;
+
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Zerg-"))
                 {
-                    record.WorkerId = selectedWorker.Id;
+                    record.Algo = record.Ticker.Remove(0, 5);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 11);
+                }
 
-                    if (record.Ticker != null && record.Algo==null && record.Ticker.StartsWith("Zerg-"))
-                    {
-                        record.Algo = record.Ticker.Remove(0, 5);
-                    }
-                    if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
-                    {
-                        record.Algo = record.Ticker.Remove(0, 11);
-                    }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                }
 
-                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
-                    {
-                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
-                    }
-                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
-                    {
-                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
-                    }
-
-                    HiveRigCoinDAO.AddRecord(record);
-                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
-                    if (multiUserMode)
-                    {
-                        coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
-                    }
+                HiveRigCoinDAO.AddRecord(record);
+                coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
+                if (multiUserMode)
+                {
+                    coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
@@ -435,7 +430,11 @@ namespace RetroMikeMiningTools.Pages
                         if (coinRecord != null)
                         {
                             coinRecord.Power = Convert.ToDecimal(coin.PowerConsumption);
-                            coinRecord.HashRateMH = Convert.ToDecimal(decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float));
+                            if (!String.IsNullOrEmpty(coin.HashRate))
+                            {
+                                coinRecord.HashRateMH = Convert.ToDecimal(decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float));
+                            }
+                            
                             HiveRigCoinDAO.UpdateRecord(coinRecord);
                         }
                     }
