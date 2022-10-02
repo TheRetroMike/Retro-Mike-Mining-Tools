@@ -45,5 +45,7 @@ namespace RetroMikeMiningTools.DTO
         public string? SecondaryTicker { get; set; }
         public decimal? SecondaryHashRateMH { get; set; }
         public string? SecondaryAlgo { get; set; }
+        public string? OverrideEndpoint { get; set; }
+        public string? SecondaryOverrideEndpoint { get; set; }
     }
 }

@@ -13,5 +13,6 @@
         public string HashRate { get; set; }
         public Enums.Exchange Exchange { get; set; }
         public string? SecondaryTicker { get; set; }
+        public int? WtmId { get; set; }
     }
 }

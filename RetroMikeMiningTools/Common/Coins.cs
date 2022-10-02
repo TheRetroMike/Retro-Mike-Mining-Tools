@@ -46,9 +46,35 @@ namespace RetroMikeMiningTools.Common
             {
                 List<Coin> result = new List<Coin>();
                 result.AddRange(ZergUtilities.GetZergAlgos());
-                result.AddRange(WhatToMineUtilities.GetCoinList("https://whattomine.com/"));
-                result.AddRange(WhatToMineUtilities.GetCoinList("https://whattomine.com/asic"));
                 result.AddRange(ProhashingUtilities.GetAlgos());
+
+                foreach (Coin coin in WhatToMineUtilities.GetCoinList("https://whattomine.com/"))
+                {
+                    var existingRecord = result.Where(x => x.Ticker.Equals(coin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (existingRecord == null)
+                    {
+                        result.Add(coin);
+                    }
+                }
+
+                foreach (Coin coin in WhatToMineUtilities.GetCoinList("https://whattomine.com/asic"))
+                {
+                    var existingRecord = result.Where(x => x.Ticker.Equals(coin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (existingRecord == null)
+                    {
+                        result.Add(coin);
+                    }
+                }
+
+                foreach (Coin coin in WhatToMineUtilities.GetIndividualCoinList())
+                {
+                    var existingRecord = result.Where(x => x.Ticker.Equals(coin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (existingRecord == null)
+                    {
+                        result.Add(coin);
+                    }
+                }
+                
                 result.Add(new Coin() { Ticker = "RDX", Name = "Radiant (RDX)" });
                 result = result.OrderBy(x => x.Name).ToList();
                 return result.Distinct().ToList();
