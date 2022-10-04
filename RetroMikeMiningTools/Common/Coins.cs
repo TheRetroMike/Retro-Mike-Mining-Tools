@@ -49,6 +49,15 @@ namespace RetroMikeMiningTools.Common
                 result.AddRange(ProhashingUtilities.GetAlgos());
                 result.AddRange(MiningDutchUtilities.GetAlgos());
 
+                foreach (Coin coin in ZergUtilities.GetZergCoins())
+                {
+                    var existingRecord = result.Where(x => x.Ticker.Equals(coin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (existingRecord == null)
+                    {
+                        result.Add(coin);
+                    }
+                }
+
                 foreach (Coin coin in WhatToMineUtilities.GetCoinList("https://whattomine.com/"))
                 {
                     var existingRecord = result.Where(x => x.Ticker.Equals(coin.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();

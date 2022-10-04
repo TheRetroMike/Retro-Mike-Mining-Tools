@@ -15,5 +15,6 @@
         public string? SecondaryTicker { get; set; }
         public int? WtmId { get; set; }
         public string HashRateFactor { get; set; }
+        public string Provider { get; set; }
     }
 }

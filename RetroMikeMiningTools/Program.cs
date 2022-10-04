@@ -24,6 +24,10 @@ LogDAO.InitialConfiguration();
 try
 {
     RetroMikeMiningTools.Utilities.MiningDutchUtilities.RefreshMiningDutchData();
+    RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergStatusData();
+    RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergCurrencyData();
+    RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergCoinData();
+    RetroMikeMiningTools.Utilities.ProhashingUtilities.RefreshProhashingData();
 }
 catch { }
 
@@ -90,6 +94,13 @@ builder.Services.AddQuartz(q =>
     {
         tp.MaxConcurrency = 10;
     });
+
+    q.ScheduleJob<RefreshApiDataJob>(trigger => trigger
+        .WithIdentity("Refresh API Data Trigger")
+        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
+        .WithCronSchedule("30 3/15 * 1/1 * ? *")
+        .WithDescription("Refresh API Data Trigger")
+    );
 
 
     if (coreConfig.ProfitSwitchingEnabled && !String.IsNullOrEmpty(coreConfig.ProfitSwitchingCronSchedule))
