@@ -98,12 +98,12 @@ namespace RetroMikeMiningTools.Utilities
                             if (newCalculatedRevenue > existingCalculatedRevenue)
                             {
                                 result.Remove(existingCoin);
-                                result.Add(new AlgoData() { Algo = algoName, Estimate = Convert.ToDecimal(estimate), MhFactor = mhFactor });
+                                result.Add(new AlgoData() { Algo = algoName, Estimate = Convert.ToString(estimate), MhFactor = Convert.ToString(mhFactor) });
                             }
                         }
                         else
                         {
-                            result.Add(new AlgoData() { Algo = algoName, Estimate = Convert.ToDecimal(estimate), MhFactor = mhFactor });
+                            result.Add(new AlgoData() { Algo = Convert.ToString(algoName), Estimate = Convert.ToString(estimate), MhFactor = Convert.ToString(mhFactor) });
                         }
                     }
                 }

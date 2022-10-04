@@ -53,7 +53,7 @@ namespace RetroMikeMiningTools.Pages
 
             if (data == null)
             {
-                data = GoldshellAsicDAO.GetRecords();
+                data = GoldshellAsicDAO.GetRecords(true);
             }
             if (importProgress == null)
             {
@@ -84,7 +84,7 @@ namespace RetroMikeMiningTools.Pages
 
         public JsonResult OnGetMasterCoinList([DataSourceRequest] DataSourceRequest request)
         {
-            return new JsonResult(Coins.AsicCoinList.OrderBy(x => x.Name));
+            return new JsonResult(Coins.CoinList.OrderBy(x => x.Name));
         }
 
         public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
@@ -106,12 +106,38 @@ namespace RetroMikeMiningTools.Pages
             GoldshellAsicCoinConfig existingRecord = null;
             if (selectedWorker != null)
             {
-                var existingRecords = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id).Where(x => x.Ticker.Equals(record.Ticker,StringComparison.OrdinalIgnoreCase)).ToList();
+                var existingRecords = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id, true, false).Where(x => x.Ticker.Equals(record.Ticker,StringComparison.OrdinalIgnoreCase)).ToList();
                 if (existingRecords == null || existingRecords?.Count == 0)
                 {
                     record.WorkerId = selectedWorker.Id;
+                    if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Zerg-"))
+                    {
+                        record.Algo = record.Ticker.Remove(0, 5);
+                    }
+                    if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
+                    {
+                        record.Algo = record.Ticker.Remove(0, 11);
+                    }
+                    if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("MiningDutch-"))
+                    {
+                        record.Algo = record.Ticker.Remove(0, 12);
+                    }
+
+                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
+                    {
+                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
+                    }
+                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
+                    {
+                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                    }
+                    if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
+                    {
+                        record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
+                    }
+
                     GoldshellAsicCoinDAO.AddRecord(record);
-                    coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id);
+                    coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id, true, false);
                 }
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
@@ -122,7 +148,7 @@ namespace RetroMikeMiningTools.Pages
             if (selectedWorker != null)
             {
                 GoldshellAsicCoinDAO.DeleteRecord(record);
-                coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id);
+                coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id, true, false);
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
@@ -131,8 +157,34 @@ namespace RetroMikeMiningTools.Pages
         {
             if (selectedWorker != null)
             {
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Zerg-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 5);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 11);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("MiningDutch-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 12);
+                }
+
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
+                }
+
                 GoldshellAsicCoinDAO.UpdateRecord(record);
-                coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id);
+                coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id, true, false);
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
@@ -196,14 +248,14 @@ namespace RetroMikeMiningTools.Pages
                 
             }
             GoldshellAsicDAO.UpdateRecord(record);
-            data = GoldshellAsicDAO.GetRecords();
+            data = GoldshellAsicDAO.GetRecords(true);
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
 
         public JsonResult OnPostDestroy([DataSourceRequest] DataSourceRequest request, GoldshellAsicConfig rig)
         {
             GoldshellAsicDAO.DeleteRecord(rig);
-            var coinRecords = GoldshellAsicCoinDAO.GetRecords(rig.Id);
+            var coinRecords = GoldshellAsicCoinDAO.GetRecords(rig.Id, true, false);
             if (coinRecords != null)
             {
                 foreach (var coinRecord in coinRecords)
@@ -220,7 +272,7 @@ namespace RetroMikeMiningTools.Pages
         public JsonResult OnPostAsicRowSelect(GoldshellAsicConfig workerId)
         {
             selectedWorker = workerId;
-            coins = GoldshellAsicCoinDAO.GetRecords(workerId.Id);
+            coins = GoldshellAsicCoinDAO.GetRecords(workerId.Id, true, false);
             return new JsonResult("Data Bound");
         }
 
@@ -368,7 +420,7 @@ namespace RetroMikeMiningTools.Pages
                 Console.WriteLine(ex.StackTrace);
             }
             importProgress = 100;
-            data = GoldshellAsicDAO.GetRecords();
+            data = GoldshellAsicDAO.GetRecords(true);
             
             return new JsonResult("Goldshell ASIC Import Complete");
         }
@@ -398,7 +450,7 @@ namespace RetroMikeMiningTools.Pages
                 if (!String.IsNullOrEmpty(selectedWorker.WhatToMineEndpoint))
                 {
                     var wtmCoins = WhatToMineUtilities.GetCoinList(selectedWorker.WhatToMineEndpoint);
-                    coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id);
+                    coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id, true, false);
                     foreach (var coin in wtmCoins)
                     {
                         if (coins.Where(x => x.Ticker==coin.Ticker).FirstOrDefault() == null)
@@ -424,7 +476,7 @@ namespace RetroMikeMiningTools.Pages
                             }
                         }
                     }
-                    coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id);
+                    coins = GoldshellAsicCoinDAO.GetRecords(selectedWorker.Id, true, false);
                 }
             }
             return new JsonResult("Rig Coins Imported");

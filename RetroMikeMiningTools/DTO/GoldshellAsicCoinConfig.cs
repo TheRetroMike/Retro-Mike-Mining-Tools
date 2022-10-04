@@ -33,5 +33,17 @@ namespace RetroMikeMiningTools.DTO
         public string? CoinWhatToMineEndpoint { get; set; }
         public string? CoinAlgo { get; set; }
         public string? Username { get; set; }
+        [DataType(DataType.Currency)]
+        public decimal Profit { get; set; }
+        public decimal HashRateMH { get; set; }
+        public decimal Power { get; set; }
+        public string Algo { get; set; }
+        public string? OverrideEndpoint { get; set; }
+        public string? SecondaryOverrideEndpoint { get; set; }
+        [UIHint("MiningCoinEditor")]
+        public string? SecondaryTicker { get; set; }
+        public decimal? SecondaryHashRateMH { get; set; }
+        public string? SecondaryAlgo { get; set; }
+        public decimal CoinRevenue { get; set; }
     }
 }

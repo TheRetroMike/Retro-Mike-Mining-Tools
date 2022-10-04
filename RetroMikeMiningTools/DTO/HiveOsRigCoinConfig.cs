@@ -47,5 +47,6 @@ namespace RetroMikeMiningTools.DTO
         public string? SecondaryAlgo { get; set; }
         public string? OverrideEndpoint { get; set; }
         public string? SecondaryOverrideEndpoint { get; set; }
+
     }
 }

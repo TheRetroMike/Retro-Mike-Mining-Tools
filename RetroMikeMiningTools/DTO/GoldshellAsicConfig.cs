@@ -26,5 +26,8 @@ namespace RetroMikeMiningTools.DTO
         public DateTime? DonationStartTime { get; set; }
         public DateTime? DonationEndTime { get; set; }
         public string? Username { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal Profit { get; set; }
     }
 }

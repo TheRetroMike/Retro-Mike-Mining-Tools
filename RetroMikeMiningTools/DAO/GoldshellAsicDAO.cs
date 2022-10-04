@@ -49,13 +49,26 @@ namespace RetroMikeMiningTools.DAO
             return result;
         }
 
-        public static List<GoldshellAsicConfig> GetRecords()
+        public static List<GoldshellAsicConfig> GetRecords(bool isUi)
         {
+            var config = CoreConfigDAO.GetCoreConfig();
             List<GoldshellAsicConfig> result = new List<GoldshellAsicConfig>();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var table = db.GetCollection<GoldshellAsicConfig>(tableName);
                 result = table.FindAll().ToList();
+            }
+
+            if (!isUi || (isUi && config.UiRigPriceCalculation))
+            {
+                foreach (var item in result)
+                {
+                    var coins = GoldshellAsicCoinDAO.GetRecords(item.Id, isUi, true)?.Where(x => x.Enabled);
+                    if (coins != null && coins.Count() > 0)
+                    {
+                        item.Profit = coins.Max(x => x.Profit);
+                    }
+                }
             }
             return result;
         }

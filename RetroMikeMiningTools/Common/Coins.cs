@@ -47,6 +47,7 @@ namespace RetroMikeMiningTools.Common
                 List<Coin> result = new List<Coin>();
                 result.AddRange(ZergUtilities.GetZergAlgos());
                 result.AddRange(ProhashingUtilities.GetAlgos());
+                result.AddRange(MiningDutchUtilities.GetAlgos());
 
                 foreach (Coin coin in WhatToMineUtilities.GetCoinList("https://whattomine.com/"))
                 {

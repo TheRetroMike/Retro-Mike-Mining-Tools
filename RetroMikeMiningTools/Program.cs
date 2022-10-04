@@ -21,6 +21,12 @@ CancellationTokenSource cancelTokenSource = new System.Threading.CancellationTok
 CoreConfigDAO.InitialConfiguration();
 LogDAO.InitialConfiguration();
 
+try
+{
+    RetroMikeMiningTools.Utilities.MiningDutchUtilities.RefreshMiningDutchData();
+}
+catch { }
+
 var coreConfig = CoreConfigDAO.GetCoreConfig();
 
 var builder = WebApplication.CreateBuilder(args);

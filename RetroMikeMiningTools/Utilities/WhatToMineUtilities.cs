@@ -21,7 +21,7 @@ namespace RetroMikeMiningTools.Utilities
                 {
                     var ticker = coin?.First?.tag?.Value;
                     var name = coin?.Name;
-                    if (ticker != null && ticker.ToString().ToUpper() == "NICEHASH")
+                    if (ticker != null && (ticker.ToString().ToUpper() == "NICEHASH" || ticker.ToString().ToUpper() == "DGB" || ticker.ToString().ToUpper() == "XMY" || ticker.ToString().ToUpper() == "XVG"))
                     {
                         ticker = name;
                     }

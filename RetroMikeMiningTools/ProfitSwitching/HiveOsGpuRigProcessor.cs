@@ -93,8 +93,16 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             break;
                     }
                 }
+                double? currentCoinPrice = null;
+                if (currentCoin != null && currentSecondaryCoin != null)
+                {
+                    currentCoinPrice = stagedCoins.Where(x => x.Ticker.Equals(currentCoin, StringComparison.OrdinalIgnoreCase) && (x.SecondaryTicker == null || x.SecondaryTicker.Equals(currentSecondaryCoin, StringComparison.OrdinalIgnoreCase))).FirstOrDefault()?.Amount;
+                }
+                else if(currentCoin != null)
+                {
+                    currentCoinPrice = stagedCoins.Where(x => x.Ticker.Equals(currentCoin, StringComparison.OrdinalIgnoreCase) && x.SecondaryTicker == null).FirstOrDefault()?.Amount;
+                }
 
-                var currentCoinPrice = stagedCoins.Where(x => x.Ticker.Equals(currentCoin, StringComparison.OrdinalIgnoreCase) && x.SecondaryTicker.Equals(currentSecondaryCoin, StringComparison.OrdinalIgnoreCase)).FirstOrDefault()?.Amount;
                 var newCoinBestPrice = stagedCoins.Max(x => x.Amount);
                 var newTopCoinTicker = stagedCoins.Aggregate((x, y) => x.Amount > y.Amount ? x : y).Ticker;
 

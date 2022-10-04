@@ -44,6 +44,12 @@
         template += "</ul>";
         return template;
     }
+    function wtmEndpointTemplate(WtmEndPoint) {
+        if(WtmEndPoint){
+            return WtmEndPoint.substring(0,5) + '...';
+        }
+        return '';
+    }
 
     function coinsTemplate(coins) {
         var template = "<ul>";
@@ -95,6 +101,7 @@
                     columns.Bound(column => column.ApiBasePath).ClientHeaderTemplate("API Base Path");
                     columns.Bound(column => column.ApiPassword).ClientHeaderTemplate("API Password").ClientTemplate("<span>#: ApiPassword == null ? ' ' : '●'.repeat( ApiPassword.length) #</span>");
                     columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint");
+                    columns.Bound(column => column.Profit);
                     columns.Bound(column => column.Enabled);
                     columns.Command(column =>
                     {
@@ -111,6 +118,7 @@
                 .Model(m => {
                     m.Id(id => id.Id);
                     m.Field(x => x.DonationAmount).DefaultValue("1%");
+                    m.Field(x => x.Profit).Editable(false);
                 })
                 )
             )
@@ -137,14 +145,21 @@
                 })
                 .Columns(columns =>
                 {
-                    columns.Bound(column => column.Ticker);
-                    columns.Bound(e => e.MergedTickers).ClientTemplate("#=coinsTemplate(MergedTickers)#");
-                    columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
-                    columns.Bound(column => column.CoinAlgo);
-                    columns.Bound(column => column.PoolUrl);
-                    columns.Bound(column => column.PoolUser);
-                    columns.Bound(column => column.PoolPassword);
-                    columns.Bound(column => column.Enabled);
+                columns.Bound(column => column.Ticker).Width(200);
+                columns.Bound(column => column.HashRateMH).ClientHeaderTemplate("Hashrate");
+                columns.Bound(column => column.OverrideEndpoint).ClientHeaderTemplate("WTM<br/>Override<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(OverrideEndpoint)#");
+                columns.Bound(column => column.SecondaryTicker).ClientHeaderTemplate("Secondary<br/>Ticker");;
+                columns.Bound(column => column.SecondaryHashRateMH).ClientHeaderTemplate("Hashrate");
+                columns.Bound(column => column.SecondaryOverrideEndpoint).ClientHeaderTemplate("Secondary<br />WTM<br/>Override<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(SecondaryOverrideEndpoint)#");
+                columns.Bound(column => column.Power);
+                columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
+                columns.Bound(column => column.CoinAlgo).ClientHeaderTemplate("Algo");
+                columns.Bound(column => column.PoolUrl).ClientHeaderTemplate("Pool").ClientTemplate("#=wtmEndpointTemplate(PoolUrl)#");
+                columns.Bound(column => column.PoolUser).ClientHeaderTemplate("User").ClientTemplate("#=wtmEndpointTemplate(PoolUser)#");
+                columns.Bound(column => column.PoolPassword).ClientHeaderTemplate("PWD");;
+                columns.Bound(column => column.Enabled);
+                columns.Bound(column => column.Profit).ClientHeaderTemplate("Profit");
+
                     columns.Command(column =>
                     {
                         column.Edit();
@@ -161,6 +176,7 @@
                     m.Id(id => id.Id);
                     m.Field(o => o.Groups).DefaultValue(new List<LinkedGroup>());
                     m.Field(x => x.MergedTickers).DefaultValue(new List<Coin>());
+                    m.Field(x => x.Profit).Editable(false);
                 })
                 )
             )

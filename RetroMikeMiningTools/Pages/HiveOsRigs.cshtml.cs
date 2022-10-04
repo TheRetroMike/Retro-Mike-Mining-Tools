@@ -243,6 +243,23 @@ namespace RetroMikeMiningTools.Pages
         {
             if (selectedWorker != null)
             {
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Zerg-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 5);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 11);
+                }
+
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                }
                 HiveRigCoinDAO.UpdateRecord(record);
                 coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);
                 if (multiUserMode)
