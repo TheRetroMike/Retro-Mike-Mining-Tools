@@ -31,6 +31,7 @@ This is a web and service based app that can connect to your Hive OS account or 
 - Goldshell ASIC Profit Switching and auto algo switching
 - Built-In Scheduler that gives you full control over how frequently it tries to profit switch
 - Auto Exchanging of coins utilizing your own exchange accounts
+- Calculations for any combination of up to 2 coins (i.e., GPU+CPU rig or just a mixed GPU rig)
 
 ## Profit Switching
 One of the most popular and powerful features is the ability to have the application automatically switch coins that you are mining. There are several modes available. While profit switching mode is the most popular, there are also coin stacking and coin diversification modes as well
@@ -51,6 +52,13 @@ The following mining modes are supported and can be set on each rig / ASIC
 
 ### Pinned Coin
 You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanted to mine something like a newly released coin to accumulate as many coins as possible early-on.
+
+### Coin Configuration
+- When configuring a coin, if it's a Prohashing or Zerg coin, then set the Hashrate in the MH equivalent and set the system power. Make sure your power cost is set in the Core Configuration screen
+- When configuring a coin from WTM, you can either have it use the generalized WTM Endpoint from the rig config, or set the individual WTM endpoints for the primary and secondary coins. If you do only override endpoints, you don't need to set one at the rig level
+- Always set the power to the total system power
+- When using override, leave hashrate blank as it will be overwritten with what is defined in the WTM Override Endpoints
+
 
 ## Auto Exchanging
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
