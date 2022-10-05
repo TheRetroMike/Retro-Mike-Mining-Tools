@@ -45,5 +45,7 @@ namespace RetroMikeMiningTools.DTO
         public decimal? SecondaryHashRateMH { get; set; }
         public string? SecondaryAlgo { get; set; }
         public decimal CoinRevenue { get; set; }
+        public string? PrimaryProvider { get; set; }
+        public string? SecondaryProvider { get; set; }
     }
 }

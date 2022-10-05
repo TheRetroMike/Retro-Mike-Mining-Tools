@@ -203,16 +203,18 @@ namespace RetroMikeMiningTools.Utilities
                         var ticker = item?.tag?.Value;
                         var id = item?.id?.Value;
                         var algorithm = item?.algorithm?.Value;
-                        result.Add(
-                            new Coin()
+                        var status = item?.status?.Value;
+                        if(status != null && status.ToString().Equals("Active", StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.Add(new Coin()
                             {
                                 Name = String.Format("{0} ({1})", name, ticker),
                                 Ticker = ticker,
                                 Algorithm = algorithm,
                                 WtmId = Convert.ToInt32(id)
                             });
+                        }
                     }
-                    
                 }
             }
             catch { }

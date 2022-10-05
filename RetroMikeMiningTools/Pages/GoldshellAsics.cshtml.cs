@@ -51,10 +51,7 @@ namespace RetroMikeMiningTools.Pages
                 }
             }
 
-            if (data == null)
-            {
-                data = GoldshellAsicDAO.GetRecords(true);
-            }
+            data = GoldshellAsicDAO.GetRecords(true);
             if (importProgress == null)
             {
                 importProgress = 0;
@@ -122,6 +119,11 @@ namespace RetroMikeMiningTools.Pages
                     {
                         record.Algo = record.Ticker.Remove(0, 12);
                     }
+                    if (record.Ticker != null && record.Ticker.StartsWith("ZergProvider-"))
+                    {
+                        record.Ticker = record.Ticker.Remove(0,13);
+                        record.PrimaryProvider = "ZergProvider";
+                    }
 
                     if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
                     {
@@ -134,6 +136,11 @@ namespace RetroMikeMiningTools.Pages
                     if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
                     {
                         record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
+                    }
+                    if (record.SecondaryTicker != null && record.SecondaryTicker.StartsWith("ZergProvider-"))
+                    {
+                        record.SecondaryTicker = record.SecondaryTicker.Remove(0, 13);
+                        record.SecondaryProvider = "ZergProvider";
                     }
 
                     GoldshellAsicCoinDAO.AddRecord(record);
@@ -169,6 +176,11 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.Algo = record.Ticker.Remove(0, 12);
                 }
+                if (record.Ticker != null && record.Ticker.StartsWith("ZergProvider-"))
+                {
+                    record.Ticker = record.Ticker.Remove(0, 13);
+                    record.PrimaryProvider = "ZergProvider";
+                }
 
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
                 {
@@ -181,6 +193,11 @@ namespace RetroMikeMiningTools.Pages
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryTicker.StartsWith("ZergProvider-"))
+                {
+                    record.SecondaryTicker = record.SecondaryTicker.Remove(0, 13);
+                    record.SecondaryProvider = "ZergProvider";
                 }
 
                 GoldshellAsicCoinDAO.UpdateRecord(record);

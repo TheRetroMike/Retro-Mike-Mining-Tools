@@ -51,6 +51,13 @@
         return '';
     }
 
+    function tickerTemplate(ticker){
+        if(ticker){
+            return ticker.replace('ZergProvider-','');
+        }
+        return ticker;
+    }
+
     function coinsTemplate(coins) {
         var template = "<ul>";
         for (var i = 0; i < coins.length; i++){
@@ -145,10 +152,10 @@
                 })
                 .Columns(columns =>
                 {
-                columns.Bound(column => column.Ticker).Width(200);
+                columns.Bound(column => column.Ticker).Width(200).ClientTemplate("#=tickerTemplate(Ticker)#");
                 columns.Bound(column => column.HashRateMH).ClientHeaderTemplate("Hashrate");
                 columns.Bound(column => column.OverrideEndpoint).ClientHeaderTemplate("WTM<br/>Override<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(OverrideEndpoint)#");
-                columns.Bound(column => column.SecondaryTicker).ClientHeaderTemplate("Secondary<br/>Ticker");;
+                columns.Bound(column => column.SecondaryTicker).ClientHeaderTemplate("Secondary<br/>Ticker").ClientTemplate("#=tickerTemplate(SecondaryTicker)#");
                 columns.Bound(column => column.SecondaryHashRateMH).ClientHeaderTemplate("Hashrate");
                 columns.Bound(column => column.SecondaryOverrideEndpoint).ClientHeaderTemplate("Secondary<br />WTM<br/>Override<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(SecondaryOverrideEndpoint)#");
                 columns.Bound(column => column.Power);

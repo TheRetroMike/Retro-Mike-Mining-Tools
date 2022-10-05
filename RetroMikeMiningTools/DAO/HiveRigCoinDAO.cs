@@ -31,7 +31,9 @@ namespace RetroMikeMiningTools.DAO
                     SecondaryHashRateMH = coinConfig.SecondaryHashRateMH,
                     SecondaryAlgo = coinConfig.SecondaryAlgo,
                     OverrideEndpoint = coinConfig.OverrideEndpoint,
-                    SecondaryOverrideEndpoint = coinConfig.SecondaryOverrideEndpoint
+                    SecondaryOverrideEndpoint = coinConfig.SecondaryOverrideEndpoint,
+                    PrimaryProvider = coinConfig.PrimaryProvider,
+                    SecondaryProvider = coinConfig.SecondaryProvider
                 });
             }
         }
@@ -333,6 +335,8 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.SecondaryAlgo = record.SecondaryAlgo;
                     existingRecord.OverrideEndpoint = record.OverrideEndpoint;
                     existingRecord.SecondaryOverrideEndpoint = record.SecondaryOverrideEndpoint;
+                    existingRecord.PrimaryProvider = record.PrimaryProvider;
+                    existingRecord.SecondaryProvider = record.SecondaryProvider;
                     table.Update(existingRecord);
                 }
                 else

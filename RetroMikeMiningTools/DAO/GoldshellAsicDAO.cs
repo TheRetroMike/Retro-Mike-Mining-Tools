@@ -61,12 +61,13 @@ namespace RetroMikeMiningTools.DAO
 
             if (!isUi || (isUi && config.UiRigPriceCalculation))
             {
-                foreach (var item in result)
+                for (int i = 0; i < result.Count(); i++)
                 {
-                    var coins = GoldshellAsicCoinDAO.GetRecords(item.Id, isUi, true)?.Where(x => x.Enabled);
+                    var id = result[i].Id;
+                    var coins = GoldshellAsicCoinDAO.GetRecords(id, isUi, true)?.Where(x => x.Enabled);
                     if (coins != null && coins.Count() > 0)
                     {
-                        item.Profit = coins.Max(x => x.Profit);
+                        result[i].Profit = coins.Max(x => x.Profit);
                     }
                 }
             }
