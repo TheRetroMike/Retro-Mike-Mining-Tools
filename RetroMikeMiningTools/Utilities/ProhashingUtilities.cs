@@ -19,9 +19,11 @@ namespace RetroMikeMiningTools.Utilities
                 foreach (var coinData in item)
                 {
                     var algoName = coinData.name.Value;
+                    var estimate = coinData.estimate_current.Value;
+                    var factor = coinData.mbtc_mh_factor.Value;
                     if (!result.Any(x => x.Algorithm.Equals(algoName)))
                     {
-                        result.Add(new Coin() { Algorithm = algoName, Name = "Prohashing-" + algoName, Ticker = "Prohashing-" + algoName });
+                        result.Add(new Coin() { Algorithm = algoName, Name = "Prohashing-" + algoName, Ticker = "Prohashing-" + algoName, BtcRevenue = estimate, HashRateFactor = factor });
                     }
                 }
             }

@@ -102,7 +102,6 @@ builder.Services.AddQuartz(q =>
         .WithDescription("Refresh API Data Trigger")
     );
 
-
     if (coreConfig.ProfitSwitchingEnabled && !String.IsNullOrEmpty(coreConfig.ProfitSwitchingCronSchedule))
     {
         //HiveOS ProfitSwitching

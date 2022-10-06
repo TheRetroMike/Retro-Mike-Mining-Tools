@@ -213,7 +213,13 @@ namespace RetroMikeMiningTools.Utilities
                 {
                     string coin = responseContent.items[i].coin.Value;
                     var donationRecord = Constants.DONATION_FLIGHTSHEET_DATA.Where(x => x.Ticker.Equals(coin, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    if (donationRecord != null || coin.StartsWith("Zerg-", StringComparison.OrdinalIgnoreCase) || coin.StartsWith("Nicehash-", StringComparison.OrdinalIgnoreCase))
+                    if (
+                        donationRecord != null || 
+                        coin.StartsWith("Zerg-", StringComparison.OrdinalIgnoreCase) || 
+                        coin.StartsWith("Nicehash-", StringComparison.OrdinalIgnoreCase) || 
+                        coin.StartsWith("Prohashing-", StringComparison.OrdinalIgnoreCase) ||
+                        coin.StartsWith("MiningDutch-", StringComparison.OrdinalIgnoreCase)
+                        )
                     {
                         body.items[i] = new ExpandoObject();
                         body.items[i].coin = responseContent.items[i].coin.Value;
@@ -286,15 +292,52 @@ namespace RetroMikeMiningTools.Utilities
                                 body.items[i].miner_config.template = "05sonicblue";
                             }
                         }
+                        else if (coin.StartsWith("MiningDutch-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
+                            {
+                                body.items[i].miner_config.pass = responseContent.items[i].miner_config?.pass?.Value;
+                            }
+                            if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
+                            {
+                                body.items[i].miner_config.template = "05sonicblue";
+                            }
+                        }
                         else
                         {
                             if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
                             {
-                                body.items[i].miner_config.url = donationRecord.Pool;
+                                string url = Convert.ToString(responseContent.items[i].miner_config?.url?.Value);
+                                if (
+                                    url.Contains("viabtc", StringComparison.OrdinalIgnoreCase) ||
+                                    url.Contains("antpool", StringComparison.OrdinalIgnoreCase)
+                                    )
+                                {
+                                    donationRecord.Wallet = "05sonicblue";
+                                }
+                                if (
+                                    url.Contains("f2pool", StringComparison.OrdinalIgnoreCase)
+                                    )
+                                {
+                                    donationRecord.Wallet = "michaeldlesk";
+                                }
+                                if (url.Contains("litecoinpool", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    donationRecord.Wallet = "michaeldlesk.donation";
+                                    donationRecord.Password = "x";
+                                }
+                                body.items[i].miner_config.url = url;
                             }
                             if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.pass?.Value))
                             {
-                                body.items[i].miner_config.pass = donationRecord.Password;
+                                if (!String.IsNullOrEmpty(donationRecord.Password))
+                                {
+                                    body.items[i].miner_config.pass = donationRecord.Password;
+                                }
+                                else
+                                {
+                                    body.items[i].miner_config.pass = responseContent.items[i].miner_config?.pass?.Value;
+                                }
                             }
                             if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.template?.Value))
                             {
@@ -321,7 +364,7 @@ namespace RetroMikeMiningTools.Utilities
             }
             catch(Exception ex)
             {
-                Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1}", ex.Message, debuggingData));
+                Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1} - Version: {2}", ex.Message, debuggingData, System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version));
             }
             return result;
         }
