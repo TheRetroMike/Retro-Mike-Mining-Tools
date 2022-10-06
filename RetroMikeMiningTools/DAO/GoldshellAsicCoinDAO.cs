@@ -133,7 +133,7 @@ namespace RetroMikeMiningTools.DAO
                             }
                             else if (item.PrimaryProvider != null && item.PrimaryProvider.Equals("ZergProvider", StringComparison.OrdinalIgnoreCase))
                             {
-                                var zergCoin = zergCoinData.Where(x => x.Ticker.Equals(String.Format("ZergProvider-{0}",item.Ticker), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                                var zergCoin = zergCoinData.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                                 if (zergCoin != null)
                                 {
                                     var mBtcPerMhAmount = Convert.ToDecimal(zergCoin.BtcRevenue) / (Convert.ToDecimal(zergCoin.HashRateFactor) / 1000);
@@ -238,7 +238,7 @@ namespace RetroMikeMiningTools.DAO
                                 }
                                 else if (item.PrimaryProvider != null && item.PrimaryProvider.Equals("ZergProvider", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    var zergCoin = zergCoinData.Where(x => x.Ticker.Equals(String.Format("ZergProvider-{0}", item.Ticker), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                                    var zergCoin = zergCoinData.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                                     if (zergCoin != null)
                                     {
                                         var mBtcPerMhAmount = Convert.ToDecimal(zergCoin.BtcRevenue) / (Convert.ToDecimal(zergCoin.HashRateFactor) / 1000);

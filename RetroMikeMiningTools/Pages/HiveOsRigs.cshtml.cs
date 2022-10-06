@@ -168,7 +168,7 @@ namespace RetroMikeMiningTools.Pages
                 }
                 if (record.Ticker != null && record.Ticker.StartsWith("ZergProvider-"))
                 {
-                    record.Ticker = record.Ticker.Remove(0, 13);
+                    //record.Ticker = record.Ticker.Remove(0, 13);
                     record.PrimaryProvider = "ZergProvider";
                 }
 
@@ -182,7 +182,7 @@ namespace RetroMikeMiningTools.Pages
                 }
                 if (record.SecondaryTicker != null && record.SecondaryTicker.StartsWith("ZergProvider-"))
                 {
-                    record.SecondaryTicker = record.SecondaryTicker.Remove(0, 13);
+                    //record.SecondaryTicker = record.SecondaryTicker.Remove(0, 13);
                     record.SecondaryProvider = "ZergProvider";
                 }
 
@@ -261,6 +261,10 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.Algo = record.Ticker.Remove(0, 11);
                 }
+                if (record.Ticker != null && record.Ticker.StartsWith("ZergProvider-"))
+                {
+                    record.PrimaryProvider = "ZergProvider";
+                }
 
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zerg-"))
                 {
@@ -269,6 +273,11 @@ namespace RetroMikeMiningTools.Pages
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryTicker.StartsWith("ZergProvider-"))
+                {
+                    //record.SecondaryTicker = record.SecondaryTicker.Remove(0, 13);
+                    record.SecondaryProvider = "ZergProvider";
                 }
                 HiveRigCoinDAO.UpdateRecord(record);
                 coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true);

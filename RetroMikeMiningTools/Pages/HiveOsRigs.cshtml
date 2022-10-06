@@ -24,6 +24,12 @@
         }
         return '';
     }
+    function tickerTemplate(ticker){
+        if(ticker){
+            return ticker.replace('ZergProvider-','');
+        }
+        return '';
+    }
 </script>
 
 <div class="k-card-header">
@@ -99,10 +105,10 @@
             })
             .Columns(columns =>
             {
-                columns.Bound(column => column.Ticker).Width(200);
+                columns.Bound(column => column.Ticker).Width(200).ClientTemplate("#=tickerTemplate(Ticker)#");
                 columns.Bound(column => column.HashRateMH).ClientHeaderTemplate("Hashrate (MH)");
                 columns.Bound(column => column.OverrideEndpoint).ClientHeaderTemplate("WTM<br/>Override<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(OverrideEndpoint)#");
-                columns.Bound(column => column.SecondaryTicker);
+                columns.Bound(column => column.SecondaryTicker).ClientTemplate("#=tickerTemplate(SecondaryTicker)#");
                 columns.Bound(column => column.SecondaryHashRateMH).ClientHeaderTemplate("Hashrate (MH)");
                 columns.Bound(column => column.SecondaryOverrideEndpoint).ClientHeaderTemplate("Secondary WTM<br/>Override<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(SecondaryOverrideEndpoint)#");
                 columns.Bound(column => column.Power);
