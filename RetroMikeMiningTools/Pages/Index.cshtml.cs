@@ -22,6 +22,7 @@ namespace RetroMikeMiningTools.Pages
         private static IHostApplicationLifetime appHost;
         private static bool multiUserMode = false;
         private static string? username;
+        public bool IsMultiUser { get; set; }
 
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment env, IHostApplicationLifetime hostLifetime)
@@ -42,6 +43,7 @@ namespace RetroMikeMiningTools.Pages
                     username = User?.Identity?.Name;
                     multiUserMode = true;
                     ViewData["MultiUser"] = true;
+                    IsMultiUser = true;
                 }
 
                 var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);

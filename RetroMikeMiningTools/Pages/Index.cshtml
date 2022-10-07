@@ -79,7 +79,9 @@
                             .Filterable()
                             .Pageable()
                             .ToolBar(toolbar=> {
-                                toolbar.Custom().Text("Purge Logs").HtmlAttributes(new { id = "clearLogs" });
+                                if(!Model.IsMultiUser){
+                                    toolbar.Custom().Text("Purge Logs").HtmlAttributes(new { id = "clearLogs" });
+                                }
                             })
                             .Columns(columns =>
                             {
