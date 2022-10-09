@@ -9,7 +9,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
 {
     public static class HiveOsGpuRigProcessor
     {
-        public static void Process(HiveOsRigConfig rig, CoreConfig config)
+        public static async void Process(HiveOsRigConfig rig, CoreConfig config)
         {
 
             //LegacyProcessing(rig, config);
@@ -106,6 +106,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                 var newCoinBestPrice = stagedCoins.Max(x => x.Amount);
                 var newTopCoinTicker = stagedCoins.Aggregate((x, y) => x.Amount > y.Amount ? x : y).Ticker;
 
+
+
                 if (!String.IsNullOrEmpty(rig.PinnedTicker))
                 {
                     newTopCoinTicker = rig.PinnedTicker;
@@ -138,6 +140,53 @@ namespace RetroMikeMiningTools.ProfitSwitching
                         if (newFlightsheet != null && newFlightsheet.Flightsheet != null && newFlightsheet.Flightsheet.ToString() != currentFlightsheet)
                         {
                             HiveUtilities.UpdateFlightSheetID(rig.HiveWorkerId, newFlightsheet.Flightsheet.ToString(), newFlightsheet.FlightsheetName, newCoinBestPrice.ToString(), config.HiveApiKey, config.HiveFarmID, rig.Name, false, rig.MiningMode, newTopCoinTicker, rig.Username);
+                        }
+                    }
+                }
+
+                
+                if(rig.SmartPlugType != null && rig.RigMinProfit != null && rig.SmartPlugHost != null)
+                {
+                    //Check to see if we should power off rig
+                    if (newCoinBestPrice < Convert.ToDouble(rig.RigMinProfit))
+                    {
+                        switch (rig.SmartPlugType)
+                        {
+                            case SmartPlugType.Kasa:
+                                using (var kasaClient = new Kasa.KasaOutlet(rig.SmartPlugHost))
+                                {
+                                    var isAlreadyOn = await kasaClient.System.IsOutletOn();
+                                    if (isAlreadyOn)
+                                    {
+                                        await kasaClient.System.SetOutletOn(false);
+                                    }
+                                }
+                                break;
+                            case SmartPlugType.None:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //Let's make sure the plug is on and if not, then turn it on
+                        switch (rig.SmartPlugType)
+                        {
+                            case SmartPlugType.Kasa:
+                                using (var kasaClient = new Kasa.KasaOutlet(rig.SmartPlugHost))
+                                {
+                                    var isAlreadyOn = await kasaClient.System.IsOutletOn();
+                                    if (!isAlreadyOn)
+                                    {
+                                        await kasaClient.System.SetOutletOn(true);
+                                    }
+                                }
+                                break;
+                            case SmartPlugType.None:
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

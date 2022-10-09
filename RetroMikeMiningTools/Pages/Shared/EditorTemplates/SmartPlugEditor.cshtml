@@ -1,0 +1,9 @@
+﻿@using Kendo.Mvc.UI
+@model Enum
+
+@(Html.Kendo().DropDownListFor(m => m)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .BindTo(Html.GetEnumSelectList<Enums.SmartPlugType>())
+        
+    )

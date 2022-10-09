@@ -35,7 +35,10 @@ namespace RetroMikeMiningTools.DAO
                     EnabledDateTime = rigConfig.Enabled ? DateTime.Now : null,
                     PinnedTicker = rigConfig.PinnedTicker,
                     PinnedZergAlgo = rigConfig.PinnedZergAlgo,
-                    Username = rigConfig.Username
+                    Username = rigConfig.Username,
+                    SmartPlugType = rigConfig.SmartPlugType,
+                    SmartPlugHost = rigConfig.SmartPlugHost,
+                    RigMinProfit = rigConfig.RigMinProfit
                 });
             }
         }
@@ -140,6 +143,9 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.DonationRunning = record.DonationRunning;
                     existingRecord.PinnedTicker = record.PinnedTicker;
                     existingRecord.PinnedZergAlgo = record.PinnedZergAlgo;
+                    existingRecord.SmartPlugType = record.SmartPlugType;
+                    existingRecord.SmartPlugHost = record.SmartPlugHost;
+                    existingRecord.RigMinProfit = record.RigMinProfit;
                     
                     table.Update(existingRecord);
                 }
@@ -155,6 +161,9 @@ namespace RetroMikeMiningTools.DAO
                         EnabledDateTime = record.Enabled ? DateTime.Now : null,
                         PinnedTicker = record.PinnedTicker,
                         PinnedZergAlgo = record.PinnedZergAlgo,
+                        SmartPlugType = record.SmartPlugType,
+                        SmartPlugHost = record.SmartPlugHost,
+                        RigMinProfit = record.RigMinProfit
                     });
                 }
             }

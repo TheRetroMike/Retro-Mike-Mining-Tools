@@ -32,5 +32,12 @@ namespace RetroMikeMiningTools.DTO
 
         [DataType(DataType.Currency)]
         public decimal Profit { get; set; }
+
+        [UIHint("SmartPlugEditor")]
+        public SmartPlugType SmartPlugType { get; set; }
+        public string? SmartPlugHost { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal? RigMinProfit { get; set; }
     }
 }

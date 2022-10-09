@@ -38,28 +38,31 @@ namespace RetroMikeMiningTools.Utilities
         public static List<Flightsheet> GetAllFlightsheets(string hiveApiKey, string farmId)
         {
             List<Flightsheet> result = new List<Flightsheet>();
-            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs", farmId));
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            var response = client.Get(request);
-            dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
-            if (!String.IsNullOrEmpty(response?.Content))
+            try
             {
-
-                foreach (var item in responseContent?.data)
+                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                RestRequest request = new RestRequest(String.Format("/farms/{0}/fs", farmId));
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                var response = client.Get(request);
+                dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
+                if (!String.IsNullOrEmpty(response?.Content))
                 {
-                    var flightSheetName = item?.name?.Value;
-                    if (!String.IsNullOrEmpty(flightSheetName))
+
+                    foreach (var item in responseContent?.data)
                     {
-                        result.Add(new Flightsheet()
+                        var flightSheetName = item?.name?.Value;
+                        if (!String.IsNullOrEmpty(flightSheetName))
                         {
-                            Name = flightSheetName,
-                            Id = item.id.Value
-                        });
+                            result.Add(new Flightsheet()
+                            {
+                                Name = flightSheetName,
+                                Id = item.id.Value
+                            });
+                        }
                     }
                 }
             }
-
+            catch { }
             return result;
         }
 
@@ -67,13 +70,15 @@ namespace RetroMikeMiningTools.Utilities
 
         public static void DeleteFlightsheet(string hiveApiKey, string farmId, long? flightSheetId)
         {
-            string? result = null;
-            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
-            
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            var response = client.Delete(request);
-            dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
+            try
+            {
+                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
+
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                var response = client.Delete(request);
+            }
+            catch { }
         }
 
         public static string GetFlightsheetWalletID(string flightSheetName, string ticker, string hiveApiKey, string farmId)
@@ -103,15 +108,19 @@ namespace RetroMikeMiningTools.Utilities
 
         public static long? GetFlightsheetWorkerCount(string hiveApiKey, string farmId, string flightSheetId)
         {
-            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            var response = client.Get(request);
-            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
-            if (responseContent != null && responseContent.workers_count != null)
+            try
             {
-                return Convert.ToInt64(responseContent?.workers_count);
+                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                var response = client.Get(request);
+                dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+                if (responseContent != null && responseContent.workers_count != null)
+                {
+                    return Convert.ToInt64(responseContent?.workers_count);
+                }
             }
+            catch { }
             return null;
         }
 
@@ -129,68 +138,75 @@ namespace RetroMikeMiningTools.Utilities
         public static string GetCurrentFlightsheet(string workerId, string hiveApiKey, string farmId, string workerName)
         {
             string result = "0";
-            if (String.IsNullOrEmpty(workerId) && !String.IsNullOrEmpty(workerName))
+            try
             {
-                workerId = GetWorkers(hiveApiKey, farmId).Where(x => x.Name == workerName)?.FirstOrDefault()?.HiveWorkerId;
+                if (String.IsNullOrEmpty(workerId) && !String.IsNullOrEmpty(workerName))
+                {
+                    workerId = GetWorkers(hiveApiKey, farmId).Where(x => x.Name == workerName)?.FirstOrDefault()?.HiveWorkerId;
+                }
+                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                RestRequest request = new RestRequest(String.Format("/farms/{0}/workers/{1}", farmId, workerId));
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                var response = client.Get(request);
+                dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
+                if (!String.IsNullOrEmpty(response?.Content))
+                {
+                    result = responseContent.flight_sheet?.id;
+                }
             }
-            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-            RestRequest request = new RestRequest(String.Format("/farms/{0}/workers/{1}", farmId, workerId));
-            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-            var response = client.Get(request);
-            dynamic responseContent = JsonConvert.DeserializeObject(response?.Content);
-            if (!String.IsNullOrEmpty(response?.Content))
-            {
-                result = responseContent.flight_sheet?.id;
-            }
-
+            catch { }
             return result;
         }
 
         public static void UpdateFlightSheetID(string workerId, string flightSheetId, string flightSheetName, string profit, string hiveApiKey, string farmId, string workerName, bool donation, MiningMode miningMode, string ticker, string username)
         {
-            if (String.IsNullOrEmpty(workerId) && !String.IsNullOrEmpty(workerName))
+            try
             {
-                workerId = GetWorkers(hiveApiKey, farmId).Where(x => x.Name == workerName)?.FirstOrDefault()?.HiveWorkerId;
-            }
-            if (!String.IsNullOrEmpty(workerId))
-            {
-                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-                RestRequest request = new RestRequest(String.Format("/farms/{0}/workers/{1}", farmId, workerId));
-                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-                var requestBody = new HiveWorkerPatchRequest() { fs_id = flightSheetId };
-                request.AddJsonBody(requestBody);
-                var response = client.Patch(request);
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (String.IsNullOrEmpty(workerId) && !String.IsNullOrEmpty(workerName))
                 {
-                    if (donation)
+                    workerId = GetWorkers(hiveApiKey, farmId).Where(x => x.Name == workerName)?.FirstOrDefault()?.HiveWorkerId;
+                }
+                if (!String.IsNullOrEmpty(workerId))
+                {
+                    RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                    RestRequest request = new RestRequest(String.Format("/farms/{0}/workers/{1}", farmId, workerId));
+                    request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                    var requestBody = new HiveWorkerPatchRequest() { fs_id = flightSheetId };
+                    request.AddJsonBody(requestBody);
+                    var response = client.Patch(request);
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        Common.Logger.Log(String.Format("Flightsheet Updated on {0} to Dev Fee / Donation. ", workerName), LogType.ProfitSwitching, username);
+                        if (donation)
+                        {
+                            Common.Logger.Log(String.Format("Flightsheet Updated on {0} to Dev Fee / Donation. ", workerName), LogType.ProfitSwitching, username);
+                        }
+                        else
+                        {
+                            if (miningMode == MiningMode.Profit || miningMode == MiningMode.DiversificationByProfit)
+                            {
+                                Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching, username);
+                            }
+                            if (miningMode == MiningMode.CoinStacking || miningMode == MiningMode.DiversificationByStacking)
+                            {
+                                Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Amount: {1} {3}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName, ticker), LogType.ProfitSwitching, username);
+                            }
+                            if (miningMode == MiningMode.ZergPoolAlgoProfitBasis)
+                            {
+                                Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching, username);
+                            }
+                        }
                     }
                     else
                     {
-                        if (miningMode == MiningMode.Profit || miningMode == MiningMode.DiversificationByProfit)
-                        {
-                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching, username);
-                        }
-                        if (miningMode == MiningMode.CoinStacking || miningMode == MiningMode.DiversificationByStacking)
-                        {
-                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Amount: {1} {3}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName, ticker), LogType.ProfitSwitching, username);
-                        }
-                        if (miningMode == MiningMode.ZergPoolAlgoProfitBasis)
-                        {
-                            Common.Logger.Log(String.Format("Flightsheet Updated on {2} to {0}. Estimated Current Profit: ${1}", flightSheetName, Math.Round(Convert.ToDouble(profit), 2), workerName), LogType.ProfitSwitching, username);
-                        }
+                        Common.Logger.Log("Flightsheet Failed to Update", LogType.ProfitSwitching, username);
                     }
                 }
                 else
                 {
-                    Common.Logger.Log("Flightsheet Failed to Update", LogType.ProfitSwitching, username);
+                    Common.Logger.Log(String.Format("Unable to determine worker id for rig {0}. Please check Rig name or use import function", workerName), LogType.ProfitSwitching, username);
                 }
             }
-            else
-            {
-                Common.Logger.Log(String.Format("Unable to determine worker id for rig {0}. Please check Rig name or use import function", workerName), LogType.ProfitSwitching, username);
-            }
+            catch { }
         }
 
         public static string CreateDonationFlightsheet(string flightSheetId, string hiveApiKey, string farmId)
