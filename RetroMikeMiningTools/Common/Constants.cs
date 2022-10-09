@@ -84,7 +84,8 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="LBC"},
                     new FlightsheetRecord(){Wallet="ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0qp84vf0eha9hu2p04vs54s5vzqusph3crlx2en",Ticker="CKB"},
                     new FlightsheetRecord(){Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",Ticker="RDX"},
-                    new FlightsheetRecord(){Wallet="NQ19 1CXU ABTD PDXL T5UM NU5P YL66 936Y VUVF", Ticker="NIM"}
+                    new FlightsheetRecord(){Wallet="NQ19 1CXU ABTD PDXL T5UM NU5P YL66 936Y VUVF", Ticker="NIM"},
+                    new FlightsheetRecord(){Wallet="XnXP9jM2Lx97BDfKQfEN6KbFmL3hGYpz1Udfbx84KXg6VoBbpf1raJHTJ1fX5vUgo2Vhnm56FYhciS72Frs4XHc41QPrJzjtu", Ticker="AEON"}
                 };
             }
         }

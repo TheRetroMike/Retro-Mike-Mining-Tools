@@ -19,6 +19,17 @@ namespace RetroMikeMiningTools.DAO
             return result;
         }
 
+        public static int GetUserCount()
+        {
+            int result = 0;
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
+            {
+                var table = db.GetCollection<UserConfig>(tableName);
+                result = table.Count();
+            }
+            return result;
+        }
+
         public static void AddUser(string username, string hashedPassword)
         {
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))

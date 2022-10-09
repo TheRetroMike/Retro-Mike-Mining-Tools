@@ -53,12 +53,17 @@ namespace RetroMikeMiningTools.Pages
             if (multiUserMode)
             {
                 Config = CoreConfigDAO.GetCoreConfig(username);
-                rigs = HiveRigDAO.GetRecords(Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (Config==null && !String.IsNullOrEmpty(username))
+                {
+                    CoreConfigDAO.InitialConfiguration(username);
+                    Config = CoreConfigDAO.GetCoreConfig(username);
+                }
+                rigs = HiveRigDAO.GetRecords(Config, true, username).ToList();
             }
             else
             {
                 Config = CoreConfigDAO.GetCoreConfig();
-                rigs = HiveRigDAO.GetRecords(Config, true);
+                rigs = HiveRigDAO.GetRecords(Config, true, null);
             }
 
             var coreConfig = CoreConfigDAO.GetCoreConfig();
@@ -372,10 +377,14 @@ namespace RetroMikeMiningTools.Pages
                 
             }
             HiveRigDAO.UpdateRecord(record);
-            rigs = HiveRigDAO.GetRecords(Config, true);
+
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords(Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config, true, username).ToList();
+            }
+            else
+            {
+                rigs = HiveRigDAO.GetRecords(Config, true, null);
             }
             return new JsonResult(new[] { record }.ToDataSourceResult(request, ModelState));
         }
@@ -424,10 +433,14 @@ namespace RetroMikeMiningTools.Pages
                     }
                 }
             }
-            rigs = HiveRigDAO.GetRecords(Config, true);
+            
             if (multiUserMode)
             {
-                rigs = HiveRigDAO.GetRecords(Config, true).Where(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                rigs = HiveRigDAO.GetRecords(Config, true, username).ToList();
+            }
+            else
+            {
+                rigs = HiveRigDAO.GetRecords(Config, true, null);
             }
             return new JsonResult("Hive OS Rigs Imported");
         }

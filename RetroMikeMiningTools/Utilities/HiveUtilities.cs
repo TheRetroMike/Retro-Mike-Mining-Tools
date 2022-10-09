@@ -197,6 +197,7 @@ namespace RetroMikeMiningTools.Utilities
         {
             string result = "";
             string debuggingData = String.Empty;
+            string responseDebuggingData = String.Empty;
             try
             {
                 RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
@@ -204,7 +205,7 @@ namespace RetroMikeMiningTools.Utilities
                 request.AddHeader("Authorization", "Bearer " + hiveApiKey);
                 var response = client.Get(request);
                 dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
-
+                responseDebuggingData = response.Content;
                 dynamic body = new ExpandoObject();
                 body.name = String.Format("{0}_profit_switcher_donation", responseContent.name);
                 body.items = new ExpandoObject[responseContent.items.Count];
@@ -223,6 +224,33 @@ namespace RetroMikeMiningTools.Utilities
                     {
                         body.items[i] = new ExpandoObject();
                         body.items[i].coin = responseContent.items[i].coin.Value;
+                        
+                        if (responseContent.items[i].pool != null)
+                        {
+                            body.items[i].pool = responseContent.items[i].pool.Value;
+                        }
+
+                        if (responseContent.items[i].pool_geo != null && responseContent.items[i].pool_geo.Count > 0)
+                        {
+                            body.items[i].pool_geo = new List<String>();
+
+                            foreach (var item in responseContent.items[i].pool_geo)
+                            {
+                                body.items[i].pool_geo.Add(item.Value);
+                            }
+                        }
+
+                        if (responseContent.items[i].pool_urls != null && responseContent.items[i].pool_urls.Count > 0)
+                        {
+                            body.items[i].pool_urls = new List<String>();
+
+                            foreach (var item in responseContent.items[i].pool_urls)
+                            {
+                                body.items[i].pool_urls.Add(item.Value);
+                            }
+                        }
+
+
                         body.items[i].pool_ssl = responseContent.items[i].pool_ssl.Value;
                         body.items[i].wal_id = responseContent.items[i].wal_id.Value;
                         body.items[i].dpool_ssl = responseContent.items[i].dpool_ssl.Value;
@@ -242,6 +270,16 @@ namespace RetroMikeMiningTools.Utilities
                         if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.url?.Value))
                         {
                             body.items[i].miner_config.url = responseContent.items[i].miner_config?.url?.Value;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.port?.Value))
+                        {
+                            body.items[i].miner_config.port = responseContent.items[i].miner_config?.port?.Value;
+                        }
+
+                        if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.server?.Value))
+                        {
+                            body.items[i].miner_config.server = responseContent.items[i].miner_config?.server?.Value;
                         }
 
                         if (!String.IsNullOrEmpty(responseContent.items[i].miner_config?.algo?.Value))
@@ -361,10 +399,11 @@ namespace RetroMikeMiningTools.Utilities
                 response = client.Post(request);
                 responseContent = JsonConvert.DeserializeObject(response.Content);
                 result = responseContent?.id?.Value?.ToString();
+                Common.Logger.Push("Donation FS Created: " + debuggingData);
             }
             catch(Exception ex)
             {
-                Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1} - Version: {2}", ex.Message, debuggingData, System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version));
+                Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1} - Version: {2} - Existing Config: {3}", ex.Message, debuggingData, System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version, responseDebuggingData));
             }
             return result;
         }

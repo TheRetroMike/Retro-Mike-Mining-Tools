@@ -31,13 +31,14 @@ namespace RetroMikeMiningTools.Jobs
             {
                 if (config != null)
                 {
+                    config.UiRigPriceCalculation = false;
                     if (String.IsNullOrEmpty(config.HiveApiKey) || String.IsNullOrEmpty(config.HiveFarmID))
                     {
                         Common.Logger.Log("Skipping Hive OS Rig Profit Switching because there is no Hive API Key and/or Farm ID configured", LogType.System);
                     }
                     else
                     {
-                        var rigs = HiveRigDAO.GetRecords(config, false).Where(x => x.Enabled);
+                        var rigs = HiveRigDAO.GetRecords(config, true, config.Username).Where(x => x.Enabled);
                         if (rigs != null && rigs.Count() > 0)
                         {
                             foreach (var rig in rigs.Where(x => x.Enabled))

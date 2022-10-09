@@ -28,6 +28,7 @@ try
     RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergCurrencyData();
     RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergCoinData();
     RetroMikeMiningTools.Utilities.ProhashingUtilities.RefreshProhashingData();
+    RetroMikeMiningTools.Utilities.WhatToMineUtilities.RefreshIndividualCoinList();
 }
 catch { }
 
@@ -53,8 +54,8 @@ if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
     multiUserMode = true;
     coreConfig.ProfitSwitchingEnabled = true;
     coreConfig.AutoExchangingEnabled = true;
-    coreConfig.ProfitSwitchingCronSchedule = "0 0/15 * 1/1 * ? *";
-    coreConfig.AutoExchangingCronSchedule = "0 0/15 * 1/1 * ? *";
+    coreConfig.ProfitSwitchingCronSchedule = "0 0/30 * 1/1 * ? *";
+    coreConfig.AutoExchangingCronSchedule = "0 0/30 * 1/1 * ? *";
     CoreConfigDAO.UpdateCoreConfig(coreConfig);
 }
 

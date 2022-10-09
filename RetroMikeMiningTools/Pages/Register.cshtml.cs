@@ -26,32 +26,40 @@ namespace RetroMikeMiningTools.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            var user = UserDAO.GetUser(UserName);
-            if (String.IsNullOrEmpty(UserName))
+            var userCount = UserDAO.GetUserCount();
+            if (userCount > 15)
             {
-                Message = "Username required";
-            }
-            else if (String.IsNullOrEmpty(Password))
-            {
-                Message = "Password required";
-            }
-            else if (user != null)
-            {
-                Message = "Username already in use. Please try a different one or login";
+                Message = "Max Users Already Registered. No More User Registrations Allowed.";
             }
             else
             {
-                var passwordHasher = new PasswordHasher<string>();
-                var hashedPassword = passwordHasher.HashPassword(UserName, Password);
-                UserDAO.AddUser(UserName, hashedPassword);
-                Common.Logger.Push("Account Registered: " + UserName);
-                var claims = new List<Claim>
+                var user = UserDAO.GetUser(UserName);
+                if (String.IsNullOrEmpty(UserName))
+                {
+                    Message = "Username required";
+                }
+                else if (String.IsNullOrEmpty(Password))
+                {
+                    Message = "Password required";
+                }
+                else if (user != null)
+                {
+                    Message = "Username already in use. Please try a different one or login";
+                }
+                else
+                {
+                    var passwordHasher = new PasswordHasher<string>();
+                    var hashedPassword = passwordHasher.HashPassword(UserName, Password);
+                    UserDAO.AddUser(UserName, hashedPassword);
+                    Common.Logger.Push("Account Registered: " + UserName);
+                    var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, UserName)
                 };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                return RedirectToPage("/Index");
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    return RedirectToPage("/Index");
+                }
             }
             return Page();
         }

@@ -73,13 +73,22 @@ namespace RetroMikeMiningTools.DAO
             return result;
         }
 
-        public static List<HiveOsRigConfig> GetRecords(CoreConfig config, bool isUi)
+        public static List<HiveOsRigConfig> GetRecords(CoreConfig config, bool isUi, string? username)
         {
             List<HiveOsRigConfig> result = new List<HiveOsRigConfig>();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
             {
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
-                result = rigExecutionsCollection.FindAll().ToList();
+                
+
+                if (username != null && !String.IsNullOrEmpty(username))
+                {
+                    result = rigExecutionsCollection.Find(x => x.Username != null && x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+                else
+                {
+                    result = rigExecutionsCollection.FindAll().ToList();
+                }
 
                 if (!isUi || (isUi && config.UiRigPriceCalculation))
                 {
@@ -90,6 +99,10 @@ namespace RetroMikeMiningTools.DAO
                         {
                             item.Profit = coins.Max(x => x.Profit);
                         }
+                    }
+                    if (!String.IsNullOrEmpty(username) && !isUi)
+                    {
+                        Thread.Sleep(250);
                     }
                 }
             }

@@ -188,6 +188,15 @@ namespace RetroMikeMiningTools.Utilities
 
         public static List<Coin> GetIndividualCoinList()
         {
+            if (!File.Exists("WtmCoins.dat"))
+            {
+                RefreshIndividualCoinList();
+            }
+            return JsonConvert.DeserializeObject<List<Coin>>(File.ReadAllText("WtmCoins.dat"));
+        }
+
+        public static void RefreshIndividualCoinList()
+        {
             List<Coin> result = new List<Coin>();
             try
             {
@@ -204,7 +213,7 @@ namespace RetroMikeMiningTools.Utilities
                         var id = item?.id?.Value;
                         var algorithm = item?.algorithm?.Value;
                         var status = item?.status?.Value;
-                        if(status != null && status.ToString().Equals("Active", StringComparison.OrdinalIgnoreCase))
+                        if (status != null && status.ToString().Equals("Active", StringComparison.OrdinalIgnoreCase))
                         {
                             result.Add(new Coin()
                             {
@@ -216,9 +225,12 @@ namespace RetroMikeMiningTools.Utilities
                         }
                     }
                 }
+                using (var writer = new StreamWriter("WtmCoins.dat", false))
+                {
+                    writer.Write(JsonConvert.SerializeObject(result));
+                }
             }
             catch { }
-            return result;
         }
 
         public static Coin GetIndividualCoin(int id, string hashrate, string power, string powerCost)

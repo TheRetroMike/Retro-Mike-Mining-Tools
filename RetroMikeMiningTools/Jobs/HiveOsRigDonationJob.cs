@@ -22,8 +22,10 @@ namespace RetroMikeMiningTools.Jobs
             {
                 configs.Add(CoreConfigDAO.GetCoreConfig());
             }
-            foreach (var config in configs)
+            foreach (var config in configs.Where(x => !String.IsNullOrEmpty(x.HiveApiKey) && !String.IsNullOrEmpty(x.HiveFarmID)))
             {
+                config.UiRigPriceCalculation = false;
+                config.UiCoinPriceCalculation = false;
                 if (!String.IsNullOrEmpty(config.HiveApiKey) && !String.IsNullOrEmpty(config.HiveFarmID))
                 {
                     var donationFlightsheets = DonationDAO.GetRecords();
@@ -48,7 +50,7 @@ namespace RetroMikeMiningTools.Jobs
                         }
                     }
 
-                    foreach (var item in HiveRigDAO.GetRecords(config, false).Where(x => x.Enabled && x.EnabledDateTime != null))
+                    foreach (var item in HiveRigDAO.GetRecords(config, true, null).Where(x => x.Enabled && x.EnabledDateTime != null))
                     {
                         if (item.EnabledDateTime <= DateTime.Now.AddHours(-1) && !String.IsNullOrEmpty(item.DonationAmount))
                         {
@@ -122,6 +124,7 @@ namespace RetroMikeMiningTools.Jobs
                                                 DateTime = DateTime.Now,
                                                 TrackingID = donationFlightSheetId
                                             });
+                                            Common.Logger.Push(String.Format("Donation Started: {0}", item.Name));
                                             currentRecord.DonationRunning = true;
                                             HiveRigDAO.UpdateRecord(currentRecord);
                                         }
