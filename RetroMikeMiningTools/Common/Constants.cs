@@ -65,11 +65,6 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="abLoc7JNzYXijnKnPf7tSFUNSWBuwKrmUPMevvPkH4jc3b1K9LmS76DKpPamgQ5AYAC2CW9dJfTJ91AnXHYDNXAKRqPx5ZrtR49+cc9260956d08b7deab9098c130750fc90d9da4cd48c21f0de627f9914bc49293",Ticker="BLOC"},
                     new FlightsheetRecord(){Wallet="hvs1Mv7guY3PgQdo2PjRGk7tvVdneNxtL5SFkkYi9SPNNCrKUEkUVXd1sCFAR4wcW8fMzxAzQfhcggHCQxrTuVCL7bnX27aWeo",Ticker="XHV"},
                     new FlightsheetRecord(){Wallet="88uHtaQX8kL3CMxXTxGGFaTaxumGMef1HBoVdkPfxDyhXKY8p1zHWLiiewrc9s25q3boTSuJGZHgBhMry2yad5RS9X2LApt",Ticker="XMR"},
-                    new FlightsheetRecord(){Wallet="DJm56pVkWqQj26A2UFeafwFw1bY632trLY",Ticker="DOGE"},
-                    new FlightsheetRecord(){Wallet="ltc1qgpks9d0tjfucx9x9wqu4j099hqxfkygmug84qm",Ticker="LTC"},
-                    new FlightsheetRecord(){Wallet="dgb1q6k7sxkwku0nn9tch8vu4arxg63q7l70hwsw2cp",Ticker="DGB"},
-                    new FlightsheetRecord(){Wallet="DQRhSWGMSv2SJ4SrZWQg8bYGmAojrzTvKV",Ticker="XVG"},
-                    new FlightsheetRecord(){Wallet="ERz6GRmPbtB2HumzxMVGftwnVcr2Et4kxX",Ticker="VIA"},
                     new FlightsheetRecord(){Wallet="9eya64Qm8iz7vv6SsCF6sFJWoAZDouY59j56e7K2CaLvJoHAqzr",Ticker="ERG"},
                     new FlightsheetRecord(){Wallet="24yE4a6tCnpwcrJ5jGyBtk1kuKmqUqKi78swU1MYN3EZjWh66CFAHzGvh1G4GsFxx7YoYSaY3vtp8WfF9dSyV32CFYhVRtWqHZ5AnGFAwFWzSNmcASfpvXNjFyKKQKaj3eDG",Ticker="SERO"},
                     new FlightsheetRecord(){Wallet="iZ2CFBHEsbjPYCWHns75LFT5NwNLc2i9hPTG1SwJjonyBnBUGCtdCdpKwBbo6KdZgH1Azg9vNcyLoBXBLEaz3HADLhncV4uBH9C2Ey4kyDSF",Ticker="ZANO"},
@@ -79,13 +74,28 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="0xa0b29e3faa57056e97f163001f00b583cd497b674ae3cdbfc92cedcf5d12dc7b",Ticker="AION"},
                     new FlightsheetRecord(){Wallet="5t5mEm254JNJ9HqRjY9vCiTE8aZALHX3v8TqhyQ3TTF9VHKZQXkRYjPDweT9kK4rJw7dDLtZXGjav2z9y24vXCdRbybmW2eTRpM15NQZSa",Ticker="MSR"},
                     new FlightsheetRecord(){Wallet="kaspa:qp68tc8esnku9tsszq4m6z4zev3e2qtrdmc7cy76fjakkzu4luy5klhjl6pkd",Ticker="KAS"},
-                    new FlightsheetRecord(){Wallet="ac8c2c19bac533c51fd4771a95d8bde73357e0efcd8c78416a377dbee33ead7daa7e0455b2f8",Ticker="SC"},
-                    new FlightsheetRecord(){Wallet="hs1q08xlzh9xv62fjjw7a3keen2mp99pqxzchqxl88",Ticker="HNS"},
-                    new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="LBC"},
-                    new FlightsheetRecord(){Wallet="ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0qp84vf0eha9hu2p04vs54s5vzqusph3crlx2en",Ticker="CKB"},
+
+
+
                     new FlightsheetRecord(){Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",Ticker="RDX"},
                     new FlightsheetRecord(){Wallet="NQ191CXUABTDPDXLT5UMNU5PYL66936YVUVF", Ticker="NIM"},
-                    new FlightsheetRecord(){Wallet="XnXP9jM2Lx97BDfKQfEN6KbFmL3hGYpz1Udfbx84KXg6VoBbpf1raJHTJ1fX5vUgo2Vhnm56FYhciS72Frs4XHc41QPrJzjtu", Ticker="AEON"}
+                    new FlightsheetRecord(){Wallet="XnXP9jM2Lx97BDfKQfEN6KbFmL3hGYpz1Udfbx84KXg6VoBbpf1raJHTJ1fX5vUgo2Vhnm56FYhciS72Frs4XHc41QPrJzjtu", Ticker="AEON"},
+
+                    new FlightsheetRecord(){Wallet="DJm56pVkWqQj26A2UFeafwFw1bY632trLY",Ticker="DOGE", AsicPool="stratum+tcp://ltc.viabtc.io:3333", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="ltc1qgpks9d0tjfucx9x9wqu4j099hqxfkygmug84qm",Ticker="LTC", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="dgb1q6k7sxkwku0nn9tch8vu4arxg63q7l70hwsw2cp",Ticker="DGB-Scrypt", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="DQRhSWGMSv2SJ4SrZWQg8bYGmAojrzTvKV",Ticker="XVG-Scrypt", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="ERz6GRmPbtB2HumzxMVGftwnVcr2Et4kxX",Ticker="VIA", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078",Ticker="Zerg-Scrypt", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="05sonicblue",Ticker="Prohashing-Scrypt", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="05sonicblue",Ticker="MiningDutch-Scrypt", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="3BAocmSZNqmiCkrLsPjYmbTMwwfp7aV29U",Ticker="Nicehash-Scrypt", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="LBC", AsicPool="stratum+tcp://lbry.mine.zergpool.com:3334", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="Zerg-lbry", AsicPool="stratum+tcp://lbry.mine.zergpool.com:3334", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="MiningDutch-lbry", AsicPool="stratum+tcp://lbry.mine.zergpool.com:3334", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
+                    new FlightsheetRecord(){Wallet="ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0qp84vf0eha9hu2p04vs54s5vzqusph3crlx2en",Ticker="CKB", AsicPool="stratum+tcp://mining.viabtc.io:3001", Password="123", AsicWallet="05sonicblue.donation"},
+                    new FlightsheetRecord(){Wallet="ac8c2c19bac533c51fd4771a95d8bde73357e0efcd8c78416a377dbee33ead7daa7e0455b2f8",Ticker="SC", AsicPool="stratum+tcp://us-east.siamining.com:3333", AsicPassword="123", AsicWallet="05sonicblue.donation" },
+                    new FlightsheetRecord(){Wallet="hs1q08xlzh9xv62fjjw7a3keen2mp99pqxzchqxl88",Ticker="HNS", AsicPool="stratum+tcp://mining.viabtc.io:3008", AsicPassword="123", AsicWallet="05sonicblue.donation"},
                 };
             }
         }

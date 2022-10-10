@@ -119,10 +119,22 @@ builder.Services.AddQuartz(q =>
         q.ScheduleJob<HiveOsRigDonationJob>(trigger => trigger
                 .WithIdentity("Donation Trigger")
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
-                .WithCronSchedule("30 0/1 * 1/1 * ? *")
+                .WithCronSchedule("25 0/1 * 1/1 * ? *")
                 .WithDescription("Donation Trigger")
                 .UsingJobData("multi_user_mode", multiUserMode)
             );
+
+        if(!multiUserMode)
+        {
+            q.ScheduleJob<GoldshellDonationJob>(trigger => trigger
+                .WithIdentity("Goldhsell Donation Trigger")
+                .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
+                .WithCronSchedule("35 0/1 * 1/1 * ? *")
+                .WithDescription("Goldhsell Donation Trigger")
+                .UsingJobData("platform_name", builder.Configuration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME))
+                .UsingJobData("multi_user_mode", multiUserMode)
+            );
+        }
     }
 
     if (coreConfig.AutoExchangingEnabled && !String.IsNullOrEmpty(coreConfig.AutoExchangingCronSchedule))
