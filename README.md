@@ -20,8 +20,6 @@
   * [Support](#support)
 
 
-
-
 # Retro Mike Mining Tools
 This is a web and service based app that can connect to your Hive OS account or Goldshell ASIC's, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
 
@@ -49,6 +47,7 @@ The following mining modes are supported and can be set on each rig / ASIC
 - All algo's on ZergPool
 - All algo's on Nicehash that are also listed on WhatToMine
 - All algo's on Prohashing
+- All algo's on Mining-Dutch
 
 ### Pinned Coin
 You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanted to mine something like a newly released coin to accumulate as many coins as possible early-on.
@@ -59,6 +58,8 @@ You can pin a coin per rig if you want that coin to over-ride current profitabil
 - Always set the power to the total system power
 - When using override, leave hashrate blank as it will be overwritten with what is defined in the WTM Override Endpoints
 
+### Donation / Dev Fee
+You can define a donation percentage that will be used to mine to the DEV Wallet. It's based on a 24-hour period. If you set it to 2%, then every 24 hours, it would mine to the dev wallet for approx. 29 minutes. It will use the same pool, overclocks, and custom flightsheet config that you may have in place to prevent any potential issues or pool hopping.
 
 ## Auto Exchanging
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
@@ -122,7 +123,7 @@ sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMike
 ![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)
 
 ## Hosted Version
-http://tools.retromike.net/
+http://retromike.net:9090/
 
 ## Support Me
 If you would like to support me:
