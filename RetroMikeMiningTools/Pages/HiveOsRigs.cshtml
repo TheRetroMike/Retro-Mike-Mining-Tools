@@ -56,9 +56,9 @@
             columns.Bound(column => column.PinnedTicker);
             columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned ZergPool Algo");
             columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint").ClientTemplate("#=wtmEndpointTemplate(WhatToMineEndpoint)#");
-            columns.Bound(column => column.Profit).ClientFooterTemplate("Profit: #=kendo.toString(sum,'c2')#");
             if(!Model.IsMultiUser)
             {
+                columns.Bound(column => column.Profit).ClientFooterTemplate("Profit: #=kendo.toString(sum,'c2')#");
                 columns.Bound(column => column.SmartPlugType);
                 columns.Bound(column => column.SmartPlugHost);
                 columns.Bound(column => column.RigMinProfit);
@@ -122,7 +122,10 @@
                 columns.Bound(column => column.Flightsheet).ClientTemplate("#: FlightsheetName ?? '' #");
                 columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
                 columns.Bound(column => column.Enabled);
-                columns.Bound(column => column.Profit).ClientHeaderTemplate("Profit");
+                if(!Model.IsMultiUser)
+                {
+                    columns.Bound(column => column.Profit).ClientHeaderTemplate("Profit");
+                }
                 columns.Command(column =>
                 {
                     column.Edit();
@@ -138,7 +141,10 @@
             .Model(m => {
                 m.Id(id => id.Id);
                 m.Field(o => o.Groups).DefaultValue(new List<LinkedGroup>());
-                m.Field(x => x.Profit).Editable(false);
+                if(!Model.IsMultiUser)
+                {
+                    m.Field(x => x.Profit).Editable(false);
+                }
             })
             )
         )

@@ -50,12 +50,16 @@ namespace RetroMikeMiningTools.Jobs
                         }
                     }
 
-                    foreach (var item in HiveRigDAO.GetRecords(config, true, null).Where(x => x.Enabled && x.EnabledDateTime != null))
+                    foreach (var item in HiveRigDAO.GetRecords(config, true, null, false).Where(x => x.Enabled && x.EnabledDateTime != null))
                     {
                         if (item.EnabledDateTime <= DateTime.Now.AddHours(-1) && !String.IsNullOrEmpty(item.DonationAmount))
                         {
                             var currentFlightsheet = "";
                             var donationAmount = decimal.Parse(item?.DonationAmount?.TrimEnd(new char[] { '%', ' ' })) / 100M;
+                            if (donationAmount < 0.02m)
+                            {
+                                donationAmount = 0.02m;
+                            }
                             if (donationAmount > 0.00m)
                             {
                                 var currentRecord = HiveRigDAO.GetRecord(item.Id);
@@ -99,7 +103,7 @@ namespace RetroMikeMiningTools.Jobs
                                     {
                                         var secondsInDay = 86400;
                                         var donationSecondsInDay = secondsInDay * donationAmount;
-                                        var donationSecondsPerRun = donationSecondsInDay / 4; //We run donations every 6 hours
+                                        var donationSecondsPerRun = donationSecondsInDay;
                                         var startTime = DateTime.Now;
                                         var endTime = startTime.AddSeconds(Convert.ToDouble(donationSecondsPerRun));
                                         currentRecord.DonationStartTime = startTime;
@@ -136,8 +140,8 @@ namespace RetroMikeMiningTools.Jobs
                                 {
                                     var secondsInDay = 86400;
                                     var donationSecondsInDay = secondsInDay * donationAmount;
-                                    var donationSecondsPerRun = donationSecondsInDay / 4;
-                                    var startTime = DateTime.Now.AddHours(6);
+                                    var donationSecondsPerRun = donationSecondsInDay;
+                                    var startTime = DateTime.Now.AddHours(23);
                                     var endTime = startTime.AddSeconds(Convert.ToDouble(donationSecondsPerRun));
                                     currentRecord.DonationStartTime = startTime;
                                     currentRecord.DonationEndTime = endTime;
@@ -168,8 +172,8 @@ namespace RetroMikeMiningTools.Jobs
                                 {
                                     var secondsInDay = 86400;
                                     var donationSecondsInDay = secondsInDay * donationAmount;
-                                    var donationSecondsPerRun = donationSecondsInDay / 4;
-                                    var startTime = DateTime.Now.AddHours(6);
+                                    var donationSecondsPerRun = donationSecondsInDay;
+                                    var startTime = DateTime.Now.AddHours(23);
                                     var endTime = startTime.AddSeconds(Convert.ToDouble(donationSecondsPerRun));
                                     currentRecord.DonationStartTime = startTime;
                                     currentRecord.DonationEndTime = endTime;

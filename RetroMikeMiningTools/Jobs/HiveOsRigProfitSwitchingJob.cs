@@ -38,7 +38,7 @@ namespace RetroMikeMiningTools.Jobs
                     }
                     else
                     {
-                        var rigs = HiveRigDAO.GetRecords(config, true, config.Username).Where(x => x.Enabled);
+                        var rigs = HiveRigDAO.GetRecords(config, true, config.Username, true).Where(x => x.Enabled);
                         if (rigs != null && rigs.Count() > 0)
                         {
                             foreach (var rig in rigs.Where(x => x.Enabled))

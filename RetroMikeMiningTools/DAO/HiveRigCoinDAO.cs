@@ -49,7 +49,7 @@ namespace RetroMikeMiningTools.DAO
             return result;
         }
 
-        public static List<HiveOsRigCoinConfig> GetRecords(int workerId, List<Flightsheet> flightsheets, CoreConfig config, bool isUi, bool forceProfit = false)
+        public static List<HiveOsRigCoinConfig> GetRecords(int workerId, List<Flightsheet> flightsheets, CoreConfig config, bool isUi, bool forceProfit, bool isMultiUser)
         {
             List<HiveOsRigCoinConfig> result = new List<HiveOsRigCoinConfig>();
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = true }))
@@ -57,7 +57,7 @@ namespace RetroMikeMiningTools.DAO
                 var table = db.GetCollection<HiveOsRigCoinConfig>(tableName);
                 result = table.FindAll().Where(x => x.WorkerId == workerId).ToList();
             }
-            if (!isUi || (isUi && config.UiCoinPriceCalculation) || forceProfit)
+            if (!isUi || (isUi && !isMultiUser && config.UiCoinPriceCalculation) || forceProfit)
             {
                 var btcPrice = CoinDeskUtilities.GetBtcPrice();
                 List<Coin> wtmCoins = new List<Coin>();

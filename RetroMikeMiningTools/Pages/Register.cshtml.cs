@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -27,7 +28,16 @@ namespace RetroMikeMiningTools.Pages
         public async Task<IActionResult> OnPost()
         {
             var userCount = UserDAO.GetUserCount();
-            if (userCount > 15)
+            int maxUserCount = 25;
+            if (configuration != null)
+            {
+                var maxUserCountConfig = configuration.GetValue<int>(Constants.PARAMETER_MAX_USER_COUNT);
+                if (maxUserCountConfig != 0)
+                {
+                    maxUserCount = maxUserCountConfig;
+                }
+            }
+            if (userCount >= maxUserCount)
             {
                 Message = "Max Users Already Registered. No More User Registrations Allowed.";
             }

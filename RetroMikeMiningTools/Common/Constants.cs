@@ -18,6 +18,7 @@ namespace RetroMikeMiningTools.Common
         public static readonly string PARAMETER_SERVICE_NAME = "service_name";
         public static readonly string PARAMETER_PLATFORM_NAME = "platform_name";
         public static readonly string MULTI_USER_MODE = "multi_user_mode";
+        public static readonly string PARAMETER_MAX_USER_COUNT = "max_user_count";
         public static readonly string OVERRIDE_PORT = "override_port";
         public static readonly string MULTI_USER_MODE_DONATION = "5%";
 
@@ -94,7 +95,7 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="Zerg-lbry", AsicPool="stratum+tcp://lbry.mine.zergpool.com:3334", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
                     new FlightsheetRecord(){Wallet="bDAWf87BcCGzJK89xeLSiYVBYy29d95StQ",Ticker="MiningDutch-lbry", AsicPool="stratum+tcp://lbry.mine.zergpool.com:3334", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
                     new FlightsheetRecord(){Wallet="ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0qp84vf0eha9hu2p04vs54s5vzqusph3crlx2en",Ticker="CKB", AsicPool="stratum+tcp://mining.viabtc.io:3001", Password="123", AsicWallet="05sonicblue.donation"},
-                    new FlightsheetRecord(){Wallet="ac8c2c19bac533c51fd4771a95d8bde73357e0efcd8c78416a377dbee33ead7daa7e0455b2f8",Ticker="SC", AsicPool="stratum+tcp://us-east.siamining.com:3333", AsicPassword="123", AsicWallet="05sonicblue.donation" },
+                    new FlightsheetRecord(){Wallet="ac8c2c19bac533c51fd4771a95d8bde73357e0efcd8c78416a377dbee33ead7daa7e0455b2f8",Ticker="SC", AsicPool="stratum+tcp://us-east.siamining.com:3333", AsicPassword="x", AsicWallet="ac8c2c19bac533c51fd4771a95d8bde73357e0efcd8c78416a377dbee33ead7daa7e0455b2f8.donation" },
                     new FlightsheetRecord(){Wallet="hs1q08xlzh9xv62fjjw7a3keen2mp99pqxzchqxl88",Ticker="HNS", AsicPool="stratum+tcp://mining.viabtc.io:3008", AsicPassword="123", AsicWallet="05sonicblue.donation"},
                 };
             }
