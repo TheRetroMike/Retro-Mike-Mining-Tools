@@ -38,24 +38,27 @@ namespace RetroMikeMiningTools.Jobs
                     }
                     else
                     {
-                        var rigs = HiveRigDAO.GetRecords(config, true, config.Username, true).Where(x => x.Enabled);
-                        if (rigs != null && rigs.Count() > 0)
+                        if (HiveUtilities.ValidateApiKey(config.HiveApiKey, config.HiveFarmID))
                         {
-                            foreach (var rig in rigs.Where(x => x.Enabled))
+                            var rigs = HiveRigDAO.GetRecords(config, true, config.Username, true).Where(x => x.Enabled);
+                            if (rigs != null && rigs.Count() > 0)
                             {
-                                if (!rig.DonationRunning && (
-                                    rig.MiningMode == MiningMode.Profit ||
-                                    rig.MiningMode == MiningMode.CoinStacking ||
-                                    rig.MiningMode == MiningMode.DiversificationByProfit ||
-                                    rig.MiningMode == MiningMode.DiversificationByStacking
+                                foreach (var rig in rigs.Where(x => x.Enabled))
+                                {
+                                    if (!rig.DonationRunning && (
+                                        rig.MiningMode == MiningMode.Profit ||
+                                        rig.MiningMode == MiningMode.CoinStacking ||
+                                        rig.MiningMode == MiningMode.DiversificationByProfit ||
+                                        rig.MiningMode == MiningMode.DiversificationByStacking
+                                        )
                                     )
-                                )
-                                {
-                                    HiveOsGpuRigProcessor.Process(rig, config);
-                                }
-                                else if (!rig.DonationRunning && rig.MiningMode == MiningMode.ZergPoolAlgoProfitBasis)
-                                {
-                                    ZergAlgoProcessor.Process(rig, config);
+                                    {
+                                        HiveOsGpuRigProcessor.Process(rig, config);
+                                    }
+                                    else if (!rig.DonationRunning && rig.MiningMode == MiningMode.ZergPoolAlgoProfitBasis)
+                                    {
+                                        ZergAlgoProcessor.Process(rig, config);
+                                    }
                                 }
                             }
                         }

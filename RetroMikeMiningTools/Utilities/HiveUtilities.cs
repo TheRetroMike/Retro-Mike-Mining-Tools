@@ -423,5 +423,23 @@ namespace RetroMikeMiningTools.Utilities
             }
             return result;
         }
+
+        public static bool ValidateApiKey(string hiveApiKey, string farmId)
+        {
+            bool result = false;
+            try
+            {
+                RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+                RestRequest request = new RestRequest("/auth/check");
+                request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+                var response = client.Get(request);
+                if (response != null && response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    result = true;
+                }
+            }
+            catch { }
+            return result;
+        }
     }
 }

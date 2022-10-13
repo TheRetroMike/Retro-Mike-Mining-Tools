@@ -60,6 +60,22 @@ if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
 }
 
 builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
+if (multiUserMode)
+{
+    var cert = builder.Configuration.GetValue<string>("cert");
+    var certPwd = builder.Configuration.GetValue<string>("cert_pwd");
+    if (cert != null && certPwd != null)
+    {
+        builder.WebHost.UseKestrel(x =>
+        {
+            x.Listen(System.Net.IPAddress.Any, 7001, y =>
+            {
+                y.UseHttps(cert, certPwd);
+            });
+        });
+    }
+}
+
 var razorBuilder = builder.Services.AddRazorPages();
 
 if (multiUserMode)
@@ -162,7 +178,6 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

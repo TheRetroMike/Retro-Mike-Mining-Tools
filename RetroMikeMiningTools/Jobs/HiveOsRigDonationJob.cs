@@ -24,6 +24,10 @@ namespace RetroMikeMiningTools.Jobs
             }
             foreach (var config in configs.Where(x => !String.IsNullOrEmpty(x.HiveApiKey) && !String.IsNullOrEmpty(x.HiveFarmID)))
             {
+                if (!HiveUtilities.ValidateApiKey(config.HiveApiKey, config.HiveFarmID))
+                {
+                    continue;
+                }
                 config.UiRigPriceCalculation = false;
                 config.UiCoinPriceCalculation = false;
                 if (!String.IsNullOrEmpty(config.HiveApiKey) && !String.IsNullOrEmpty(config.HiveFarmID))
