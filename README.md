@@ -18,10 +18,14 @@
     + [Auto Exchanging](#auto-exchanging-1)
   * [Support Me](#support-me)
   * [Support](#support)
+  * [Roadmap](#roadmap)
+  * [Release Notes](#release-notes)
 
 
 # Retro Mike Mining Tools
 This is a web and service based app that can connect to your Hive OS account or Goldshell ASIC's, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
+
+This app was designed to be installed on a server on a Hive OS Rig on your network (or on any server on your network that is always running). If you are unable to host yourself due to network restrictions, there is a hosted version that can be used.
 
 ## Features
 - Web based management and monitoring dashboard 
@@ -59,7 +63,7 @@ You can pin a coin per rig if you want that coin to over-ride current profitabil
 - When using override, leave hashrate blank as it will be overwritten with what is defined in the WTM Override Endpoints
 
 ### Donation / Dev Fee
-You can define a donation percentage that will be used to mine to the DEV Wallet. It's based on a 24-hour period. If you set it to 2%, then every 24 hours, it would mine to the dev wallet for approx. 29 minutes. It will use the same pool, overclocks, and custom flightsheet config that you may have in place to prevent any potential issues or pool hopping.
+There is a Dev Fee of 1%. The system will auto generate a profit switching flightsheet that matches your settings, but points to the DEV wallet. To ensures system stability. To prevent frequent hopping, the process runs once per day for approx 15 minutes and then switch back to your wallet.
 
 ## Auto Exchanging
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
@@ -78,6 +82,20 @@ Another powerful feature is the ability to have the application auto-exchange yo
 - Api Secret - API Secret Key you can get from your account settings on the exchange
 - Passphrase - Some exchanges, like Kucoin, also require a passphrase in addition to your API Keys
 - Auto Move To Trading Account - For exchanges that have a main and trading account, like Kucoin, setting this on will auto move your assets from your main account into your trading account prior to executing the auto exchanging
+- Auto Withdrawl - Enables / Disables the auto withdrawl feature. This is dependent on the Enabled flag also being set.
+- Auto Withdrawl Address - Address to auto withdraw to
+- Withdrawl Coin - Coin on the exchange to auto withdraw
+- Auto Withdrawl Min - Minimum amount need to auto withdraw selected coin
+- Withdrawl Fee - Fee amount to deduct from the withdrawl amount. This is needed for some exchanges.
+- Enabled - Enables the auto exchanging feature.
+
+### Auto Withdrawls
+The system can auto withdraw your wallet balance to a defined wallet address once a threshold is met. This is supported by most exchanges. Most exchanges will auto-detect the fee, but for some exchanges, you may need to indicate the withdrawl fee
+
+Notes:
+- TradeOgre's API doesn't support auto-withdrawls at this time.
+- Kucoin requires IP Whitelist setup in order to auto withdrawl
+- CoinEx requires the withdrawl address to be whitelisted in the API section of your profile
 
 ## Hive OS Installer
 Install Video / Walkthrough: https://youtu.be/A3J7Ax6jtlk
@@ -123,13 +141,249 @@ sudo docker pull theretromike/miningtools && sudo docker run -d --name RetroMike
 ![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)
 
 ## Hosted Version
-http://retromike.net:9090/
+https://retromike.net
 
 ## Support Me
 If you would like to support me:
 - Youtube Channel: https://www.youtube.com/retromikecrypto
-- Community Mining Pool: https://retromike.net
-- Just run the profit switcher with any donation amount
+- Hosted Version: https://retromike.net
+- Just run the profit switcher
 
 ## Support
-This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord: https://discord.gg/HsjJPCP2hp
+This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/HsjJPCP2hp
+
+## Roadmap
+- Auto Update
+- Manually Apply Flightsheet
+- Manually Apply Goldshell ASIC Config
+- Exbitron Exchange
+- Graviex Exchange
+- 6Block Exchange
+- Dove Wallet / BTX Exchange
+- Hotbit Exchange
+- Altmarkets Exchange
+- Asymetrex Exchange
+- SafeTrade Exchange
+- Garlix Exchange
+- iPollo G1 Mini Asic Profit Switching
+
+## Release Notes
+
+v2.5.9
+
+Added check to the profit switching and donation jobs to make sure the Hive API is working and that the API Key is valid.
+This will make sure that when user multi user mode that profit switching stops if the user inactivates the API key in the hive dashboard
+
+Also added SSL Cert configuration for Multi-User Mode.
+
+----------------------------------------------
+
+v2.5.8
+
+- Optimized WhatToMine calls from the Rig and Goldshell Pages
+- Various Performance Optimizations
+- Removed Profit Viewing on the Multi User Mode UI due to WTM DDoS Implementation
+- Updated Donation / Dev Fee to process only once per day instead of 4 times per day
+- Added Max User Count Config for Multi User Mode
+
+Note: Donation processing will now run in one block every 24 hours instead of a tiny block every 6 hours.
+In addition, donation will use the same pool and miner config with the only difference being the wallet address.
+This should help with any pool hopping monitoring and custom device specific flightsheets
+
+----------------------------------------------
+
+v2.5.7
+
+- Added Smart Plug support for the TP-Link KASA line of smart plugs. Tested with a KP115. If profitability drops below your defined threshold, then the app can turn off the smart plug. It will automatically turn it back on whenever profitability goes above your defined minimum. You can have one KASA device configured per rig. Be sure to give it a static IP and then set the IP in the Smart Plug Host field
+
+Note that this is currently implemented for single plugs and doesn't work with the KASA power strips yet. The KP115 I used for testing is rated for 1800 watts. Be cautious and mindful of the wattage of your rig when using this.
+
+----------------------------------------------
+
+v2.5.6
+
+- Performance Optimizations for all APIs
+- Donation processing Optimizations
+
+----------------------------------------------
+
+v2.5.4
+
+- Improved Performance of Hive OS Rigs page when there are a large number of users
+- Added WTM coin caching to limit WTM calls
+
+----------------------------------------------
+
+v2.5.3
+
+Added Coindesk API Caching and fixed issue with Hive OS Rigs page not loading properly on multi-user mode
+This release is mainly an attempt to handle a large number of users on the hosted platform
+
+----------------------------------------------
+
+v2.5.2
+
+Removed Log Purging for Multi User Mode
+
+----------------------------------------------
+
+v2.5.1
+
+Fixed Conflicting Coin Listings
+
+----------------------------------------------
+
+v2.5.0
+
+- Added New Coin Providers and Comprehensive List of Coins
+- Added Primary and Secondary Coins for determining dual mining profitability
+- Added ability to specify an over-ride WTM json url for primary and secondary coins. If not specified, it will try to determine profitability by hashrate and using available coin providers. This can be used both on Hive Rigs and Goldshell ASICs
+- Added Purge Log Feature to purge all log entries
+- Added Mining-Dutch
+- Revamped Donation Process
+
+----------------------------------------------
+
+v2.4.0
+
+- Added view of all balances currently on each configured exchange
+- Fixed ZergPool Donation Processing
+- Fixed Nicehash Donation Processing
+- Fixed ProHashing Donation Processing
+
+----------------------------------------------
+
+v2.3.1
+
+Fixed issue where if a rig didn't have a WhatToMine endpoint, it wasn't processing the Zerg and/or Prohashing profit switching routine
+
+----------------------------------------------
+
+v2.3.0
+
+- Added ZergPool into the core Profit Switching Mode
+- Added Prohashing into the core Profit Switching Mode
+With this release Zergpool has been integration into the base ProfitSwitching mode and so the extra Zerg mining mode will be removed in a future release.
+
+----------------------------------------------
+
+v2.2.1
+
+Fixed donation calculation for imported rigs
+
+----------------------------------------------
+
+v2.2.0
+
+Added multi-user support for a hosted environment. No need to apply this upgrade. This is being released for a Community Portal. Links in Discord and YouTube soon.
+
+----------------------------------------------
+
+v2.1.1
+
+Quick fix to an issue where if a coin is pinned and isn't on WhatToMine, it was causing the coin grid not to show
+
+----------------------------------------------
+
+v2.1.0
+
+- Added Real-Time Profit calculations to Coin and Algo grids
+- Fixed calculation of Zerg Algo where it was off by a multiple of 1000. This doesn't impact differences between coins, just is a fix to reflect accurate values when looking at the grids or on the logs
+- Fixed issue where Zerg Algo changes weren't being logged in the Dashboard view
+
+----------------------------------------------
+
+v2.0.0
+
+- Added ZergPool algo profit switching option. Just set the mode and then define the algo's, your hashrate, and power per algo and it will profit switch based on real-time ZergPool calculations
+- Updated amd64 Docker Image
+- Added arm64 Docker Image with core functionality
+- Added amd64v2 Docker Image with full functionality
+- Added amd64v3 Docker Image with full functionality
+
+----------------------------------------------
+
+v1.6.0
+
+- Added Auto Exchanging for SouthXchange
+- Fixed issue where you couldn't clear the pinned coin once set
+- Added Raspberry Pi Installer Script
+
+----------------------------------------------
+
+v1.5.0
+
+- Added Kucoin for auto exchanging.
+- Added an option for a pinned coin per rig. This will force that coin to be mined regardless of profitability. i.e., if you want to mine Radiant or a new coin, set that coin and it will over-ride the WTM calculations
+
+----------------------------------------------
+
+v1.4.1
+
+- Fixed several Nicehash Algo Tickers. If they should empty on your coin list, just click edit and reselect them.
+- Removed case sensitivity requirement for coins since there are some differences between WTM, Hive OS, and Exchanges
+
+----------------------------------------------
+
+v1.4.0
+
+- Added Auto Exchanging for TxBit
+- Added Auto Exchanging for TradeOgre
+- Added Auto Exchanging for CoinEx
+- Added process to cleanup donation flightsheets
+
+----------------------------------------------
+
+v1.3.2
+
+- Fixed a case sensitivity issue with flightsheets between WTM and Hive. Nicehash-ZelHash should work now
+- Adjusted projected profits to indicate the appropriate currency ($ vs coin)
+- Added core code for auto exchanging (will be fully implemented in a future release)
+
+----------------------------------------------
+
+v1.3.1
+
+Patch Fix for Dev Fee. If you still notice excess dev fee processing, you can set it to 0.00%.
+
+----------------------------------------------
+
+v1.3.0
+
+- Added Docker Image
+- Added Nicehash-Octopus to the algo list
+- Added Docker specific config options
+
+----------------------------------------------
+
+v1.2.1
+
+Minor release for fixing Goldshell ASIC processing
+
+----------------------------------------------
+
+v1.2.0
+
+- Added Goldshell ASIC Profit Switching
+- Added Configurable Port for Web UI
+
+----------------------------------------------
+
+v1.0.2
+
+- Added an easy installer script for hive os that will setup the tools as a native service
+- Replaced all alert messages with toast notifications
+
+----------------------------------------------
+
+v1.0.1
+
+Added an update check and the ability to execute the update from within the web ui
+
+----------------------------------------------
+
+v1.0.0
+
+Initial release of the Retro Mike Mining Tools.
+
+This includes Core Hive OS Profit Switching capabilities.

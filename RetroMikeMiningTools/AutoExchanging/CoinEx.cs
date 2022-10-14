@@ -84,9 +84,16 @@ namespace RetroMikeMiningTools.AutoExchanging
                         var balanceRecord = balances.Data.Where(x => x.Key.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                         if (balanceRecord.Value.Available > exchange.AutoWithdrawlMin)
                         {
-                            var withdrawlAmount = balanceRecord.Value.Available - exchange.WithdrawlFee;
-                            await client.SpotApi.Account.WithdrawAsync(balanceRecord.Key, exchange.AutoWithdrawlAddress, false, balanceRecord.Value.Available);
-                            Common.Logger.Log("CoinEx: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
+                            var withdrawlAmount = Convert.ToDecimal(balanceRecord.Value.Available - (exchange.WithdrawlFee ?? 0.00m));
+                            var withdrawOperation = await client.SpotApi.Account.WithdrawAsync(balanceRecord.Key, exchange.AutoWithdrawlAddress, false, withdrawlAmount);
+                            if (withdrawOperation != null && withdrawOperation.Success)
+                            {
+                                Common.Logger.Log("CoinEx: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
+                            }
+                            else if(withdrawOperation != null && !withdrawOperation.Success)
+                            {
+                                Common.Logger.Log("CoinEx: Withdraw Error: " + withdrawOperation.Error, LogType.AutoExchanging, exchange.Username);
+                            }
                         }
                     }
                 }
