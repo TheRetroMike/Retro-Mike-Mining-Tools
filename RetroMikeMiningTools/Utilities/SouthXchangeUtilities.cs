@@ -126,14 +126,12 @@ namespace RetroMikeMiningTools.Utilities
             try
             {
                 dynamic requestObject = new ExpandoObject();
-                
+               
+                requestObject.address = exchange.AutoWithdrawlAddress;
+                requestObject.amount = amount-(exchange.WithdrawlFee ?? 0.00m);
                 requestObject.currency = exchange.AutoWithdrawlCurrency.Ticker;
-                requestObject.destination = exchange.AutoWithdrawlAddress;
-                requestObject.destinationType = 0;
-                requestObject.amount = amount;
-                requestObject.nonce = DateTime.UtcNow.Ticks;
                 requestObject.key = exchange.ApiKey;
-                
+                requestObject.nonce = DateTime.UtcNow.Ticks;
                 
                 string jsonData = JsonConvert.SerializeObject(requestObject);
                 RestClient client = new RestClient("https://www.southxchange.com/api/withdraw");
@@ -150,6 +148,5 @@ namespace RetroMikeMiningTools.Utilities
             catch(Exception ex) { }
             return result;
         }
-
     }
 }
