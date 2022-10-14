@@ -329,6 +329,10 @@ namespace RetroMikeMiningTools.Pages
                 rig.DonationAmount = Constants.MULTI_USER_MODE_DONATION;
                 existingRecord = HiveRigDAO.GetRecord(rig?.Name, username);
             }
+            else
+            {
+                rig.DonationAmount = Constants.DEFAULT_DONATION;
+            }
             if (existingRecord == null)
             {
                 if (!String.IsNullOrEmpty(rig?.WhatToMineEndpoint))

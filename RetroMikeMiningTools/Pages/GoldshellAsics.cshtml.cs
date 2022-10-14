@@ -232,6 +232,7 @@ namespace RetroMikeMiningTools.Pages
                         }
                     }
                 }
+                rig.DonationAmount = Constants.DEFAULT_DONATION;
                 GoldshellAsicDAO.AddRig(rig);
                 existingRecord = GoldshellAsicDAO.GetRecord(rig?.Name);
                 data.Add(existingRecord);

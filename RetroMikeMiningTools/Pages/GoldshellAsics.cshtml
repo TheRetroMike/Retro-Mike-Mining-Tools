@@ -104,7 +104,6 @@
                 {
                     columns.Bound(column => column.Name);
                     columns.Bound(column => column.MiningMode).Width(200);
-                    columns.Bound(column => column.DonationAmount).Width(100);
                     columns.Bound(column => column.ApiBasePath).ClientHeaderTemplate("API Base Path");
                     columns.Bound(column => column.ApiPassword).ClientHeaderTemplate("API Password").ClientTemplate("<span>#: ApiPassword == null ? ' ' : '●'.repeat( ApiPassword.length) #</span>");
                     columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint");
@@ -124,7 +123,6 @@
                 .Destroy(d => d.Url("/GoldshellAsics?handler=Destroy").Data("forgeryToken"))
                 .Model(m => {
                     m.Id(id => id.Id);
-                    m.Field(x => x.DonationAmount).DefaultValue("1%");
                     m.Field(x => x.Profit).Editable(false);
                 })
                 )

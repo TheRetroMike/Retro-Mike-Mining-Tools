@@ -52,7 +52,6 @@
         {
             columns.Bound(column => column.Name);
             columns.Bound(column => column.MiningMode).Width(200);
-            columns.Bound(column => column.DonationAmount).Width(100);
             columns.Bound(column => column.PinnedTicker);
             columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned ZergPool Algo");
             columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint").ClientTemplate("#=wtmEndpointTemplate(WhatToMineEndpoint)#");
@@ -82,7 +81,6 @@
             })
         .Model(m => {
             m.Id(id => id.Id);
-            m.Field(x => x.DonationAmount).DefaultValue("1%").Editable(!Model.IsMultiUser);
             m.Field(x => x.PinnedTicker).DefaultValue("");
             m.Field(x => x.Profit).Editable(false);
             m.Field(x => x.SmartPlugType).DefaultValue(Enums.SmartPlugType.None);
