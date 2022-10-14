@@ -11,7 +11,7 @@ namespace RetroMikeMiningTools.AutoExchanging
         {
             if (String.IsNullOrEmpty(exchange?.ApiKey) || String.IsNullOrEmpty(exchange?.ApiSecret))
             {
-                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job for TxBit due to missing API Keys"), LogType.AutoExchanging, exchange.Username);
+                Common.Logger.Log(String.Format("Unable to execute Auto Exchanging Job due to missing API Keys"), LogType.AutoExchanging, exchange.Username);
             }
             else
             {
@@ -21,6 +21,24 @@ namespace RetroMikeMiningTools.AutoExchanging
                 {
                     GenericTradeForTradingCurrency(false, exchange, apiBasePath, tradingFee);
                 }
+                if (exchange.AutoWithdrawl && !String.IsNullOrEmpty(exchange.AutoWithdrawlAddress) && exchange.AutoWithdrawlCurrency != null)
+                {
+                    Withdraw(exchange, apiBasePath);
+                }
+            }
+        }
+
+        private static void Withdraw(ExchangeConfig exchange, string apiBasePath)
+        {
+            var balance = GenericExchangeApiUtilities.GetWalletBalances(apiBasePath, exchange).Where(x => x.Ticker.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            if (balance != null && balance.Balance >= exchange.AutoWithdrawlMin)
+            {
+                if (exchange.WithdrawlFee == null)
+                {
+                    exchange.WithdrawlFee = 0.00m;
+                }
+                GenericExchangeApiUtilities.Withdraw(exchange, apiBasePath, exchange.AutoWithdrawlCurrency.Ticker, (balance.Balance).ToString(), exchange.AutoWithdrawlAddress);
+                Common.Logger.Log(String.Format("{0}: Auto Withdrawl Submitted", exchange.Exchange.ToString()), LogType.AutoExchanging, exchange.Username);
             }
         }
 

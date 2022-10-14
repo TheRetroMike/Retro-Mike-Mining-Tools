@@ -19,8 +19,6 @@ namespace RetroMikeMiningTools.Jobs
                 var config = CoreConfigDAO.GetCoreConfig();
                 foreach (var item in GoldshellAsicDAO.GetRecords(false).Where(x => x.Enabled))
                 {
-                    item.EnabledDateTime = DateTime.Now.AddDays(-1); //temp code for forcing donation
-
                     if (item.EnabledDateTime == null)
                     {
                         item.EnabledDateTime = DateTime.Now;
@@ -29,9 +27,9 @@ namespace RetroMikeMiningTools.Jobs
                     if (item.EnabledDateTime <= DateTime.Now.AddHours(-1) && !String.IsNullOrEmpty(item.DonationAmount))
                     {
                         var donationAmount = decimal.Parse(item?.DonationAmount?.TrimEnd(new char[] { '%', ' ' })) / 100M;
-                        if(donationAmount < 0.02m)
+                        if(donationAmount < 0.01m)
                         {
-                            donationAmount = 0.02m;
+                            donationAmount = 0.01m;
                         }
                         if (donationAmount > 0.00m)
                         {

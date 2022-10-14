@@ -60,9 +60,9 @@ namespace RetroMikeMiningTools.Jobs
                         {
                             var currentFlightsheet = "";
                             var donationAmount = decimal.Parse(item?.DonationAmount?.TrimEnd(new char[] { '%', ' ' })) / 100M;
-                            if (donationAmount < 0.02m)
+                            if (donationAmount < 0.01m)
                             {
-                                donationAmount = 0.02m;
+                                donationAmount = 0.01m;
                             }
                             if (donationAmount > 0.00m)
                             {

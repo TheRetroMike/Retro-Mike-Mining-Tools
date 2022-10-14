@@ -53,21 +53,27 @@
     .Editable()
     .Selectable()
     .Filterable()
+    .Scrollable()
     .Events(x => x.Change("handleExchangeSelection"))
     .ToolBar(toolbar=> {
         toolbar.Create();
     })
     .Columns(columns =>
     {
-        columns.Bound(column => column.Exchange);
-        columns.Bound(column => column.DestinationCoin).ClientTemplate("#=cleanText(DestinationCoin?.Ticker)#").ClientHeaderTemplate("Destination");
-        columns.Bound(column => column.ExcludedSourceCoins).ClientTemplate("#=coinsTemplate(ExcludedSourceCoins)#").ClientHeaderTemplate("Exclusions");
-        columns.Bound(column => column.TradingPairCurrency).ClientTemplate("#=cleanText(TradingPairCurrency?.Ticker)#").ClientHeaderTemplate("Trading Pair");
-        columns.Bound(column => column.ApiKey).ClientTemplate("#=maskData(ApiKey)#");
-        columns.Bound(column => column.ApiSecret).ClientTemplate("#=maskData(ApiSecret)#");
-        columns.Bound(column => column.Passphrase).ClientTemplate("#=maskData(Passphrase)#");
-        columns.Bound(column => column.AutoMoveToTradingAccount).ClientHeaderTemplate("<center>Auto Move to <br />Trading Account</center>");
-        columns.Bound(column => column.Enabled);
+        columns.Bound(column => column.Exchange).Width(150);
+        columns.Bound(column => column.DestinationCoin).ClientTemplate("#=cleanText(DestinationCoin?.Ticker)#").ClientHeaderTemplate("Destination").Width(150);
+        columns.Bound(column => column.ExcludedSourceCoins).ClientTemplate("#=coinsTemplate(ExcludedSourceCoins)#").ClientHeaderTemplate("Exclusions").Width(150);
+        columns.Bound(column => column.TradingPairCurrency).ClientTemplate("#=cleanText(TradingPairCurrency?.Ticker)#").ClientHeaderTemplate("Trading Pair").Width(150);
+        columns.Bound(column => column.ApiKey).ClientTemplate("#=maskData(ApiKey)#").Width(100);
+        columns.Bound(column => column.ApiSecret).ClientTemplate("#=maskData(ApiSecret)#").Width(100);
+        columns.Bound(column => column.Passphrase).ClientTemplate("#=maskData(Passphrase)#").Width(100);
+        columns.Bound(column => column.AutoMoveToTradingAccount).ClientHeaderTemplate("Auto Move to Trading Account").Width(200);
+        columns.Bound(column => column.AutoWithdrawl).ClientHeaderTemplate("Auto Withdrawl").Width(150);
+        columns.Bound(column => column.AutoWithdrawlAddress).ClientHeaderTemplate("Auto Withdrawl Address").Width(200);
+        columns.Bound(column => column.AutoWithdrawlCurrency).ClientTemplate("#=cleanText(AutoWithdrawlCurrency?.Ticker)#").ClientHeaderTemplate("Withdrawl Coin").Width(200);
+        columns.Bound(column => column.AutoWithdrawlMin).ClientHeaderTemplate("Auto Widthdrawl Min").Width(200);
+        columns.Bound(column => column.WithdrawlFee).ClientHeaderTemplate("Widthdrawl Fee").Width(150);
+        columns.Bound(column => column.Enabled).ClientHeaderTemplate("Enabled").Width(150);
         columns.Command(column =>
         {
             column.Edit();
@@ -84,6 +90,7 @@
         m.Field(o => o.ExcludedSourceCoins).DefaultValue(new List<Coin>());
             m.Field(o => o.DestinationCoin).DefaultValue(new Coin());
             m.Field(o => o.TradingPairCurrency).DefaultValue(new Coin());
+            m.Field(o => o.AutoWithdrawlCurrency).DefaultValue(new Coin());
     })
     )
 )

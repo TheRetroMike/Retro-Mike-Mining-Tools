@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
+using RetroMikeMiningTools.Enums;
 using System.Dynamic;
 using System.Security.Cryptography;
 using System.Text;
@@ -119,5 +120,36 @@ namespace RetroMikeMiningTools.Utilities
             catch { }
             return result;
         }
+        public static async Task<string> Withdraw(ExchangeConfig exchange, decimal amount)
+        {
+            var result = String.Empty;
+            try
+            {
+                dynamic requestObject = new ExpandoObject();
+                
+                requestObject.currency = exchange.AutoWithdrawlCurrency.Ticker;
+                requestObject.destination = exchange.AutoWithdrawlAddress;
+                requestObject.destinationType = 0;
+                requestObject.amount = amount;
+                requestObject.nonce = DateTime.UtcNow.Ticks;
+                requestObject.key = exchange.ApiKey;
+                
+                
+                string jsonData = JsonConvert.SerializeObject(requestObject);
+                RestClient client = new RestClient("https://www.southxchange.com/api/withdraw");
+                client.AddDefaultHeader("Hash", HashingUtilities.SHA512_ComputeHash(jsonData, exchange.ApiSecret));
+                RestRequest request = new RestRequest("", Method.Post);
+                request.AddStringBody(jsonData, DataFormat.Json);
+                var response = client.Post(request);
+                dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+                if (responseContent != null)
+                {
+                    Common.Logger.Log("SouthXchange: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
+                }
+            }
+            catch(Exception ex) { }
+            return result;
+        }
+
     }
 }

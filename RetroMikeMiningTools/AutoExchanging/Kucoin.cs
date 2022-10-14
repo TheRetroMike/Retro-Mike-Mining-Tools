@@ -90,6 +90,21 @@ namespace RetroMikeMiningTools.AutoExchanging
                         }
                     }
                 }
+
+                if (exchange.AutoWithdrawl && !String.IsNullOrEmpty(exchange.AutoWithdrawlAddress) && exchange.AutoWithdrawlCurrency != null)
+                {
+                    balances = await client.SpotApi.Account.GetAccountsAsync();
+                    var balanceRecord = balances.Data.Where(x => x.Asset.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (balanceRecord != null)
+                    {
+                        if (balanceRecord.Available > exchange.AutoWithdrawlMin)
+                        {
+                            var withdrawlAmount = balanceRecord.Available - exchange.WithdrawlFee;
+                            await client.SpotApi.Account.WithdrawAsync(balanceRecord.Asset, exchange.AutoWithdrawlAddress, balanceRecord.Available);
+                            Common.Logger.Log("Kucoin: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
+                        }
+                    }
+                }
             }
         }
     }

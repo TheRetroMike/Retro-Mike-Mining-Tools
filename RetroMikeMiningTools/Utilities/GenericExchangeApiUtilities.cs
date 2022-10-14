@@ -136,5 +136,18 @@ namespace RetroMikeMiningTools.Utilities
             }
             return result;
         }
+
+        public static void Withdraw(ExchangeConfig exchange, string apiBasePath, string currency, string quantity, string address)
+        {
+            var method = "/account/withdraw";
+            var queryString = String.Format("address={3}&apikey={0}&currency={1}&nonce={4}&quantity={2}", exchange.ApiKey, currency, quantity, address, HashingUtilities.CalculateNonce());
+            var apiSignMessage = String.Format("{0}{1}?{2}", apiBasePath, method, queryString);
+            var apiSign = HashingUtilities.SHA512_ComputeHash(apiSignMessage, exchange.ApiSecret);
+            var client = new RestClient(apiBasePath);
+            var request = new RestRequest(String.Format("{0}?{1}", method, queryString));
+            request.AddHeader("apisign", apiSign.ToUpper());
+            var response = client.Get(request);
+            dynamic responseData = JsonConvert.DeserializeObject(response.Content);
+        }
     }
 }

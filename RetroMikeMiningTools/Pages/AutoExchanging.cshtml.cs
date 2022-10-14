@@ -99,7 +99,9 @@ namespace RetroMikeMiningTools.Pages
 
         public JsonResult OnGetMasterCoinList([DataSourceRequest] DataSourceRequest request, int exchangeId)
         {
-            return new JsonResult(Exchanges.ExchangeCoins.Where(x => x.Exchange == (Enums.Exchange)exchangeId));
+            var coins = Exchanges.ExchangeCoins.Where(x => x.Exchange == (Enums.Exchange)exchangeId).ToList();
+            coins.Insert(0, new Coin() { Name="" });
+            return new JsonResult(coins);
         }
 
         public JsonResult OnPostReadBalances([DataSourceRequest] DataSourceRequest request)

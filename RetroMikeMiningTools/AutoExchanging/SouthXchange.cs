@@ -85,6 +85,18 @@ namespace RetroMikeMiningTools.AutoExchanging
                     }
                 }
             }
+
+            if (exchange.AutoWithdrawl && !String.IsNullOrEmpty(exchange.AutoWithdrawlAddress) && exchange.AutoWithdrawlCurrency != null)
+            {
+                var balanceRecord = SouthXchangeUtilities.GetBalances(exchange).Where(x => x.Ticker.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                if (balanceRecord != null)
+                {
+                    if (balanceRecord.Balance > exchange.AutoWithdrawlMin)
+                    {
+                        SouthXchangeUtilities.Withdraw(exchange, balanceRecord.Balance);
+                    }
+                }
+            }
         }
     }
 }

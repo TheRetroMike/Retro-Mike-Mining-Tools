@@ -75,6 +75,21 @@ namespace RetroMikeMiningTools.AutoExchanging
                         }
                     }
                 }
+
+                if (exchange.AutoWithdrawl && !String.IsNullOrEmpty(exchange.AutoWithdrawlAddress) && exchange.AutoWithdrawlCurrency != null)
+                {
+                    balances = await client.SpotApi.Account.GetBalancesAsync();
+                    if (balances.Data.ContainsKey(exchange.AutoWithdrawlCurrency.Ticker))
+                    {
+                        var balanceRecord = balances.Data.Where(x => x.Key.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (balanceRecord.Value.Available > exchange.AutoWithdrawlMin)
+                        {
+                            var withdrawlAmount = balanceRecord.Value.Available - exchange.WithdrawlFee;
+                            await client.SpotApi.Account.WithdrawAsync(balanceRecord.Key, exchange.AutoWithdrawlAddress, false, balanceRecord.Value.Available);
+                            Common.Logger.Log("CoinEx: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
+                        }
+                    }
+                }
             }
         }
     }

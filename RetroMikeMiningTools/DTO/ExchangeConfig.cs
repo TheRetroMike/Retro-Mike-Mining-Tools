@@ -35,5 +35,12 @@ namespace RetroMikeMiningTools.DTO
 
         public bool AutoMoveToTradingAccount { get; set; }
         public string? Username { get; set; }
+        public bool AutoWithdrawl { get; set; }
+
+        [UIHint("ExchangeCoinEditor")]
+        public Coin? AutoWithdrawlCurrency { get; set; }
+        public string? AutoWithdrawlAddress { get; set; }
+        public decimal? AutoWithdrawlMin { get; set; }
+        public decimal? WithdrawlFee { get; set; }
     }
 }

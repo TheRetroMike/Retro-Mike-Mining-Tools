@@ -24,7 +24,12 @@ namespace RetroMikeMiningTools.DAO
                     Enabled = record.Enabled,
                     AutoMoveToTradingAccount = record.AutoMoveToTradingAccount,
                     Passphrase = record.Passphrase,
-                    Username = record.Username
+                    Username = record.Username,
+                    AutoWithdrawl = record.AutoWithdrawl,
+                    AutoWithdrawlAddress = record.AutoWithdrawlAddress,
+                    AutoWithdrawlCurrency = record.AutoWithdrawlCurrency,
+                    AutoWithdrawlMin = record.AutoWithdrawlMin,
+                    WithdrawlFee = record.WithdrawlFee
                 });
             }
         }
@@ -79,6 +84,11 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.Passphrase = record.Passphrase;
                     existingRecord.AutoMoveToTradingAccount = record.AutoMoveToTradingAccount;
                     existingRecord.Username = record.Username;
+                    existingRecord.AutoWithdrawl = record.AutoWithdrawl;
+                    existingRecord.AutoWithdrawlAddress = record.AutoWithdrawlAddress;
+                    existingRecord.AutoWithdrawlCurrency = record.AutoWithdrawlCurrency;
+                    existingRecord.AutoWithdrawlMin = record.AutoWithdrawlMin;
+                    existingRecord.WithdrawlFee = record.WithdrawlFee;
                     table.Update(existingRecord);
                 }
                 else
@@ -94,7 +104,12 @@ namespace RetroMikeMiningTools.DAO
                         Enabled = record.Enabled,
                         AutoMoveToTradingAccount = record.AutoMoveToTradingAccount,
                         Passphrase = record.Passphrase,
-                        Username = record.Username
+                        Username = record.Username,
+                        AutoWithdrawl = record.AutoWithdrawl,
+                        AutoWithdrawlAddress = record.AutoWithdrawlAddress,
+                        AutoWithdrawlCurrency = record.AutoWithdrawlCurrency,
+                        AutoWithdrawlMin = record.AutoWithdrawlMin,
+                        WithdrawlFee = record.WithdrawlFee
                     });
                 }
 
