@@ -526,6 +526,10 @@ namespace RetroMikeMiningTools.Pages
                     coins = HiveRigCoinDAO.GetRecords(selectedWorker.Id, flightsheets?.ToList(), Config, true, false, true);
                     foreach (var coin in wtmCoins)
                     {
+                        if (String.IsNullOrEmpty(coin.HashRate))
+                        {
+                            coin.HashRate = "0";
+                        }
                         if (coins.Where(x => x.Ticker.Equals(coin.Ticker,StringComparison.OrdinalIgnoreCase)).FirstOrDefault() == null)
                         {
                             try
@@ -540,7 +544,7 @@ namespace RetroMikeMiningTools.Pages
                                         Username = username,
                                         Algo = coin.Algorithm,
                                         HashRateMH = decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float),
-                                        Power = Convert.ToDecimal(coin.PowerConsumption)
+                                        Power = Convert.ToDecimal(coin.PowerConsumption),
                                     });
                                 }
                                 else

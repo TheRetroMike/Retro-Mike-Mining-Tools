@@ -430,15 +430,18 @@ namespace RetroMikeMiningTools.Utilities
             try
             {
                 RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-                RestRequest request = new RestRequest("/auth/check");
+                RestRequest request = new RestRequest("/account");
                 request.AddHeader("Authorization", "Bearer " + hiveApiKey);
                 var response = client.Get(request);
-                if (response != null && response.StatusCode == HttpStatusCode.NoContent)
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     result = true;
                 }
             }
-            catch { }
+            catch(Exception ex)
+            {
+
+            }
             return result;
         }
     }
