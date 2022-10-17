@@ -153,6 +153,7 @@ If you would like to support me:
 This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/HsjJPCP2hp
 
 ## Roadmap
+- Add Additional / Misc power on rig and auto-detect in profit on each coin
 - Auto Update
 - Manually Apply Flightsheet
 - Manually Apply Goldshell ASIC Config

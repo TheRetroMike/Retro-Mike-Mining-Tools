@@ -223,7 +223,7 @@ namespace RetroMikeMiningTools.Utilities
                 dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
                 responseDebuggingData = response.Content;
                 dynamic body = new ExpandoObject();
-                body.name = String.Format("{0}_profit_switcher_donation", responseContent.name);
+                body.name = String.Format("{0}_profit_switcher_donation", responseContent.name ?? "");
                 body.items = new ExpandoObject[responseContent.items.Count];
 
                 for (int i = 0; i < responseContent.items.Count; i++)
