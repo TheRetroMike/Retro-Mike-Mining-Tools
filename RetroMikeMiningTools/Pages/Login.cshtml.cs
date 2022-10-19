@@ -28,18 +28,24 @@ namespace RetroMikeMiningTools.Pages
         public string Password { get; set; }
         public string Message { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
             if (configuration != null)
             {
                 var multiUserModeConfig = configuration.GetValue<string>(Constants.MULTI_USER_MODE);
+                var fluxModeConfig = configuration.GetValue<string>(Constants.FLUX_MODE);
                 if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
+                {
+                    return Redirect("https://retromike.net");
+                }
+                    if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
                 {
                     username = User?.Identity?.Name;
                     multiUserMode = true;
                     ViewData["MultiUser"] = true;
                 }
             }
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()

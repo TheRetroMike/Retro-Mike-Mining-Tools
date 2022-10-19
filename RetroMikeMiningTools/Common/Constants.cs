@@ -18,6 +18,7 @@ namespace RetroMikeMiningTools.Common
         public static readonly string PARAMETER_SERVICE_NAME = "service_name";
         public static readonly string PARAMETER_PLATFORM_NAME = "platform_name";
         public static readonly string MULTI_USER_MODE = "multi_user_mode";
+        public static readonly string FLUX_MODE = "flux_mode";
         public static readonly string PARAMETER_MAX_USER_COUNT = "max_user_count";
         public static readonly string OVERRIDE_PORT = "override_port";
         public static readonly string MULTI_USER_MODE_DONATION = "5%";
