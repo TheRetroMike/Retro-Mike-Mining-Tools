@@ -120,22 +120,22 @@ All functionality is available on x64 systems.
 
 If you are running an ARM-based device, such as a raspberry pi, you won't have access to the Goldshell ASIC functionality, but everything else will be fully functional
 
-- Flux
+### Flux
 For Flux, please use the RetroMikeMiningTools App or just use the hosted environment at https://retromike.net
 
-- Single-User Mode (Preferred)
+### Single-User Mode (Preferred)
 You can install the normal app in single user mode via docker with the following command.
 ```
 sudo docker pull theretromike/miningtools:single_user && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools:single_user
 ```
 
-- Multi-User Mode (No SSL)
+### Multi-User Mode (No SSL)
 You can install the hosted version in multi user mode via docker with the following command. This should only be used if you need login capabilities
 ```
 sudo docker pull theretromike/miningtools:multi_user && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools:multi_user
 ```
 
-- Multi-User Mode (SSL)
+### Multi-User Mode (SSL)
 You can install the hosted version in multi user mode via docker with the following command. This should only be used if you need login capabilities and SSL
 ```
 sudo docker pull theretromike/miningtools:multi_user && sudo docker run -d -it --name RetroMikeMiningTools -p 9090:7000 -p 9091:7001 -v /volume0/retromikeminingtools-multi:/app/db -v /volume0/certs:/certs --restart on-failure:3 --entrypoint /bin/sh theretromike/miningtools:multi_user -c "dotnet RetroMikeMiningTools.dll --platform_name=Docker-linux/amd64 --multi_user_mode=true --cert=/certs/xxx.pfx --cert_pwd=xxx --max_user_count=100"
