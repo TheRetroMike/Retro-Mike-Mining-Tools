@@ -1,4 +1,5 @@
 ﻿using Quartz;
+using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.Utilities;
 
@@ -26,11 +27,16 @@ namespace RetroMikeMiningTools.Jobs
                     }
                     if (item.EnabledDateTime <= DateTime.Now.AddHours(-1) && !String.IsNullOrEmpty(item.DonationAmount))
                     {
-                        var donationAmount = decimal.Parse(item?.DonationAmount?.TrimEnd(new char[] { '%', ' ' })) / 100M;
-                        if(donationAmount < 0.01m)
+                        var donationAmount = 0.01m;
+                        if (!String.IsNullOrEmpty(config.PromoCode))
                         {
-                            donationAmount = 0.01m;
+                            var promo = Constants.PROMO_DATA.Where(x => x.CutoffDate > DateTime.Now && x.Code.Equals(Convert.ToHexString(System.Text.Encoding.UTF8.GetBytes(config.PromoCode)))).FirstOrDefault();
+                            if (promo != null && !String.IsNullOrEmpty(promo.DonationPercentage))
+                            {
+                                donationAmount = decimal.Parse(promo.DonationPercentage.TrimEnd(new char[] { '%', ' ' })) / 100M;
+                            }
                         }
+
                         if (donationAmount > 0.00m)
                         {
                             var currentRecord = GoldshellAsicDAO.GetRecord(item.Id);
@@ -46,7 +52,7 @@ namespace RetroMikeMiningTools.Jobs
                             {
                                 var secondsInDay = 86400;
                                 var donationSecondsInDay = secondsInDay * donationAmount;
-                                var donationSecondsPerRun = donationSecondsInDay; //Now running donations once per day instead of small amounts every 6 hours
+                                var donationSecondsPerRun = donationSecondsInDay;
                                 var startTime = DateTime.Now;
                                 var endTime = startTime.AddSeconds(Convert.ToDouble(donationSecondsPerRun));
                                 currentRecord.DonationStartTime = startTime;

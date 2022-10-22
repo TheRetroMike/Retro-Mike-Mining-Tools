@@ -3,6 +3,7 @@ using RetroMikeMiningTools.Enums;
 using RetroMikeMiningTools.Utilities;
 using Quartz;
 using RetroMikeMiningTools.DTO;
+using RetroMikeMiningTools.Common;
 
 namespace RetroMikeMiningTools.Jobs
 {
@@ -59,11 +60,16 @@ namespace RetroMikeMiningTools.Jobs
                         if (item.EnabledDateTime <= DateTime.Now.AddHours(-1) && !String.IsNullOrEmpty(item.DonationAmount))
                         {
                             var currentFlightsheet = "";
-                            var donationAmount = decimal.Parse(item?.DonationAmount?.TrimEnd(new char[] { '%', ' ' })) / 100M;
-                            if (donationAmount < 0.01m)
+                            var donationAmount = 0.01m;
+                            if (!String.IsNullOrEmpty(config.PromoCode))
                             {
-                                donationAmount = 0.01m;
+                                var promo = Constants.PROMO_DATA.Where(x => x.CutoffDate > DateTime.Now && x.Code.Equals(Convert.ToHexString(System.Text.Encoding.UTF8.GetBytes(config.PromoCode)), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                                if (promo != null && !String.IsNullOrEmpty(promo.DonationPercentage))
+                                {
+                                    donationAmount = decimal.Parse(promo.DonationPercentage.TrimEnd(new char[] { '%', ' ' })) / 100M;
+                                }
                             }
+
                             if (donationAmount > 0.00m)
                             {
                                 var currentRecord = HiveRigDAO.GetRecord(item.Id);

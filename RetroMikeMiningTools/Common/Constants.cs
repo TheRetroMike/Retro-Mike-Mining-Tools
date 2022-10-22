@@ -103,6 +103,18 @@ namespace RetroMikeMiningTools.Common
             }
         }
 
+        public static List<Promos> PROMO_DATA
+        {
+            get
+            {
+                return new List<Promos>()
+                {
+                    //new Promos(){ Code="4d4d", DonationPercentage="0.1%", CutoffDate=DateTime.Parse("2023-12-31")},
+                    //new Promos(){ Code="474f4c44454e4841574b", DonationPercentage="0%", CutoffDate=DateTime.Parse("2023-04-15")}
+                };
+            }
+        }
+
         public static Dictionary<string, string> GOLDSHELL_ASIC_DEFAULT_WTM
         {
             get

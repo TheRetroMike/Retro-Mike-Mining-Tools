@@ -10,7 +10,6 @@
   "profiles": {
     "RetroMikeMiningTools": {
       "commandName": "Project",
-      "commandLineArgs": "--multi_user_mode=true --flux_mode=true",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

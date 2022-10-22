@@ -30,7 +30,7 @@ namespace RetroMikeMiningTools.DAO
                             ReleaseType = Enums.ReleaseType.Production,
                             DefaultPowerPrice = 0.10m,
                             UiCoinPriceCalculation = true,
-                            UiRigPriceCalculation = true
+                            UiRigPriceCalculation = true,
                         });
                         db.Commit();
                     }
@@ -104,6 +104,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.UiCoinPriceCalculation = coreConfig.UiCoinPriceCalculation;
                 existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
                 existingRecord.CoinMarketCapApi = coreConfig.CoinMarketCapApi;
+                existingRecord.PromoCode = coreConfig.PromoCode;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
@@ -124,6 +125,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.UiCoinPriceCalculation = coreConfig.UiCoinPriceCalculation;
                 existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
                 existingRecord.CoinMarketCapApi = coreConfig.CoinMarketCapApi;
+                existingRecord.PromoCode = coreConfig.PromoCode;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
