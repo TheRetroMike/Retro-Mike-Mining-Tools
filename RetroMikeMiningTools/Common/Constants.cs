@@ -77,7 +77,7 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="5t5mEm254JNJ9HqRjY9vCiTE8aZALHX3v8TqhyQ3TTF9VHKZQXkRYjPDweT9kK4rJw7dDLtZXGjav2z9y24vXCdRbybmW2eTRpM15NQZSa",Ticker="MSR"},
                     new FlightsheetRecord(){Wallet="kaspa:qp68tc8esnku9tsszq4m6z4zev3e2qtrdmc7cy76fjakkzu4luy5klhjl6pkd",Ticker="KAS"},
                     new FlightsheetRecord(){Wallet="RHmSBY9b7RdfMeG7vkFLyXvrjg3imiaLP6", Ticker="VRSC"},
-
+                    new FlightsheetRecord(){Wallet="s1dPNXs4tV5rHBZGbbf5kC22zEXpXQ87gHK", Ticker="YEC"},
 
 
                     new FlightsheetRecord(){Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",Ticker="RDX"},

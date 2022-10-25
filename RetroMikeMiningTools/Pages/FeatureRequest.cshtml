@@ -1,0 +1,52 @@
+﻿@page
+@model RetroMikeMiningTools.Pages.FeatureRequestModel
+
+@{
+    ViewData["Title"] = "Feature Request";
+}
+
+@using Kendo.Mvc.UI
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+
+<div class="k-card">
+    <form method="post">
+        <div class="k-card-body">
+            You may use this form to submit an enhancement request.
+            <br/>
+            Note: Submitting doesn't guarantee implementation. It will be reviewed by the developer and either dismissed or added to the roadmap
+            <br />
+            <br/>
+            <div class="form-group">
+                <div class="col-md-10">
+                     <kendo-textarea name="description" rows="20" placeholder="Enhancement Request Details..." class="form-text">
+                         
+                    </kendo-textarea>
+                </div>
+            </div>
+        </div>
+        <div class="k-card-footer">
+            <button class="btn btn-primary">Submit</button>
+            &nbsp;
+        </div>
+    </form>
+</div>
+
+<script>
+    @{
+        var message = ViewData["Message"];
+    }
+    var message = '@message';
+    
+    if(message){
+        alert(message);
+        if(message != "Enhancement Writeup Required")
+        {
+            location.href="/Index";
+        }
+    }
+
+    function forgeryToken() {
+        return kendo.antiForgeryTokens();
+    }
+</script>

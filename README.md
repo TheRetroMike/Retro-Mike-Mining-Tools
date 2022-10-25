@@ -184,6 +184,8 @@ This is an open-source project and isn't officially supported, but if you have q
 - SafeTrade Exchange
 - Garlix Exchange
 - iPollo G1 Mini Asic Profit Switching
+- Login Page for Single User Mode
+
 
 ## Release Notes
 
