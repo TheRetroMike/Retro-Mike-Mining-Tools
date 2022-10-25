@@ -16,6 +16,7 @@
     + [Hive OS Rigs](#hive-os-rigs)
     + [Goldshell ASIC's](#goldshell-asics)
     + [Auto Exchanging](#auto-exchanging-1)
+  * [Videos](#videos)  
   * [Support Me](#support-me)
   * [Support](#support)
   * [Roadmap](#roadmap)
@@ -23,6 +24,9 @@
 
 
 # Retro Mike Mining Tools
+
+Overview Video: https://youtu.be/Yp5bNBCuqQs
+
 This is a web and service based app that can connect to your Hive OS account or Goldshell ASIC's, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
 
 This app was designed to be installed on a server on a Hive OS Rig on your network (or on any server on your network that is always running). If you are unable to host yourself due to network restrictions, there is a hosted version that can be used.
@@ -171,6 +175,9 @@ sudo docker pull theretromike/miningtools:multi_user && sudo docker run -d -it -
 
 ## Hosted Version
 https://retromike.net
+
+## Videos
+- Overview: https://youtu.be/Yp5bNBCuqQs
 
 ## Support Me
 If you would like to support me:
