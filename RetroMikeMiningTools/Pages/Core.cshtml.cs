@@ -99,7 +99,13 @@ namespace RetroMikeMiningTools.Pages
                     {
                         var serviceName = systemConfiguration.GetValue<string>(Constants.PARAMETER_SERVICE_NAME);
                         var hostPlatform = systemConfiguration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME);
-                        if (!String.IsNullOrEmpty(serviceName) && !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_HIVE_OS, StringComparison.OrdinalIgnoreCase))
+                        if (
+                                !String.IsNullOrEmpty(serviceName) && 
+                                (
+                                    !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_HIVE_OS, StringComparison.OrdinalIgnoreCase) ||
+                                    !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_LINUX, StringComparison.OrdinalIgnoreCase)
+                                )
+                            )
                         {
                             newProcess.StartInfo = new System.Diagnostics.ProcessStartInfo()
                             {
