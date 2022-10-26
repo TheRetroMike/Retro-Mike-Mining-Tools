@@ -34,11 +34,13 @@ namespace RetroMikeMiningTools.Pages
             {
                 var multiUserModeConfig = configuration.GetValue<string>(Constants.MULTI_USER_MODE);
                 var fluxModeConfig = configuration.GetValue<string>(Constants.FLUX_MODE);
-                if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
+                
+                if (!String.IsNullOrEmpty(fluxModeConfig) && fluxModeConfig == "true")
                 {
                     return Redirect("https://retromike.net");
                 }
-                    if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
+                
+                if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
                 {
                     username = User?.Identity?.Name;
                     multiUserMode = true;
