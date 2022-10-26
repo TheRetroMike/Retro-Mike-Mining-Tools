@@ -16,6 +16,7 @@
     + [Hive OS Rigs](#hive-os-rigs)
     + [Goldshell ASIC's](#goldshell-asics)
     + [Auto Exchanging](#auto-exchanging-1)
+  * [Videos](#videos)  
   * [Support Me](#support-me)
   * [Support](#support)
   * [Roadmap](#roadmap)
@@ -23,6 +24,9 @@
 
 
 # Retro Mike Mining Tools
+
+Overview Video: https://youtu.be/Yp5bNBCuqQs
+
 This is a web and service based app that can connect to your Hive OS account or Goldshell ASIC's, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
 
 This app was designed to be installed on a server on a Hive OS Rig on your network (or on any server on your network that is always running). If you are unable to host yourself due to network restrictions, there is a hosted version that can be used.
@@ -114,11 +118,23 @@ wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools
 ```
 
 ## Docker Installer
+#### Parameters
+- Volume
+    - /app/db: This mapped volume is where your db will be stored. Make sure it's mapped so that it persists across container restarts
+- Environment
+    - TZ: This is optional and can be set to your local timezone. If you don't include it, it will default to GMT
+
 You can install the mining tools via a docker container. 
 
 All functionality is available on x64 systems. 
 
 If you are running an ARM-based device, such as a raspberry pi, you won't have access to the Goldshell ASIC functionality, but everything else will be fully functional
+
+You may specify the "TZ" environment variable to have the container use your local timezone instead of GMT.
+i.e.: 
+```
+sudo docker pull theretromike/miningtools:single_user && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -e TZ=America/Chicago -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools:single_user
+```
 
 ### Flux
 For Flux, please use the RetroMikeMiningTools App or just use the hosted environment at https://retromike.net
@@ -160,6 +176,9 @@ sudo docker pull theretromike/miningtools:multi_user && sudo docker run -d -it -
 ## Hosted Version
 https://retromike.net
 
+## Videos
+- Overview: https://youtu.be/Yp5bNBCuqQs
+
 ## Support Me
 If you would like to support me:
 - Youtube Channel: https://www.youtube.com/retromikecrypto
@@ -188,6 +207,38 @@ This is an open-source project and isn't officially supported, but if you have q
 
 
 ## Release Notes
+
+v2.5.13
+
+- Added Feature Request Form
+- Added Promo Code Feature
+- Added Redirect for Flux Mode
+- Added Timezone configuration for docker containers
+- Enhanced Dev Fee flightsheet generation to reduce errors
+- Fixed Dev Fee Processing for YEC
+
+----------------------------------------------
+
+v2.5.12
+
+- Dev Fee Processing Fix for Nameless Flightsheets
+
+----------------------------------------------
+
+v2.5.11
+
+- Fixed API call to Hive that broke profit switching
+- Fixed Import Coin functionality when a select algo doesn't have a hashrate
+
+----------------------------------------------
+
+v2.5.10
+
+- Added Auto Withdrawls for all Exchanges, except for TrageOgre.
+
+Trade Ogre API doesn't support auto withdrawls so that one may never be supported for auto withdrawls.
+
+----------------------------------------------
 
 v2.5.9
 
