@@ -1,4 +1,6 @@
 #!/bin/bash
+apt-get update -y
+apt-get install ipmitool -y
 wget -O /QuantaS51GFanControl.sh https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/NodeUtilities/QuantaS51GFanControl.sh
 chmod +x /QuantaS51GFanControl.sh
 
@@ -17,3 +19,4 @@ EOF
 
 systemctl daemon-reload
 systemctl enable s51gfancontrol
+systemctl start s51gfancontrol
