@@ -71,7 +71,7 @@ namespace RetroMikeMiningTools.Jobs
                                         DateTime = DateTime.Now,
                                         TrackingID = Guid.NewGuid().ToString()
                                     });
-                                    Common.Logger.Push(String.Format("Donation Started: {0}", item.Name));
+                                    //Common.Logger.Push(String.Format("Donation Started: {0}", item.Name));
                                     currentRecord.DonationRunning = true;
                                     GoldshellAsicDAO.UpdateRecord(currentRecord);
                                 }

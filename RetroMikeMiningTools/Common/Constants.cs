@@ -79,7 +79,7 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="kaspa:qp68tc8esnku9tsszq4m6z4zev3e2qtrdmc7cy76fjakkzu4luy5klhjl6pkd",Ticker="KAS"},
                     new FlightsheetRecord(){Wallet="RHmSBY9b7RdfMeG7vkFLyXvrjg3imiaLP6", Ticker="VRSC"},
                     new FlightsheetRecord(){Wallet="s1dPNXs4tV5rHBZGbbf5kC22zEXpXQ87gHK", Ticker="YEC"},
-
+                    new FlightsheetRecord(){Wallet="M95ULQ4AUNERJ2aAH8Zq3dk2L6RK1xMnY2", Ticker="MEWC"},
 
                     new FlightsheetRecord(){Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",Ticker="RDX"},
                     new FlightsheetRecord(){Wallet="NQ191CXUABTDPDXLT5UMNU5PYL66936YVUVF", Ticker="NIM"},
@@ -111,7 +111,7 @@ namespace RetroMikeMiningTools.Common
             {
                 return new List<Promos>()
                 {
-                    //new Promos(){ Code="4d4d", DonationPercentage="0.1%", CutoffDate=DateTime.Parse("2023-12-31")},
+                    new Promos(){ Code="484f4c494441593232", DonationPercentage="0.00%", CutoffDate=DateTime.Parse("2023-01-01")},
                     //new Promos(){ Code="474f4c44454e4841574b", DonationPercentage="0%", CutoffDate=DateTime.Parse("2023-04-15")}
                 };
             }

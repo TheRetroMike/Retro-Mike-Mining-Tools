@@ -188,6 +188,6 @@ if (multiUserMode)
 
 app.UseAuthorization();
 app.MapRazorPages();
-app.Lifetime.ApplicationStarted.Register(() => { RetroMikeMiningTools.Common.Logger.Log("Application Started", LogType.System); RetroMikeMiningTools.Utilities.AnalyticUtilities.Startup(); });
+app.Lifetime.ApplicationStarted.Register(() => { RetroMikeMiningTools.Common.Logger.Log("Application Started", LogType.System); });
 app.Lifetime.ApplicationStopped.Register(() => { RetroMikeMiningTools.Common.Logger.Log("Application Shutdown", LogType.System); });
 app.Run();

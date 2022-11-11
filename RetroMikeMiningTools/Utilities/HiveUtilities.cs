@@ -423,11 +423,11 @@ namespace RetroMikeMiningTools.Utilities
                         response = client.Post(request);
                         responseContent = JsonConvert.DeserializeObject(response.Content);
                         result = responseContent?.id?.Value?.ToString();
-                        Common.Logger.Push("Donation FS Created: " + debuggingData);
+                        //Common.Logger.Push("Donation FS Created: " + debuggingData);
                     }
                     catch (Exception ex)
                     {
-                        Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1} - Version: {2} - Existing Config: {3}", ex.Message, debuggingData, System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version, responseDebuggingData));
+                        //Logger.Push(String.Format("Error while trying to create donation flightsheet: {0} - {1} - Version: {2} - Existing Config: {3}", ex.Message, debuggingData, System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version, responseDebuggingData));
                     }
                 }
             }
