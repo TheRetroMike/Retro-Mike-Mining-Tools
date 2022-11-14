@@ -16,39 +16,6 @@
 </style>
 
 <div class="container-fluid">
-    @*<div class="row">
-        <div class="col-md-6">
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        Core System Settings
-                    </h3>
-                </div>
-
-                <div class="card-body">
-                    <label>
-                        Control 1
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        Core System Settings
-                    </h3>
-                </div>
-
-                <div class="card-body">
-                    <label>
-                        Control 2
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>*@
     @(Html.Kendo().Dialog()
         .Name("updateDialog")
         .Title("Application Update Available")
@@ -72,43 +39,39 @@
                 </div>
 
                 <div class="k-card-body">
-                    <label>
-                        @(Html.Kendo().Grid<LogEntry>
-                            ().Name("logGrid")
-                            .Sortable()
-                            .Filterable()
-                            .Pageable()
-                            .ToolBar(toolbar=> {
-                                if(!Model.IsMultiUser){
-                                    toolbar.Custom().Text("Purge Logs").HtmlAttributes(new { id = "clearLogs" });
-                                }
-                            })
-                            .Columns(columns =>
+                    @(Html.Kendo().Grid<LogEntry>
+                        ().Name("logGrid")
+                        .Sortable()
+                        .Filterable()
+                        .Pageable()
+                        .ToolBar(toolbar=> {
+                            if(!Model.IsMultiUser){
+                                toolbar.Custom().Text("Purge Logs").HtmlAttributes(new { id = "clearLogs" });
+                            }
+                        })
+                        .Columns(columns =>
+                        {
+                            columns.Bound(column => column.LogDateTime).Width(200).Format("{0:g}");
+                            columns.Bound(column => column.LogType).Width(150);
+                            columns.Bound(column => column.LogMessage);
+                            columns.Command(column =>
                             {
-                                columns.Bound(column => column.LogDateTime).Width(200).Format("{0:g}");
-                                columns.Bound(column => column.LogType).Width(150);
-                                columns.Bound(column => column.LogMessage);
-                                columns.Command(column =>
-                                {
-                                    column.Destroy();
-                                }).Width(125);
-                            })
-                            .DataSource(ds => ds.Ajax()
-                            .Filter(x=> x.Add(y => y.LogType).IsNotEqualTo(Enums.LogType.System))
-                            .Read(r => r.Url("/Index?handler=Read").Data("forgeryToken"))
-                            .Destroy(d => d.Url("/Index?handler=Destroy").Data("forgeryToken"))
-                            .Model(m => m.Id(id => id.Id))
-                            .Sort(x => x.Add("LogDateTime").Descending())
-                            )
+                                column.Destroy();
+                            }).Width(125);
+                        })
+                        .DataSource(ds => ds.Ajax()
+                        .Filter(x=> x.Add(y => y.LogType).IsNotEqualTo(Enums.LogType.System))
+                        .Read(r => r.Url("/Index?handler=Read").Data("forgeryToken"))
+                        .Destroy(d => d.Url("/Index?handler=Destroy").Data("forgeryToken"))
+                        .Model(m => m.Id(id => id.Id))
+                        .Sort(x => x.Add("LogDateTime").Descending())
                         )
-                    </label>
+                    )
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 
 <script>
     var refreshInterval = 1500;

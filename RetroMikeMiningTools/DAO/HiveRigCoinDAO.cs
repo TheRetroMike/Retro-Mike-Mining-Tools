@@ -61,9 +61,10 @@ namespace RetroMikeMiningTools.DAO
             {
                 var btcPrice = CoinDeskUtilities.GetBtcPrice();
                 List<Coin> wtmCoins = new List<Coin>();
-
+                var rigRecord = HiveRigDAO.GetRecord(workerId);
+                var additionalPower = rigRecord?.AdditionalPower ?? 0;
                 decimal powerPrice = config.DefaultPowerPrice;
-                var wtmEndPoint = HiveRigDAO.GetRecord(workerId)?.WhatToMineEndpoint;
+                var wtmEndPoint = rigRecord?.WhatToMineEndpoint;
                 if (wtmEndPoint != null)
                 {
                     wtmCoins = WhatToMineUtilities.GetCoinList(wtmEndPoint);
@@ -113,7 +114,7 @@ namespace RetroMikeMiningTools.DAO
                                 item.HashRateMH = decimal.Parse(coin.HashRate, System.Globalization.NumberStyles.Float);
                             }
 
-                            if(!String.IsNullOrEmpty(coin.PowerConsumption) && item.Power==0)
+                            if (!String.IsNullOrEmpty(coin.PowerConsumption) && item.Power == 0)
                             {
                                 item.Power = Convert.ToDecimal(coin.PowerConsumption);
                             }
@@ -272,7 +273,7 @@ namespace RetroMikeMiningTools.DAO
                         if (!String.IsNullOrEmpty(item.SecondaryOverrideEndpoint))
                         {
                             var coin = WhatToMineUtilities.GetIndividualCoin(item.SecondaryOverrideEndpoint);
-                            
+
                             if (coin != null)
                             {
                                 foreach (var grouping in item.Groups)
@@ -297,7 +298,7 @@ namespace RetroMikeMiningTools.DAO
                     }
                     combinedRevenue += secondaryRevenue;
 
-                    var dailyPowerCost = 24 * ((Convert.ToDouble(item.Power) / 1000) * Convert.ToDouble(powerPrice));
+                    var dailyPowerCost = 24 * ((Convert.ToDouble(item.Power + additionalPower) / 1000) * Convert.ToDouble(powerPrice));
                     decimal dailyRevenue = Convert.ToDecimal(combinedRevenue) * Convert.ToDecimal(btcPrice);
                     decimal dailyProfit = Convert.ToDecimal(dailyRevenue) - Convert.ToDecimal(dailyPowerCost);
                     item.Profit = Convert.ToDecimal(dailyProfit);

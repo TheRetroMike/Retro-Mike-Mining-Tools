@@ -38,7 +38,8 @@ namespace RetroMikeMiningTools.DAO
                     Username = rigConfig.Username,
                     SmartPlugType = rigConfig.SmartPlugType,
                     SmartPlugHost = rigConfig.SmartPlugHost,
-                    RigMinProfit = rigConfig.RigMinProfit
+                    RigMinProfit = rigConfig.RigMinProfit,
+                    AdditionalPower = rigConfig.AdditionalPower
                 });
             }
         }
@@ -146,6 +147,7 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.SmartPlugType = record.SmartPlugType;
                     existingRecord.SmartPlugHost = record.SmartPlugHost;
                     existingRecord.RigMinProfit = record.RigMinProfit;
+                    existingRecord.AdditionalPower = record.AdditionalPower;
                     
                     table.Update(existingRecord);
                 }
@@ -163,7 +165,8 @@ namespace RetroMikeMiningTools.DAO
                         PinnedZergAlgo = record.PinnedZergAlgo,
                         SmartPlugType = record.SmartPlugType,
                         SmartPlugHost = record.SmartPlugHost,
-                        RigMinProfit = record.RigMinProfit
+                        RigMinProfit = record.RigMinProfit,
+                        AdditionalPower = record.AdditionalPower
                     });
                 }
             }

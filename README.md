@@ -60,6 +60,9 @@ The following mining modes are supported and can be set on each rig / ASIC
 ### Pinned Coin
 You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanted to mine something like a newly released coin to accumulate as many coins as possible early-on.
 
+### Additional Power
+When configuring your Hive OS Rig, you can specify an "Additional / Misc Power" in watts. The power cost will then be calculated and factored into profitability of each coin. This is usefull if you have a A/C Unit, Window Fan, Box Fan, or additional items hooked up to your rig and you want to deduct that cost from profitability figures
+
 ### Coin Configuration
 - When configuring a coin, if it's a Prohashing or Zerg coin, then set the Hashrate in the MH equivalent and set the system power. Make sure your power cost is set in the Core Configuration screen
 - When configuring a coin from WTM, you can either have it use the generalized WTM Endpoint from the rig config, or set the individual WTM endpoints for the primary and secondary coins. If you do only override endpoints, you don't need to set one at the rig level
@@ -184,12 +187,13 @@ If you would like to support me:
 - Youtube Channel: https://www.youtube.com/retromikecrypto
 - Hosted Version: https://retromike.net
 - Just run the profit switcher
+- Amazon Affiliate Link: https://amzn.to/3hIOvhP
+- Ebay Affiliate Link: https://ebay.us/jvqlUf
 
 ## Support
 This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/HsjJPCP2hp
 
 ## Roadmap
-- Add Additional / Misc power on rig and auto-detect in profit on each coin
 - Auto Update
 - Manually Apply Flightsheet
 - Manually Apply Goldshell ASIC Config

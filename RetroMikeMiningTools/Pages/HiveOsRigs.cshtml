@@ -54,6 +54,7 @@
             columns.Bound(column => column.MiningMode).Width(200);
             columns.Bound(column => column.PinnedTicker);
             columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned ZergPool Algo");
+            columns.Bound(column => column.AdditionalPower);
             columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint").ClientTemplate("#=wtmEndpointTemplate(WhatToMineEndpoint)#");
             if(!Model.IsMultiUser)
             {

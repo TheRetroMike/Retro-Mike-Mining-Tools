@@ -39,5 +39,7 @@ namespace RetroMikeMiningTools.DTO
 
         [DataType(DataType.Currency)]
         public decimal? RigMinProfit { get; set; }
+
+        public decimal AdditionalPower { get; set; }
     }
 }
