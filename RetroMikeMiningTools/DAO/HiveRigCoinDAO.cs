@@ -316,6 +316,15 @@ namespace RetroMikeMiningTools.DAO
             }
         }
 
+        public static void DeleteRecords(int workerId)
+        {
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
+            {
+                var table = db.GetCollection<HiveOsRigCoinConfig>(tableName);
+                table.DeleteMany(x => x.WorkerId == workerId);
+            }
+        }
+
         public static void UpdateRecord(HiveOsRigCoinConfig record)
         {
             var existingRecord = GetRecord(record.Id);

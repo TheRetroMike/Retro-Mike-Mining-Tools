@@ -115,6 +115,7 @@ namespace RetroMikeMiningTools.DAO
 
         public static void DeleteRecord(HiveOsRigConfig rigConfig)
         {
+            HiveRigCoinDAO.DeleteRecords(rigConfig.Id);
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
             {
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
