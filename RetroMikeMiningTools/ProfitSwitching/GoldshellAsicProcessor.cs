@@ -138,7 +138,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                     {
                         options.BinaryLocation = "chromium-browswer";
                     }
-                    if (!String.IsNullOrEmpty(platformName) &&
+                    else if (
+                        !String.IsNullOrEmpty(platformName) &&
                         platformName.Equals(Constants.PLATFORM_DOCKER_AMD64) ||
                         platformName.Equals(Constants.PLATFORM_DOCKER_AMD64_V2) ||
                         platformName.Equals(Constants.PLATFORM_DOCKER_AMD64_V3) ||
