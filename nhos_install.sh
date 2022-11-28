@@ -15,7 +15,8 @@ wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.
 dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 apt-get update
-apt-get install -y dotnet-sdk-6.0
+apt-get install -y dotnet-sdk-6.0 
+apt-get install -y unzip
 wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/download/RetroMikeMiningTools.zip
 unzip  -o -d /usr/retro-mike-mining-tools RetroMikeMiningTools.zip
 rm RetroMikeMiningTools.zip

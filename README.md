@@ -111,6 +111,13 @@ Install Video / Walkthrough: https://youtu.be/A3J7Ax6jtlk
 wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/hive_install.sh | bash
 ```
 
+## Nicehash OS OS Installer
+Tested on Nicehash OS 2.0. May work on earlier versions, but I recommend using 2.0 or above.
+
+```
+wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/nhos_install.sh | sudo bash
+```
+
 ## Raspberry Pi Installer
 This may work on other ARM platforms utilizing debian based linux like Ubuntu, but has only been tested on a Raspberry Pi 4 running 64-Bit Ubuntu
 
