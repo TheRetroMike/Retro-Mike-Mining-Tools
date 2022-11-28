@@ -9,6 +9,7 @@ namespace RetroMikeMiningTools.Common
         public static readonly string LINUX_SERVICE_CONTROLLER_CMD = "systemctl";
         public static readonly string LINUX_RESTART_SERVICE_CMD = "restart";
         public static readonly string PLATFORM_HIVE_OS = "hive_os";
+        public static readonly string PLATFORM_NICEHASH_OS = "nicehash_os";
         public static readonly string PLATFORM_LINUX = "linux";
         public static readonly string PLATFORM_DOCKER_ARM64 = "Docker-linux/arm64";
         public static readonly string PLATFORM_DOCKER_AMD64 = "Docker-linux/amd64";

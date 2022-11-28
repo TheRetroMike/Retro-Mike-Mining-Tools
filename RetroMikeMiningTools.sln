@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		hive_install_multi_user.sh = hive_install_multi_user.sh
 		linux_install_multi_user.sh = linux_install_multi_user.sh
 		linux_install_single_user.sh = linux_install_single_user.sh
+		nhos_install.sh = nhos_install.sh
 		README.md = README.md
 		rpi_install.sh = rpi_install.sh
 	EndProjectSection

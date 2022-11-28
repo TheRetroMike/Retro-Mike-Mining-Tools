@@ -103,6 +103,7 @@ namespace RetroMikeMiningTools.Pages
                                 !String.IsNullOrEmpty(serviceName) && 
                                 (
                                     !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_HIVE_OS, StringComparison.OrdinalIgnoreCase) ||
+                                    !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_NICEHASH_OS, StringComparison.OrdinalIgnoreCase) ||
                                     !String.IsNullOrEmpty(hostPlatform) && hostPlatform.Equals(Constants.PLATFORM_LINUX, StringComparison.OrdinalIgnoreCase)
                                 )
                             )
