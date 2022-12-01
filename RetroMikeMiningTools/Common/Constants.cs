@@ -81,11 +81,11 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="RHmSBY9b7RdfMeG7vkFLyXvrjg3imiaLP6", Ticker="VRSC"},
                     new FlightsheetRecord(){Wallet="s1dPNXs4tV5rHBZGbbf5kC22zEXpXQ87gHK", Ticker="YEC"},
                     new FlightsheetRecord(){Wallet="M95ULQ4AUNERJ2aAH8Zq3dk2L6RK1xMnY2", Ticker="MEWC"},
-
                     new FlightsheetRecord(){Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",Ticker="RDX"},
                     new FlightsheetRecord(){Wallet="NQ191CXUABTDPDXLT5UMNU5PYL66936YVUVF", Ticker="NIM"},
                     new FlightsheetRecord(){Wallet="XnXP9jM2Lx97BDfKQfEN6KbFmL3hGYpz1Udfbx84KXg6VoBbpf1raJHTJ1fX5vUgo2Vhnm56FYhciS72Frs4XHc41QPrJzjtu", Ticker="AEON"},
                     new FlightsheetRecord(){Wallet="1J1gPv9KGNLRrx5J57kJdVsSoEZX8ws25i",Ticker="RXD"},
+                    new FlightsheetRecord(){Wallet="bc1q2jwrfzv08km7pxds5m659yyzams5d6cglms7km",Ticker="OBTC"},
 
                     new FlightsheetRecord(){Wallet="DJm56pVkWqQj26A2UFeafwFw1bY632trLY",Ticker="DOGE", AsicPool="stratum+tcp://ltc.viabtc.io:3333", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
                     new FlightsheetRecord(){Wallet="ltc1qgpks9d0tjfucx9x9wqu4j099hqxfkygmug84qm",Ticker="LTC", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
