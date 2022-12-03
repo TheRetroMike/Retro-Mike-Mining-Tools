@@ -232,7 +232,7 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                             {
                                                 if (asic.MiningMode == MiningMode.Profit || asic.MiningMode == MiningMode.DiversificationByProfit)
                                                 {
-                                                    Common.Logger.Log(String.Format("{0} Goldshell pool config updated for coin {1}. Projected Profit: ${2}", asic.Name, bestCoin.Ticker, newCoinBestPrice), Enums.LogType.ProfitSwitching);
+                                                    Common.Logger.Log(String.Format("{0} Goldshell pool config updated for coin {1}. Projected Profit: ${2}", asic.Name, bestCoin.Ticker, Math.Round(newCoinBestPrice, 2)), Enums.LogType.ProfitSwitching);
                                                 }
 
                                                 if (asic.MiningMode == MiningMode.CoinStacking || asic.MiningMode == MiningMode.DiversificationByStacking)
