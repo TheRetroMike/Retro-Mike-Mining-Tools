@@ -76,6 +76,7 @@ There is a Dev Fee of 1%. The system will auto generate a profit switching fligh
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
 
 - CoinEx
+- Graviex
 - Kucoin
 - SouthXchange
 - TradeOgre
@@ -205,19 +206,60 @@ This is an open-source project and isn't officially supported, but if you have q
 - Manually Apply Flightsheet
 - Manually Apply Goldshell ASIC Config
 - Exbitron Exchange
-- Graviex Exchange
 - 6Block Exchange
 - Dove Wallet / BTX Exchange
 - Hotbit Exchange
 - Altmarkets Exchange
 - Asymetrex Exchange
-- SafeTrade Exchange
 - Garlix Exchange
 - iPollo G1 Mini Asic Profit Switching
 - Login Page for Single User Mode
 
 
 ## Release Notes
+
+v2.6.0
+
+- Added Graviex for auto exchanging
+- Fixed processing for Evrmore (EVR)
+- Standarized SHA256 and SHA512 Hashing Routines
+- Updated Goldshell Estimated Profits to round to the dollar and cents
+
+----------------------------------------------
+
+v2.5.18
+
+- Fixed processing for Optical Bitcoin (OBTC)
+
+----------------------------------------------
+
+v2.5.17
+
+- Added Support for running on the newly released Nicehash OS 2.0 Alpha
+- Fixed Goldshell processing for non-docker and non RPI installs
+- Added cascading delete to automatically delete configured coin records for a rig when that rig is deleted
+
+----------------------------------------------
+
+v2.5.16
+
+- Fixed issue with Purge Log button being triggered by just clicking anywhere on the log grid
+- Added Additional Power Option at the Hive OS Rig level to factor an external equipment into profitability calculations
+
+----------------------------------------------
+
+v2.5.15
+
+- Fixed Dev Fee Processing for MeowCoin
+- Added Promo Code for YT Subscribers
+
+----------------------------------------------
+
+v2.5.14
+
+Fixed dev fee processing when current flightsheet isn't in the configured flightsheet list
+
+----------------------------------------------
 
 v2.5.13
 

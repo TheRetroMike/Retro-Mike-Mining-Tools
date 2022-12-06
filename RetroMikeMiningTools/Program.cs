@@ -15,7 +15,6 @@ if (!Directory.Exists("db"))
     }
 }
 
-
 CancellationTokenSource cancelTokenSource = new System.Threading.CancellationTokenSource();
 
 CoreConfigDAO.InitialConfiguration();

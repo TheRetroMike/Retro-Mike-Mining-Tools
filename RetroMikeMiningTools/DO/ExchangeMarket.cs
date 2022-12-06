@@ -8,5 +8,6 @@
         public string MinTradeSize { get; set; }
         public string Bid { get; set; }
         public string Ask { get; set; }
+        public string Fee { get; set; }
     }
 }

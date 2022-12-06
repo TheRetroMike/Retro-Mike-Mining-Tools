@@ -6,6 +6,7 @@
         TradeOgre=1,
         CoinEx=2,
         SouthXchange=3,
-        Kucoin=4
+        Kucoin=4,
+        Graviex=5
     }
 }

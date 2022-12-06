@@ -22,6 +22,7 @@ namespace RetroMikeMiningTools.Common
             exchangeData = exchangeData.Concat(await Utilities.CoinExUtilities.GetTickers()).ToList(); //Coin Ex
             exchangeData = exchangeData.Concat(Utilities.SouthXchangeUtilities.GetTickers()).ToList(); //SouthXchange
             exchangeData = exchangeData.Concat(await Utilities.KucoinUtilities.GetTickers()).ToList(); //Coin Ex
+            exchangeData = exchangeData.Concat(Utilities.GraviexExchangeApiUtilities.GetTickers()).ToList(); //Graviex
         }
     }
 }

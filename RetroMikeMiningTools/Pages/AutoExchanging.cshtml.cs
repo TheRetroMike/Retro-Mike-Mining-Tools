@@ -133,11 +133,14 @@ namespace RetroMikeMiningTools.Pages
                 case Enums.Exchange.Kucoin:
                     balanceData = KucoinUtilities.GetBalances(exchangeRecord).Result;
                     break;
+                case Enums.Exchange.Graviex:
+                    balanceData = GraviexExchangeApiUtilities.GetWalletBalances(exchangeRecord);
+                    break;
                 default:
                     break;
             }
 
-            if (balanceData != null)
+            if (balanceData != null && balanceData.Count > 0)
             {
                 var coreConfig = CoreConfigDAO.GetCoreConfig();
                 if(multiUserMode)

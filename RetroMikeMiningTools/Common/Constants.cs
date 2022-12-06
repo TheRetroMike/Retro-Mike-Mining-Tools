@@ -33,6 +33,8 @@ namespace RetroMikeMiningTools.Common
 
         public static readonly string SOUTH_XCHANGE_TRADE_FEE = "0.3%";
 
+        public static readonly string GRAVIEX_API_BASE_PATH = "https://graviex.net/webapi/v3";
+
         public static readonly string PUSHOVER_APP_KEY = "aycs6oxrntbbifbrdkozr1ntpvimgh";
         public static readonly string PUSHOVER_USER_KEY = "udi31rrph9qz6t6qcuwgta4j3cocwm";
         public static readonly string IP_API = "http://ip-api.com/json";

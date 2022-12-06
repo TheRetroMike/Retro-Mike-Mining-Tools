@@ -43,6 +43,10 @@ namespace RetroMikeMiningTools.Jobs
                             Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Kucoin"), LogType.System, exchange.Username);
                             KucoinExchange.Process(exchange);
                             break;
+                        case Exchange.Graviex:
+                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Graviex"), LogType.System, exchange.Username);
+                            Graviex.Process(exchange);
+                            break;
                         default:
                             break;
                     }
