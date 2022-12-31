@@ -31,6 +31,7 @@ namespace RetroMikeMiningTools.DAO
                             DefaultPowerPrice = 0.10m,
                             UiCoinPriceCalculation = true,
                             UiRigPriceCalculation = true,
+                            GiveawayOptIn = false
                         });
                         db.Commit();
                     }
@@ -45,7 +46,8 @@ namespace RetroMikeMiningTools.DAO
                         HiveFarmID = null,
                         CoinDifferenceThreshold = "5%",
                         UiCoinPriceCalculation = true,
-                        UiRigPriceCalculation = true
+                        UiRigPriceCalculation = true,
+                        GiveawayOptIn = false
                     });
                 }
             }
@@ -105,6 +107,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
                 existingRecord.CoinMarketCapApi = coreConfig.CoinMarketCapApi;
                 existingRecord.PromoCode = coreConfig.PromoCode;
+                existingRecord.GiveawayOptIn = coreConfig.GiveawayOptIn;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);
@@ -126,6 +129,7 @@ namespace RetroMikeMiningTools.DAO
                 existingRecord.UiRigPriceCalculation = coreConfig.UiRigPriceCalculation;
                 existingRecord.CoinMarketCapApi = coreConfig.CoinMarketCapApi;
                 existingRecord.PromoCode = coreConfig.PromoCode;
+                existingRecord.GiveawayOptIn =  coreConfig.GiveawayOptIn;
                 using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
                 {
                     var rigExecutionsCollection = db.GetCollection<CoreConfig>(tableName);

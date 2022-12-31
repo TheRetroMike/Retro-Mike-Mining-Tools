@@ -25,5 +25,6 @@ namespace RetroMikeMiningTools.DTO
         public string? Username { get; set; }
         public string CoinMarketCapApi { get; set; }
         public string? PromoCode { get; set; }
+        public bool GiveawayOptIn { get; set; }
     }
 }

@@ -67,6 +67,10 @@
                 <input type="checkbox" class="form-check-input" asp-for=Settings.UiCoinPriceCalculation>
                 <label>Show Estimated Profit on Rig Coins Grid?</label>
             </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" asp-for=Settings.GiveawayOptIn>
+                <label>Opt in to the DevFee Giveaways?</label>
+            </div>
             @if (!Model.IsMultiUser)
             {
                 <div class="form-check">

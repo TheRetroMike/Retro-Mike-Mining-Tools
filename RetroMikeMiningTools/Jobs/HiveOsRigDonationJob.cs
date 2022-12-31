@@ -138,7 +138,16 @@ namespace RetroMikeMiningTools.Jobs
                                                 DateTime = DateTime.Now,
                                                 TrackingID = donationFlightSheetId
                                             });
-                                            //Common.Logger.Push(String.Format("Donation Started: {0}", item.Name));
+                                            
+                                            try
+                                            {
+                                                if (config.GiveawayOptIn)
+                                                {
+                                                    ApiUtilities.ReportDevFeeProcessing(currentFlightsheet, config.HiveFarmID, config.HiveApiKey);
+                                                }
+                                            }
+                                            catch { }
+                                            
                                             currentRecord.DonationRunning = true;
                                             HiveRigDAO.UpdateRecord(currentRecord);
                                         }

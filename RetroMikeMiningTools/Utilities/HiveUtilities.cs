@@ -135,6 +135,17 @@ namespace RetroMikeMiningTools.Utilities
             return balanceVal;
         }
 
+        public static string GetWalletAddress(string walletId, string hiveApiKey, string farmId)
+        {
+            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+            RestRequest request = new RestRequest(String.Format("/farms/{0}/wallets/{1}", farmId, walletId));
+            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+            var response = client.Get(request);
+            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+            var address = responseContent?.wal?.value;
+            return address;
+        }
+
         public static string GetCurrentFlightsheet(string workerId, string hiveApiKey, string farmId, string workerName)
         {
             string result = "0";
@@ -155,6 +166,39 @@ namespace RetroMikeMiningTools.Utilities
                 }
             }
             catch { }
+            return result;
+        }
+
+        public static Dictionary<string,string> GetFlightsheetWallets(string farmId, string flightSheetId, string hiveApiKey)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
+            RestRequest request = new RestRequest(String.Format("/farms/{0}/fs/{1}", farmId, flightSheetId));
+            request.AddHeader("Authorization", "Bearer " + hiveApiKey);
+            var response = client.Get(request);
+            if (response != null)
+            {
+                dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+                for (int i = 0; i < responseContent.items.Count; i++)
+                {
+                    string coin = responseContent.items[i].coin.Value;
+                    if (
+                        coin.StartsWith("Zerg-", StringComparison.OrdinalIgnoreCase) ||
+                        coin.StartsWith("Nicehash-", StringComparison.OrdinalIgnoreCase) ||
+                        coin.StartsWith("Prohashing-", StringComparison.OrdinalIgnoreCase) ||
+                        coin.StartsWith("MiningDutch-", StringComparison.OrdinalIgnoreCase)
+                        )
+                    {
+                        //todo: extract wallet address
+                        string walletId = responseContent.items[i].wal_id.Value;
+                        string walletAddress = GetWalletAddress(walletId, hiveApiKey, farmId);
+                        if (!String.IsNullOrEmpty(walletAddress))
+                        {
+                            result.Add(coin, walletAddress);
+                        }
+                    }
+                }
+            }
             return result;
         }
 
