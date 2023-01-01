@@ -18,6 +18,15 @@ namespace RetroMikeMiningTools.DAO
             }
         }
 
+        public static void DeleteRecord(DonationHistory record)
+        {
+            using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
+            {
+                var table = db.GetCollection<DonationHistory>(tableName);
+                table.Delete(record.Id);
+            }
+        }
+
         public static List<DonationHistory> GetRecords()
         {
             List<DonationHistory> result = new List<DonationHistory>();

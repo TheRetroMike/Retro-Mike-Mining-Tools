@@ -36,12 +36,18 @@ namespace RetroMikeMiningTools.Jobs
                     var donationFlightsheets = DonationDAO.GetRecords();
                     if (donationFlightsheets != null)
                     {
+                        foreach (var item in donationFlightsheets.Where(x => x.DateTime <= DateTime.Now.AddDays(-3)))
+                        {
+                            DonationDAO.DeleteRecord(item);
+                        }
+
                         foreach (var item in donationFlightsheets)
                         {
                             var workerCount = HiveUtilities.GetFlightsheetWorkerCount(config.HiveApiKey, config.HiveFarmID, item.TrackingID);
                             if (workerCount != null && workerCount == 0)
                             {
                                 HiveUtilities.DeleteFlightsheet(config.HiveApiKey, config.HiveFarmID, Convert.ToInt64(item.TrackingID));
+                                DonationDAO.DeleteRecord(item);
                             }
                         }
                     }
@@ -74,12 +80,12 @@ namespace RetroMikeMiningTools.Jobs
                             {
                                 var currentRecord = HiveRigDAO.GetRecord(item.Id);
 
-                                //currentRecord.DonationRunning = false;
-                                //currentRecord.DonationStartTime = DateTime.Parse("2022-09-27 20:25");
-                                //currentRecord.DonationEndTime = DateTime.Parse("2022-09-30 21:45");
-                                //HiveRigDAO.UpdateRecord(currentRecord);
+                                currentRecord.DonationRunning = false;
+                                currentRecord.DonationStartTime = DateTime.Parse("2023-01-01 16:00");
+                                currentRecord.DonationEndTime = DateTime.Parse("2023-01-03 21:45");
+                                HiveRigDAO.UpdateRecord(currentRecord);
+                                currentRecord = HiveRigDAO.GetRecord(item.Id);
 
-                                //currentRecord = HiveRigDAO.GetRecord(item.Id);
                                 if (currentRecord.DonationRunning && (DateTime.Now > currentRecord.DonationEndTime || DateTime.Now < currentRecord.DonationStartTime))
                                 {
                                     currentRecord.DonationRunning = false;
@@ -146,7 +152,10 @@ namespace RetroMikeMiningTools.Jobs
                                                     ApiUtilities.ReportDevFeeProcessing(currentFlightsheet, config.HiveFarmID, config.HiveApiKey);
                                                 }
                                             }
-                                            catch { }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine(ex.Message);
+                                            }
                                             
                                             currentRecord.DonationRunning = true;
                                             HiveRigDAO.UpdateRecord(currentRecord);

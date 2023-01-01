@@ -142,7 +142,7 @@ namespace RetroMikeMiningTools.Utilities
             request.AddHeader("Authorization", "Bearer " + hiveApiKey);
             var response = client.Get(request);
             dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
-            var address = responseContent?.wal?.value;
+            var address = responseContent?.wal?.Value;
             return address;
         }
 
@@ -189,8 +189,7 @@ namespace RetroMikeMiningTools.Utilities
                         coin.StartsWith("MiningDutch-", StringComparison.OrdinalIgnoreCase)
                         )
                     {
-                        //todo: extract wallet address
-                        string walletId = responseContent.items[i].wal_id.Value;
+                        string walletId = Convert.ToString(responseContent.items[i].wal_id);
                         string walletAddress = GetWalletAddress(walletId, hiveApiKey, farmId);
                         if (!String.IsNullOrEmpty(walletAddress))
                         {

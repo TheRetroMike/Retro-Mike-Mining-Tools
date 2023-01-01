@@ -90,6 +90,7 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="bc1qp4j2cqxj29ec9vfl3jnd0t8zxczn37dm4effwm",Ticker="OBTC"},
                     new FlightsheetRecord(){Wallet="EZCVMN2ZRMtQP1YddkgTZjB3wJtK2oPyw6",Ticker="EVR"},
                     new FlightsheetRecord(){Wallet="1GikdAT4gkWGVt2wTEAQkLorphhQDMs9yn",Ticker="NOVO"},
+                    new FlightsheetRecord(){Wallet="grin1yqh66h3cwaqsaspp6h7px2ycpe3yysdca57zv6ghsekzl0vq6grqh4zllt", Ticker="GRIN"},
 
 
                     new FlightsheetRecord(){Wallet="DJm56pVkWqQj26A2UFeafwFw1bY632trLY",Ticker="DOGE", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},

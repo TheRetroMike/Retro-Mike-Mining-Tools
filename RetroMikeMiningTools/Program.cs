@@ -134,7 +134,7 @@ builder.Services.AddQuartz(q =>
         q.ScheduleJob<HiveOsRigDonationJob>(trigger => trigger
                 .WithIdentity("Donation Trigger")
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
-                .WithCronSchedule("25 0/1 * 1/1 * ? *")
+                .WithCronSchedule("25 0/2 * 1/1 * ? *")
                 .WithDescription("Donation Trigger")
                 .UsingJobData("multi_user_mode", multiUserMode)
             );
