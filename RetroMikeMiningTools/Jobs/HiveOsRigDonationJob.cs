@@ -80,11 +80,11 @@ namespace RetroMikeMiningTools.Jobs
                             {
                                 var currentRecord = HiveRigDAO.GetRecord(item.Id);
 
-                                currentRecord.DonationRunning = false;
-                                currentRecord.DonationStartTime = DateTime.Parse("2023-01-01 16:00");
-                                currentRecord.DonationEndTime = DateTime.Parse("2023-01-03 21:45");
-                                HiveRigDAO.UpdateRecord(currentRecord);
-                                currentRecord = HiveRigDAO.GetRecord(item.Id);
+                                //currentRecord.DonationRunning = false;
+                                //currentRecord.DonationStartTime = DateTime.Parse("2023-01-01 16:00");
+                                //currentRecord.DonationEndTime = DateTime.Parse("2023-01-03 21:45");
+                                //HiveRigDAO.UpdateRecord(currentRecord);
+                                //currentRecord = HiveRigDAO.GetRecord(item.Id);
 
                                 if (currentRecord.DonationRunning && (DateTime.Now > currentRecord.DonationEndTime || DateTime.Now < currentRecord.DonationStartTime))
                                 {

@@ -58,7 +58,30 @@ if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
     CoreConfigDAO.UpdateCoreConfig(coreConfig);
 }
 
-builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
+var forceDevFeeReset = builder.Configuration.GetValue<string>(Constants.RESET_DEVFEE);
+if (!String.IsNullOrEmpty(forceDevFeeReset) && forceDevFeeReset == "true")
+{
+    foreach(var configRecord in CoreConfigDAO.GetCoreConfigs())
+    {
+        var rigs = HiveRigDAO.GetRecords(configRecord, false, configRecord.Username, multiUserMode);
+        foreach (var rig in rigs)
+        {
+            if (rig != null)
+            {
+                var secondsInDay = 86400;
+                var donationSecondsInDay = secondsInDay * 0.01m;
+                var donationSecondsPerRun = donationSecondsInDay;
+                var startTime = DateTime.Now;
+                var endTime = startTime.AddSeconds(Convert.ToDouble(donationSecondsPerRun));
+                rig.DonationStartTime = startTime;
+                rig.DonationEndTime = endTime;
+                HiveRigDAO.UpdateRecord(rig);
+            }
+        }
+    }
+}
+
+    builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
 if (multiUserMode)
 {
     var cert = builder.Configuration.GetValue<string>("cert");

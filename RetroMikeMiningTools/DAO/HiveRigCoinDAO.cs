@@ -136,10 +136,13 @@ namespace RetroMikeMiningTools.DAO
                         var zergCoin = zergCoinData.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                         if (zergCoin != null)
                         {
-                            var mBtcPerMhAmount = Convert.ToDecimal(zergCoin.BtcRevenue) / (Convert.ToDecimal(zergCoin.HashRateFactor) / 1000);
-                            var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
-                            var btcRevenue = mBtcRevenue / 1000;
-                            primaryRevenue = btcRevenue;
+                            if (zergCoin.HashRateFactor != "False")
+                            {
+                                var mBtcPerMhAmount = Convert.ToDecimal(zergCoin.BtcRevenue) / (Convert.ToDecimal(zergCoin.HashRateFactor) / 1000);
+                                var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
+                                var btcRevenue = mBtcRevenue / 1000;
+                                primaryRevenue = btcRevenue;
+                            }
                         }
                     }
                     else if (item.Ticker.StartsWith("Prohashing-"))
@@ -241,10 +244,13 @@ namespace RetroMikeMiningTools.DAO
                             var zergCoin = zergCoinData.Where(x => x.Ticker.Equals(item.SecondaryTicker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                             if (zergCoin != null)
                             {
-                                var mBtcPerMhAmount = Convert.ToDecimal(zergCoin.BtcRevenue) / (Convert.ToDecimal(zergCoin.HashRateFactor) / 1000);
-                                var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
-                                var btcRevenue = mBtcRevenue / 1000;
-                                secondaryRevenue = btcRevenue;
+                                if (zergCoin.HashRateFactor != "False")
+                                {
+                                    var mBtcPerMhAmount = Convert.ToDecimal(zergCoin.BtcRevenue) / (Convert.ToDecimal(zergCoin.HashRateFactor) / 1000);
+                                    var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
+                                    var btcRevenue = mBtcRevenue / 1000;
+                                    secondaryRevenue = btcRevenue;
+                                }
                             }
                         }
                         else if (item.SecondaryTicker.StartsWith("Prohashing-"))

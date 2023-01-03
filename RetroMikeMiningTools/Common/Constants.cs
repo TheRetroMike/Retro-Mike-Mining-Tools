@@ -23,6 +23,7 @@ namespace RetroMikeMiningTools.Common
         public static readonly string FLUX_MODE = "flux_mode";
         public static readonly string PARAMETER_MAX_USER_COUNT = "max_user_count";
         public static readonly string OVERRIDE_PORT = "override_port";
+        public static readonly string RESET_DEVFEE = "reset_devfee";
         public static readonly string MULTI_USER_MODE_DONATION = "5%";
 
         public static readonly string TX_BIT_API_BASE_PATH = "https://api.txbit.io/api";
