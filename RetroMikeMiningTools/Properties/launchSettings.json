@@ -2,7 +2,6 @@
   "profiles": {
     "RetroMikeMiningTools": {
       "commandName": "Project",
-      "commandLineArgs": "--reset_devfee=true",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

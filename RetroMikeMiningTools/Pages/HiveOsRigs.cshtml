@@ -53,14 +53,14 @@
             columns.Bound(column => column.Name);
             columns.Bound(column => column.MiningMode).Width(200);
             columns.Bound(column => column.PinnedTicker);
-            columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned ZergPool Algo");
-            columns.Bound(column => column.AdditionalPower);
+            columns.Bound(column => column.PinnedZergAlgo).ClientHeaderTemplate("Pinned<br/>ZergPool<br/>Algo");
+            columns.Bound(column => column.AdditionalPower).ClientHeaderTemplate("Additional<br/>Power");
             columns.Bound(column => column.WhatToMineEndpoint).ClientHeaderTemplate("WTM Endpoint").ClientTemplate("#=wtmEndpointTemplate(WhatToMineEndpoint)#");
             if(!Model.IsMultiUser)
             {
                 columns.Bound(column => column.Profit).ClientFooterTemplate("Profit: #=kendo.toString(sum,'c2')#");
-                columns.Bound(column => column.SmartPlugType);
-                columns.Bound(column => column.SmartPlugHost);
+                columns.Bound(column => column.SmartPlugType).ClientHeaderTemplate("Smart<br/>Plug<br/>Type");
+                columns.Bound(column => column.SmartPlugHost).ClientHeaderTemplate("Smart<br/>Plug<br/>Host");
                 columns.Bound(column => column.RigMinProfit);
             }
             columns.Bound(column => column.Enabled);
@@ -68,7 +68,8 @@
             {
                 column.Edit();
                 column.Destroy();
-            }).Width(200);
+                column.Custom("Clone").Click("clone");
+            }).Width(250);
         })
         .DataSource(ds => ds.Ajax()
         .Sort(x => x.Add("Name"))
@@ -206,6 +207,34 @@
 
     function dataBindCompleted(){
         //alert('completed');
+    }
+
+    function clone(e){
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        if(dataItem){
+            var workerId = dataItem.id;
+            $.ajax({
+                url: "/HiveOsRigs?handler=CloneRig",
+                type: 'POST',
+                data: {"workerId":dataItem.id},
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    //alert('refresh grid');
+                    //$("#rigsGrid").data("kendoGrid").bind("dataBound", onGridEdit(e));
+                    //$('#rigsGrid').data('kendoGrid').dataSource.read();
+                    //$('#rigsGrid').data('kendoGrid').refresh();
+                    location.reload();
+                },
+                failure: function (response) {
+                    alert('Unable to clone');
+                },
+                error: function (response) {
+                    alert('Unable to clone');
+                }
+            });
+        }
     }
 
     function handleRigSelection(){

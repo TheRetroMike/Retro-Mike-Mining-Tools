@@ -461,6 +461,28 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult("Hive OS Rigs Imported");
         }
 
+        public JsonResult OnPostCloneRig(int workerId)
+        {
+            var selectedRig = HiveRigDAO.GetRecord(workerId);
+            var coins = HiveRigCoinDAO.GetRecords(workerId, flightsheets?.ToList(), Config, false, false, multiUserMode);
+            if (selectedRig != null)
+            {
+                selectedRig.Id = 0;
+                selectedRig.Name = String.Format("{0}_COPY", selectedRig.Name);
+                var newId = HiveRigDAO.AddRig(selectedRig);
+                
+                if (coins != null)
+                {
+                    foreach (var coin in coins)
+                    {
+                        coin.Id = 0;
+                        coin.WorkerId = newId;
+                        HiveRigCoinDAO.AddRecord(coin);
+                    }
+                }
+            }
+            return new JsonResult("Cloned");
+        }
 
         public JsonResult OnPostHiveOsRowSelect(HiveOsRigConfig workerId)
         {

@@ -20,12 +20,12 @@ namespace RetroMikeMiningTools.DAO
             }
         }
 
-        public static void AddRig(HiveOsRigConfig rigConfig)
+        public static int AddRig(HiveOsRigConfig rigConfig)
         {
             using (var db = new LiteDatabase(new ConnectionString { Filename = Constants.DB_FILE, Connection = ConnectionType.Shared, ReadOnly = false }))
             {
                 var rigExecutionsCollection = db.GetCollection<HiveOsRigConfig>(tableName);
-                rigExecutionsCollection.Insert(new HiveOsRigConfig()
+                var result = rigExecutionsCollection.Insert(new HiveOsRigConfig()
                 {
                     Name = rigConfig.Name,
                     DonationAmount = rigConfig.DonationAmount,
@@ -41,6 +41,7 @@ namespace RetroMikeMiningTools.DAO
                     RigMinProfit = rigConfig.RigMinProfit,
                     AdditionalPower = rigConfig.AdditionalPower
                 });
+                return result.AsInt32;
             }
         }
 
