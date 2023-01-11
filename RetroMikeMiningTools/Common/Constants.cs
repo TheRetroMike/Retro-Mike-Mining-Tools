@@ -121,6 +121,7 @@ namespace RetroMikeMiningTools.Common
                 {
                     //new Promos(){ Code="484f4c494441593232", DonationPercentage="0.00%", CutoffDate=DateTime.Parse("2023-01-01")},
                     //new Promos(){ Code="474f4c44454e4841574b", DonationPercentage="0%", CutoffDate=DateTime.Parse("2023-04-15")}
+                    new Promos(){ Code="5445525241484f5354494e47", DonationPercentage="0%", CutoffDate=DateTime.Parse("2025-01-11")}
                 };
             }
         }
