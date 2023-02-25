@@ -17,16 +17,29 @@ namespace RetroMikeMiningTools.Pages
         
         IHostApplicationLifetime appLifetime;
         private static IConfiguration systemConfiguration;
+        private IWebHostEnvironment _hostEnvironment;
 
         public bool IsMultiUser { get; set; }
         public static bool multiUserMode { get;set; }
 
         public static string? username { get; set; }
 
-        public CoreModel(IHostApplicationLifetime hostLifetime, IConfiguration configuration)
+        public CoreModel(IHostApplicationLifetime hostLifetime, IConfiguration configuration, IWebHostEnvironment hostEnvironment)
         {
             appLifetime = hostLifetime;
             systemConfiguration = configuration;
+            _hostEnvironment = hostEnvironment;
+        }
+
+        public ActionResult OnPostDownloadBackupFile()
+        {
+            //
+            //return File(path, "application/octet-stream",
+            //            "retromikeminingtools.db");
+
+            string path = Path.Combine(_hostEnvironment.ContentRootPath, "db", "retromikeminingtools.db");
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            return File(fileBytes, "application/x-msdownload", "retromikeminingtools.db");
         }
 
 

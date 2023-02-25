@@ -100,7 +100,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                         if (balanceRecord.Available > exchange.AutoWithdrawlMin)
                         {
                             var withdrawlAmount = Convert.ToDecimal(balanceRecord.Available - (exchange.WithdrawlFee ?? 0.00m));
-                            await client.SpotApi.Account.WithdrawAsync(balanceRecord.Asset, exchange.AutoWithdrawlAddress, withdrawlAmount);
+                            var withdrawlResult = await client.SpotApi.Account.WithdrawAsync(balanceRecord.Asset, exchange.AutoWithdrawlAddress, withdrawlAmount);
                             Common.Logger.Log("Kucoin: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
                         }
                     }

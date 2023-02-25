@@ -107,6 +107,7 @@
         @if (!Model.IsMultiUser)
         {
             <input type="button" value="Restart Services" class="btn btn-primary" onclick="Restart()"/>
+            <button type="submit" asp-page-handler="DownloadBackupFile"class="btn btn-primary">Download Backup</button>
         }
         </div>
     </div>
