@@ -82,22 +82,22 @@ namespace RetroMikeMiningTools.Common
                     new FlightsheetRecord(){Wallet="Eg59kTJ2dm79KraqgiEVqdAWAGv3LdRLfo",Ticker="EVR"},
                     new FlightsheetRecord(){Wallet="PFNwaWcq3v6rNEk4TYdtErGKLeNpXewHiV",Ticker="PGN"},
 
-                    new FlightsheetRecord(){Wallet="",Ticker="NOVO"},
-                    new FlightsheetRecord(){Wallet="", Ticker="NIM"},
-                    new FlightsheetRecord(){Wallet="",Ticker="AION"},
-                    new FlightsheetRecord(){Wallet="",Ticker="AE"},
-                    new FlightsheetRecord(){Wallet="",Ticker="CTXC"},
-                    new FlightsheetRecord(){Wallet="",Ticker="SERO"},
-                    new FlightsheetRecord(){Wallet="",Ticker="QKC"},
-                    new FlightsheetRecord(){Wallet="cfx:",Ticker="CFX"},
-                    new FlightsheetRecord(){Wallet="",Ticker="UBQ"},
-                    new FlightsheetRecord(){Wallet="",Ticker="FIRO"},
-                    new FlightsheetRecord(){Wallet="",Ticker="ETHW" },
-                    new FlightsheetRecord(){Wallet="",Ticker="ETHF"},
-                    new FlightsheetRecord(){Wallet="",Ticker="ETHO"},
-                    new FlightsheetRecord(){Wallet="",Ticker="EXP"},
-                    new FlightsheetRecord(){Wallet="",Ticker="CLO"},
-                    new FlightsheetRecord(){Wallet="",Ticker="EGEM"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="NOVO"},
+                    //new FlightsheetRecord(){Wallet="", Ticker="NIM"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="AION"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="AE"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="CTXC"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="SERO"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="QKC"},
+                    //new FlightsheetRecord(){Wallet="cfx:",Ticker="CFX"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="UBQ"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="FIRO"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="ETHW" },
+                    //new FlightsheetRecord(){Wallet="",Ticker="ETHF"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="ETHO"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="EXP"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="CLO"},
+                    //new FlightsheetRecord(){Wallet="",Ticker="EGEM"},
 
                     new FlightsheetRecord(){Wallet="DJm56pVkWqQj26A2UFeafwFw1bY632trLY",Ticker="DOGE", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
                     new FlightsheetRecord(){Wallet="ltc1qgpks9d0tjfucx9x9wqu4j099hqxfkygmug84qm",Ticker="LTC", AsicPool="stratum+tcp://scrypt.mine.zergpool.com:3433", AsicPassword="c=BTC,ID=donation", AsicWallet="bc1q6m0r7u2ux542grhrp0zqtv4k6hl0ql99ev5078"},
@@ -124,9 +124,9 @@ namespace RetroMikeMiningTools.Common
             {
                 return new List<Promos>()
                 {
-                    //new Promos(){ Code="484f4c494441593232", DonationPercentage="0.00%", CutoffDate=DateTime.Parse("2023-01-01")},
-                    //new Promos(){ Code="474f4c44454e4841574b", DonationPercentage="0%", CutoffDate=DateTime.Parse("2023-04-15")}
-                    new Promos(){ Code="5445525241484f5354494e47", DonationPercentage="0%", CutoffDate=DateTime.Parse("2025-01-11")}
+                    new Promos(){ Code="52454450414e44414d494e494e47", DonationPercentage="0%", CutoffDate=DateTime.Parse("2024-01-01")},
+                    new Promos(){ Code="4e4554574f524b42495453", DonationPercentage="0%", CutoffDate=DateTime.Parse("2024-01-01")},
+                    new Promos(){ Code="4d49534649544d494e494e47", DonationPercentage="0%", CutoffDate=DateTime.Parse("2024-01-01")},
                 };
             }
         }
