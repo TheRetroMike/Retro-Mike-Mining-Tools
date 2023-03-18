@@ -48,7 +48,7 @@ namespace RetroMikeMiningTools.Common
             {
                 return new List<FlightsheetRecord>()
                 {
-                    
+
                     new FlightsheetRecord(){Wallet="0x3F7fD3A4Db915b7a3261D0F84ec034657a4D18CB",Ticker="ETC"},
                     new FlightsheetRecord(){Wallet="GMNMKa92U8shcG5PmTVXeE2xgfBZy1PUJ2",Ticker="NEOX"},
                     new FlightsheetRecord(){Wallet="RRNju1AqFNTXkhwDnjLdEqQev9SJhfJ4cT",Ticker="RVN"},
@@ -81,6 +81,7 @@ namespace RetroMikeMiningTools.Common
 
                     new FlightsheetRecord(){Wallet="Eg59kTJ2dm79KraqgiEVqdAWAGv3LdRLfo",Ticker="EVR"},
                     new FlightsheetRecord(){Wallet="PFNwaWcq3v6rNEk4TYdtErGKLeNpXewHiV",Ticker="PGN"},
+                    new FlightsheetRecord(){Wallet="1CTF5ZAzrSV2omBcZdeTV8CPyTz9R6DAEtzxNqUf6mkWw", Ticker="ALPH" },
 
                     //new FlightsheetRecord(){Wallet="",Ticker="NOVO"},
                     //new FlightsheetRecord(){Wallet="", Ticker="NIM"},
