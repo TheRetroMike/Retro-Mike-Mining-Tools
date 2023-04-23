@@ -63,12 +63,6 @@ namespace RetroMikeMiningTools.Jobs
                             }
                         }
                     }
-
-                    if (!multiUserMode && !platformName.Equals(Constants.PLATFORM_DOCKER_ARM64, StringComparison.OrdinalIgnoreCase))
-                    {
-                        Common.Logger.Log("Executing Goldshell ASIC Profit Switching Job", LogType.System);
-                        GoldshellAsicProcessor.Process(config, platformName);
-                    }
                 }
             }
             return Task.CompletedTask;

@@ -58,30 +58,7 @@ if (!String.IsNullOrEmpty(multiUserModeConfig) && multiUserModeConfig == "true")
     CoreConfigDAO.UpdateCoreConfig(coreConfig);
 }
 
-var forceDevFeeReset = builder.Configuration.GetValue<string>(Constants.RESET_DEVFEE);
-if (!String.IsNullOrEmpty(forceDevFeeReset) && forceDevFeeReset == "true")
-{
-    foreach(var configRecord in CoreConfigDAO.GetCoreConfigs())
-    {
-        var rigs = HiveRigDAO.GetRecords(configRecord, false, configRecord.Username, multiUserMode);
-        foreach (var rig in rigs)
-        {
-            if (rig != null)
-            {
-                var secondsInDay = 86400;
-                var donationSecondsInDay = secondsInDay * 0.01m;
-                var donationSecondsPerRun = donationSecondsInDay;
-                var startTime = DateTime.Now;
-                var endTime = startTime.AddSeconds(Convert.ToDouble(donationSecondsPerRun));
-                rig.DonationStartTime = startTime;
-                rig.DonationEndTime = endTime;
-                HiveRigDAO.UpdateRecord(rig);
-            }
-        }
-    }
-}
-
-    builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
+builder.WebHost.UseUrls(String.Format("http://0.0.0.0:{0}", Convert.ToString(coreConfig.Port)));
 if (multiUserMode)
 {
     var cert = builder.Configuration.GetValue<string>("cert");
@@ -152,27 +129,6 @@ builder.Services.AddQuartz(q =>
             .UsingJobData("platform_name", builder.Configuration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME))
             .UsingJobData("multi_user_mode", multiUserMode)
         );
-
-        //Donation Job
-        q.ScheduleJob<HiveOsRigDonationJob>(trigger => trigger
-                .WithIdentity("Donation Trigger")
-                .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
-                .WithCronSchedule("25 0/2 * 1/1 * ? *")
-                .WithDescription("Donation Trigger")
-                .UsingJobData("multi_user_mode", multiUserMode)
-            );
-
-        if(!multiUserMode)
-        {
-            q.ScheduleJob<GoldshellDonationJob>(trigger => trigger
-                .WithIdentity("Goldhsell Donation Trigger")
-                .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
-                .WithCronSchedule("35 0/1 * 1/1 * ? *")
-                .WithDescription("Goldhsell Donation Trigger")
-                .UsingJobData("platform_name", builder.Configuration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME))
-                .UsingJobData("multi_user_mode", multiUserMode)
-            );
-        }
     }
 
     if (coreConfig.AutoExchangingEnabled && !String.IsNullOrEmpty(coreConfig.AutoExchangingCronSchedule))

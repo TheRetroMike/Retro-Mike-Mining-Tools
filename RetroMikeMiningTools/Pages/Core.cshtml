@@ -36,10 +36,6 @@
                 </div>
             }
             <div class="form-group">
-                <label>Promo Code</label>  
-                <input asp-for=Settings.PromoCode class="form-control" />
-            </div>
-            <div class="form-group">
                 <label>Default Power Price</label>  
                 <input asp-for=Settings.DefaultPowerPrice class="form-control" />
             </div>
@@ -66,10 +62,6 @@
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" asp-for=Settings.UiCoinPriceCalculation>
                 <label>Show Estimated Profit on Rig Coins Grid?</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" asp-for=Settings.GiveawayOptIn>
-                <label>Opt in to the DevFee Giveaways?</label>
             </div>
             @if (!Model.IsMultiUser)
             {

@@ -15,19 +15,6 @@ wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/dow
 unzip  -o -d /usr/retro-mike-mining-tools RetroMikeMiningTools.zip
 rm RetroMikeMiningTools.zip
 
-if [ -f "$CHROME_DRIVER" ]; then
-    echo "Chromedriver already installed"
-else
-    cd "$APP_FOLDER"
-    apt-get install -y libappindicator1 fonts-liberation 
-    apt-get -f install -y
-    dpkg --configure -a
-    apt-get install -y chromium-browser
-    CHROME_MAJOR_VERSION=$(chromium-browser --product-version --no-sandbox | sed -E 's/\.[^.]*$//') && CHROME_DRIVER_VERSION=$(wget -O - "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION") && wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-    unzip chromedriver_linux64.zip
-    rm chromedriver_linux64.zip
-fi
-
 if [ -f "$SERVICE_FILE" ] ; then
         IS_ACTIVE=$(systemctl is-active $SERVICE_NAME)
         if [ "$IS_ACTIVE" == "active" ]; then

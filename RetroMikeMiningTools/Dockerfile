@@ -20,7 +20,7 @@ RUN apt-get install -y tzdata
 
 ARG TARGETPLATFORM
 ENV DOCKER_PLATFORM=${TARGETPLATFORM}
-RUN if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then apt-get update -y && apt-get install -y wget unzip chromium && CHROME_MAJOR_VERSION=$(chromium --product-version --no-sandbox | sed -E 's/\.[^.]*$//') && CHROME_DRIVER_VERSION=$(wget -O - "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION") && wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip; fi
+#RUN if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then apt-get update -y && apt-get install -y wget unzip chromium && CHROME_MAJOR_VERSION=$(chromium --product-version --no-sandbox | sed -E 's/\.[^.]*$//') && CHROME_DRIVER_VERSION=$(wget -O - "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION") && wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip; fi
 
 # MultiUser Flux: 
 #ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM} --multi_user_mode=true --flux_mode=true

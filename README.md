@@ -27,14 +27,13 @@
 
 Overview Video: https://youtu.be/Yp5bNBCuqQs
 
-This is a web and service based app that can connect to your Hive OS account or Goldshell ASIC's, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
+This is a web and service based app that can connect to your Hive OS account, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
 
 This app was designed to be installed on a server on a Hive OS Rig on your network (or on any server on your network that is always running). If you are unable to host yourself due to network restrictions, there is a hosted version that can be used.
 
 ## Features
 - Web based management and monitoring dashboard 
 - Hive OS GPU Rig Profit Switching
-- Goldshell ASIC Profit Switching and auto algo switching
 - Built-In Scheduler that gives you full control over how frequently it tries to profit switch
 - Auto Exchanging of coins utilizing your own exchange accounts
 - Calculations for any combination of up to 2 coins (i.e., GPU+CPU rig or just a mixed GPU rig)
@@ -69,8 +68,8 @@ When configuring your Hive OS Rig, you can specify an "Additional / Misc Power" 
 - Always set the power to the total system power
 - When using override, leave hashrate blank as it will be overwritten with what is defined in the WTM Override Endpoints
 
-### Donation / Dev Fee
-There is a Dev Fee of 1%. The system will auto generate a profit switching flightsheet that matches your settings, but points to the DEV wallet. To ensures system stability. To prevent frequent hopping, the process runs once per day for approx 15 minutes and then switch back to your wallet.
+### Dev Fee
+There is no Dev Fee as of version 3.0.0.0. If you are running an older version, please upgrade.
 
 ## Auto Exchanging
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
@@ -147,9 +146,6 @@ i.e.:
 sudo docker pull theretromike/miningtools:single_user && sudo docker run -d --name RetroMikeMiningTools -p 8080:7000 -e TZ=America/Chicago -v /volume0/retromikeminingtools:/app/db --restart always theretromike/miningtools:single_user
 ```
 
-### Flux
-For Flux, please use the RetroMikeMiningTools App or just use the hosted environment at https://retromike.net
-
 ### Single-User Mode (Preferred)
 You can install the normal app in single user mode via docker with the following command.
 ```
@@ -202,21 +198,68 @@ If you would like to support me:
 This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/HsjJPCP2hp
 
 ## Roadmap
-- Auto Update
-- Manually Apply Flightsheet
-- Manually Apply Goldshell ASIC Config
-- Exbitron Exchange
-- 6Block Exchange
-- Dove Wallet / BTX Exchange
-- Hotbit Exchange
-- Altmarkets Exchange
-- Asymetrex Exchange
-- Garlix Exchange
-- iPollo G1 Mini Asic Profit Switching
-- Login Page for Single User Mode
+TBD
 
 
 ## Release Notes
+
+v3.0.0
+
+- Removed All Dev Fee's
+- Removed Goldshell ASIC
+- Removed Google Chrome Requirement
+- Backend Performance Improvements
+
+----------------------------------------------
+
+v2.9.0
+
+- Added DB Backup Option
+- Removed several devfee's
+- Updated dev fee's for known coins
+
+----------------------------------------------
+
+v2.8.0
+
+- Added ability to clone a rig. It will create a copy and also copy the full coin config list, including hashrates. 
+
+If using clone, just make sure to change the rig name to match your hive os rig name on the copied record.
+
+----------------------------------------------
+
+v2.7.3
+
+- Fixed profit switching for Zerg when the trying to auto exchange to ETH since they moved it to the non-Mineable algo
+- Fixed DevFee processing
+- Added command to reset DevFee if it gets stuck
+
+----------------------------------------------
+
+v2.7.2
+
+- Emergency fix for v 2.7.1 that was forcing dev fee to run when it shouldn't.
+
+----------------------------------------------
+
+v2.7.1
+
+- Fixed Dev Fee Reporting for the Giveaway Opt In
+- Fixed DevFee Flightsheet Cleanup
+- DevFee Optimizations
+- Added Grin DevFee
+
+----------------------------------------------
+
+v2.7.0
+
+This release adds supporting code for Dev Fee giveaways. Starting in Jan, 2023, I'll be doing a monthly 10% giveaway of the DevFee for each coin that received DevFee payouts. To be eligible, just ticket the Opt In checkbox and make sure your wallet tied to your flightsheet is a true wallet address and not a pool login username.
+
+- Added option to opt into DevFee giveaway
+- Updated all DevFee Wallet Addresses
+- Added reporting of mining coin and wallet if opted into the giveaway
+
+----------------------------------------------
 
 v2.6.0
 
