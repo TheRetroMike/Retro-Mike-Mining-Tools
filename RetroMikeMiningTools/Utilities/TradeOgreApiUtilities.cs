@@ -141,7 +141,19 @@ namespace RetroMikeMiningTools.Utilities
             orderRequest.AddParameter("price", rate);
             var orderResponse = orderClient.Post(orderRequest);
             dynamic orderResponseData = JsonConvert.DeserializeObject(orderResponse.Content);
-            result = String.Format("Created Sell Order on Trade Ogre for {0}", marketName);
+            var apiResult = Convert.ToBoolean(orderResponseData.success);
+            if (apiResult == true)
+            {
+                if (method== "/order/sell")
+                {
+                    result = String.Format("Created Sell Order on Trade Ogre for {0}", marketName);
+                }
+                else
+                {
+                    result = String.Format("Created Buy Order on Trade Ogre for {0}", marketName);
+                }
+            }
+            
             return result;
         }
     }

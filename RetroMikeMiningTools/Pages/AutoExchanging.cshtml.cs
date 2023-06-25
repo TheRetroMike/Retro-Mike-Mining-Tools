@@ -152,18 +152,20 @@ namespace RetroMikeMiningTools.Pages
                 {
                     List<String> marketList = balanceData.Select(x => x.Ticker).Distinct().ToList();
                     NoobsMuc.Coinmarketcap.Client.CoinmarketcapClient client = new NoobsMuc.Coinmarketcap.Client.CoinmarketcapClient(coreConfig?.CoinMarketCapApi);
-
-                    var marketData = client.GetCurrencyBySymbolList(marketList.ToArray(), "USD");
-                    if (marketData != null)
+                    if (marketList != null && marketList.Count > 0)
                     {
-                        foreach (var item in marketData)
+                        var marketData = client.GetCurrencyBySymbolList(marketList.ToArray(), "USD");
+                        if (marketData != null)
                         {
-                            var ticker = item.Symbol;
-                            var price = item.Price;
-                            var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                            if (balanceRecord != null)
+                            foreach (var item in marketData)
                             {
-                                balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
+                                var ticker = item.Symbol;
+                                var price = item.Price;
+                                var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                                if (balanceRecord != null)
+                                {
+                                    balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
+                                }
                             }
                         }
                     }

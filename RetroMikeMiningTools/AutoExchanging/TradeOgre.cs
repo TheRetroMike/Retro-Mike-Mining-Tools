@@ -39,11 +39,11 @@ namespace RetroMikeMiningTools.AutoExchanging
                         var currencyMarkets = new List<ExchangeMarket>();
                         if (tradingCurrencyStep)
                         {
-                            currencyMarkets = markets.Where(x => x.MarketCurrency.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase) && x.BaseCurrency.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
+                            currencyMarkets = markets.Where(x => x.MarketCurrency.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase) && x.BaseCurrency.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
                         else
                         {
-                            currencyMarkets = markets.Where(x => x.MarketCurrency.Equals(exchange.DestinationCoin.Ticker, StringComparison.OrdinalIgnoreCase) && x.BaseCurrency.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
+                            currencyMarkets = markets.Where(x => x.MarketCurrency.Equals(balance.Ticker, StringComparison.OrdinalIgnoreCase) && x.BaseCurrency.Equals(exchange.DestinationCoin.Ticker, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
                         if (currencyMarkets != null && currencyMarkets.Count == 1)
                         {
