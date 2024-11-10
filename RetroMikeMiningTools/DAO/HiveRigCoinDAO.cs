@@ -163,7 +163,7 @@ namespace RetroMikeMiningTools.DAO
                         {
                             var mBtcPerMhAmount = Convert.ToDecimal(algo.Estimate);
                             var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
-                            var btcRevenue = mBtcRevenue / 1000;
+                            var btcRevenue = mBtcRevenue / 1;//1000;
                             primaryRevenue = btcRevenue;
                         }
                     }

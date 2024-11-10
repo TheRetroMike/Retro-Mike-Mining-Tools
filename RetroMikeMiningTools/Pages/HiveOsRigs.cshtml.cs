@@ -171,6 +171,10 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.Algo = record.Ticker.Remove(0, 11);
                 }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("MiningDutch-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 12);
+                }
                 if (record.Ticker != null && record.Ticker.StartsWith("ZergProvider-"))
                 {
                     //record.Ticker = record.Ticker.Remove(0, 13);
@@ -184,6 +188,10 @@ namespace RetroMikeMiningTools.Pages
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
                 }
                 if (record.SecondaryTicker != null && record.SecondaryTicker.StartsWith("ZergProvider-"))
                 {
