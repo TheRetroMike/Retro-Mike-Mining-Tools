@@ -23,12 +23,12 @@ namespace RetroMikeMiningTools.Utilities
                     {
                         if (!result.Any(x => x.Ticker== subItem.base_unit.ToString().ToUpper()))
                         {
-                            result.Add(new Coin() { Exchange = Enums.Exchange.Graviex, Ticker = subItem.base_unit.ToString().ToUpper(), Name = subItem.base_unit.ToString().ToUpper() });
+                            //result.Add(new Coin() { Exchange = Enums.Exchange.Graviex, Ticker = subItem.base_unit.ToString().ToUpper(), Name = subItem.base_unit.ToString().ToUpper() });
                         }
 
                         if (!result.Any(x => x.Ticker == subItem.quote_unit.ToString().ToUpper()))
                         {
-                            result.Add(new Coin() { Exchange = Enums.Exchange.Graviex, Ticker = subItem.quote_unit.ToString().ToUpper(), Name = subItem.quote_unit.ToString().ToUpper() });
+                            //result.Add(new Coin() { Exchange = Enums.Exchange.Graviex, Ticker = subItem.quote_unit.ToString().ToUpper(), Name = subItem.quote_unit.ToString().ToUpper() });
                         }
                     }
                 }

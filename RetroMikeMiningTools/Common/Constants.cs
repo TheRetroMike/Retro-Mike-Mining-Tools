@@ -32,6 +32,9 @@ namespace RetroMikeMiningTools.Common
         public static readonly string TRADE_OGRE_API_BASE_PATH = "https://tradeogre.com/api/v1";
         public static readonly string TRADE_OGRE_TRADE_FEE = "0.2%";
 
+        public static readonly string XEGGEX_API_BASE_PATH = "https://api.xeggex.com/api/v2";
+        public static readonly string XEGGEX_TRADE_FEE = "0.2%";
+
         public static readonly string SOUTH_XCHANGE_TRADE_FEE = "0.3%";
 
         public static readonly string GRAVIEX_API_BASE_PATH = "https://graviex.net/webapi/v3";

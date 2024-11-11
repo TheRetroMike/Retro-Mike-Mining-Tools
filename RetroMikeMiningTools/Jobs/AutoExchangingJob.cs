@@ -23,10 +23,10 @@ namespace RetroMikeMiningTools.Jobs
                 {
                     switch (exchange.Exchange)
                     {
-                        case Exchange.TxBit:
-                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for TxBit"), LogType.System, exchange.Username);
-                            GenericExchange.Process(exchange, Constants.TX_BIT_API_BASE_PATH, Constants.TX_BIT_TRADE_FEE);
-                            break;
+                        //case Exchange.TxBit:
+                        //    Common.Logger.Log(String.Format("Executing Auto Exchanging Job for TxBit"), LogType.System, exchange.Username);
+                        //    GenericExchange.Process(exchange, Constants.TX_BIT_API_BASE_PATH, Constants.TX_BIT_TRADE_FEE);
+                        //    break;
                         case Exchange.TradeOgre:
                             Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Trade Ogre"), LogType.System, exchange.Username);
                             TradeOgre.Process(exchange);
@@ -35,17 +35,21 @@ namespace RetroMikeMiningTools.Jobs
                             Common.Logger.Log(String.Format("Executing Auto Exchanging Job for CoinEx"), LogType.System, exchange.Username);
                             CoinExExchange.Process(exchange);
                             break;
-                        case Exchange.SouthXchange:
-                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for SouthXchange"), LogType.System, exchange.Username);
-                            SouthXchange.Process(exchange);
-                            break;
+                        //case Exchange.SouthXchange:
+                        //    Common.Logger.Log(String.Format("Executing Auto Exchanging Job for SouthXchange"), LogType.System, exchange.Username);
+                        //    SouthXchange.Process(exchange);
+                        //    break;
                         case Exchange.Kucoin:
                             Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Kucoin"), LogType.System, exchange.Username);
                             KucoinExchange.Process(exchange);
                             break;
-                        case Exchange.Graviex:
-                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Graviex"), LogType.System, exchange.Username);
-                            Graviex.Process(exchange);
+                        //case Exchange.Graviex:
+                        //    Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Graviex"), LogType.System, exchange.Username);
+                        //    Graviex.Process(exchange);
+                        //    break;
+                        case Exchange.Xeggex:
+                            Common.Logger.Log(String.Format("Executing Auto Exchanging Job for Xeggex"), LogType.System, exchange.Username);
+                            Xeggex.Process(exchange);
                             break;
                         default:
                             break;

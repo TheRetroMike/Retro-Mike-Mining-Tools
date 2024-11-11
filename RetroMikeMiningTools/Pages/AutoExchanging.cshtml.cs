@@ -2,6 +2,8 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using RestSharp;
 using RetroMikeMiningTools.Common;
 using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DO;
@@ -118,23 +120,26 @@ namespace RetroMikeMiningTools.Pages
 
             switch (exchange)
             {
-                case Enums.Exchange.TxBit:
-                    balanceData = GenericExchangeApiUtilities.GetWalletBalances(Constants.TX_BIT_API_BASE_PATH, exchangeRecord).Where(x => x.Balance > 0.00m).ToList();
-                    break;
+                //case Enums.Exchange.TxBit:
+                //    balanceData = GenericExchangeApiUtilities.GetWalletBalances(Constants.TX_BIT_API_BASE_PATH, exchangeRecord).Where(x => x.Balance > 0.00m).ToList();
+                //    break;
                 case Enums.Exchange.TradeOgre:
                     balanceData = TradeOgreApiUtilities.GetBalances(exchangeRecord).Where(x => x.Balance > 0.00m).ToList();
                     break;
                 case Enums.Exchange.CoinEx:
                     balanceData = CoinExUtilities.GetBalances(exchangeRecord).Result;
                     break;
-                case Enums.Exchange.SouthXchange:
-                    balanceData = SouthXchangeUtilities.GetBalances(exchangeRecord);
-                    break;
+                //case Enums.Exchange.SouthXchange:
+                //    balanceData = SouthXchangeUtilities.GetBalances(exchangeRecord);
+                //    break;
                 case Enums.Exchange.Kucoin:
                     balanceData = KucoinUtilities.GetBalances(exchangeRecord).Result;
                     break;
-                case Enums.Exchange.Graviex:
-                    balanceData = GraviexExchangeApiUtilities.GetWalletBalances(exchangeRecord);
+                //case Enums.Exchange.Graviex:
+                //    balanceData = GraviexExchangeApiUtilities.GetWalletBalances(exchangeRecord);
+                //    break;
+                case Enums.Exchange.Xeggex:
+                    balanceData = XeggexUtilities.GetBalances(exchangeRecord).Where(x => x.Balance > 0.00m).ToList();
                     break;
                 default:
                     break;
@@ -151,21 +156,23 @@ namespace RetroMikeMiningTools.Pages
                 if (!String.IsNullOrEmpty(coreConfig?.CoinMarketCapApi))
                 {
                     List<String> marketList = balanceData.Select(x => x.Ticker).Distinct().ToList();
-                    NoobsMuc.Coinmarketcap.Client.CoinmarketcapClient client = new NoobsMuc.Coinmarketcap.Client.CoinmarketcapClient(coreConfig?.CoinMarketCapApi);
-                    if (marketList != null && marketList.Count > 0)
+
+                    var restClient = new RestClient("https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest");
+                    var request = new RestRequest(String.Format("?symbol={0}&convert=USD", String.Join(',', marketList)));
+                    request.AddHeader("X-CMC_PRO_API_KEY", coreConfig.CoinMarketCapApi);
+                    var response = restClient.Get(request);
+                    dynamic responseData = JsonConvert.DeserializeObject(response.Content);
+                    if (responseData.data != null)
                     {
-                        var marketData = client.GetCurrencyBySymbolList(marketList.ToArray(), "USD");
-                        if (marketData != null)
+                        foreach (var item in responseData.data)
                         {
-                            foreach (var item in marketData)
+                            var responseHeader = item.Name;
+                            var ticker = item.Value[0].symbol.Value;
+                            var price = item.Value[0].quote["USD"].price.Value;
+                            var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                            if (balanceRecord != null)
                             {
-                                var ticker = item.Symbol;
-                                var price = item.Price;
-                                var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                                if (balanceRecord != null)
-                                {
-                                    balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
-                                }
+                                balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
                             }
                         }
                     }

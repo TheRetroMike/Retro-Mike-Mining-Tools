@@ -1,12 +1,36 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk as build
+﻿#FROM ubuntu:focal as build
+FROM mcr.microsoft.com/dotnet/sdk as build
 
 WORKDIR /app
-
-COPY *.csproj ./
-COPY NuGet.Config ./
-RUN dotnet restore
+#ARG DEBIAN_FRONTEND=noninteractive
+#RUN apt-get update -y
+#RUN apt-get -y install wget
+#RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+#RUN dpkg -i packages-microsoft-prod.deb
+#RUN rm packages-microsoft-prod.deb
+#RUN apt-get update -y
+#RUN apt-get -y install dotnet-sdk
 
 COPY . ./
+
+
+
+#FROM mcr.microsoft.com/dotnet/sdk as build
+
+
+#COPY *.csproj ./
+#COPY NuGet.Config ./
+#COPY *.nupkg ./
+
+#RUN mkdir -p /nuget
+#copy *.nupkg /nuget/
+#RUN ls /app/nuget
+RUN dotnet restore -s "https://api.nuget.org/v3/index.json" -s "/app/nuget/"
+
+#RUN nuget install nuget\Telerik.UI.for.AspNet.Core.2022.3.913.nupkg -OutputDirectory packages
+
+
+#RUN dotnet restore -s ""
 
 RUN dotnet publish -c Release -o out --no-restore
 
@@ -26,10 +50,10 @@ ENV DOCKER_PLATFORM=${TARGETPLATFORM}
 #ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM} --multi_user_mode=true --flux_mode=true
 
 # MultiUser: 
-ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM} --multi_user_mode=true
+#ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM} --multi_user_mode=true
 
 # SingleUser: 
-#ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM}
+ENTRYPOINT dotnet RetroMikeMiningTools.dll --platform_name=Docker-${DOCKER_PLATFORM}
 
 
 

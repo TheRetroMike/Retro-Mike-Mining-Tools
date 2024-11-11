@@ -5,6 +5,7 @@ using Quartz;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.Common;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using RetroMikeMiningTools.Utilities;
 
 if (!Directory.Exists("db"))
 {

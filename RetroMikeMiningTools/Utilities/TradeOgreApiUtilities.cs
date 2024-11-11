@@ -107,9 +107,12 @@ namespace RetroMikeMiningTools.Utilities
             var request = new RestRequest(method);
             var response = client.Get(request);
             dynamic responseData = JsonConvert.DeserializeObject(response.Content);
-            foreach (var item in responseData.balances)
+            if (responseData.balances != null)
             {
-                balances.Add(new ExchangeBalance() { Ticker = item.Name, Balance = Convert.ToDecimal(item.Value), BalanceDisplayVal = item.Value });
+                foreach (var item in responseData.balances)
+                {
+                    balances.Add(new ExchangeBalance() { Ticker = item.Name, Balance = Convert.ToDecimal(item.Value), BalanceDisplayVal = item.Value });
+                }
             }
             return balances;
         }
