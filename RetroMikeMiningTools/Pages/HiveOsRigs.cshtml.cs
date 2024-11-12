@@ -105,10 +105,10 @@ namespace RetroMikeMiningTools.Pages
             return new JsonResult(Coins.CoinList.OrderBy(x => x.Name));
         }
 
-        public JsonResult OnGetMasterZergAlgoList([DataSourceRequest] DataSourceRequest request)
-        {
-            return new JsonResult(Coins.ZergAlgoList.OrderBy(x => x.Name));
-        }
+        //public JsonResult OnGetMasterZpoolAlgoList([DataSourceRequest] DataSourceRequest request)
+        //{
+        //    return new JsonResult(Coins.ZpoolAlgoList.OrderBy(x => x.Name));
+        //}
 
         public JsonResult OnGetMasterFlightsheetList([DataSourceRequest] DataSourceRequest request)
         {
@@ -167,6 +167,10 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.Algo = record.Ticker.Remove(0, 5);
                 }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Zpool-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 6);
+                }
                 if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
                 {
                     record.Algo = record.Ticker.Remove(0, 11);
@@ -174,6 +178,10 @@ namespace RetroMikeMiningTools.Pages
                 if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("MiningDutch-"))
                 {
                     record.Algo = record.Ticker.Remove(0, 12);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Unmineable-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 11);
                 }
                 if (record.Ticker != null && record.Ticker.StartsWith("ZergProvider-"))
                 {
@@ -185,6 +193,10 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
                 }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zpool-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 6);
+                }
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
@@ -192,6 +204,10 @@ namespace RetroMikeMiningTools.Pages
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Unmineable-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
                 }
                 if (record.SecondaryTicker != null && record.SecondaryTicker.StartsWith("ZergProvider-"))
                 {
@@ -278,7 +294,19 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.Algo = record.Ticker.Remove(0, 5);
                 }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Zpool-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 6);
+                }
                 if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Prohashing-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 11);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("MiningDutch-"))
+                {
+                    record.Algo = record.Ticker.Remove(0, 12);
+                }
+                if (record.Ticker != null && record.Algo == null && record.Ticker.StartsWith("Unmineable-"))
                 {
                     record.Algo = record.Ticker.Remove(0, 11);
                 }
@@ -291,7 +319,19 @@ namespace RetroMikeMiningTools.Pages
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 5);
                 }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Zpool-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 6);
+                }
                 if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Prohashing-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("MiningDutch-"))
+                {
+                    record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 12);
+                }
+                if (record.SecondaryTicker != null && record.SecondaryAlgo == null && record.SecondaryTicker.StartsWith("Unmineable-"))
                 {
                     record.SecondaryAlgo = record.SecondaryTicker.Remove(0, 11);
                 }

@@ -23,12 +23,16 @@ LogDAO.InitialConfiguration();
 
 try
 {
-    RetroMikeMiningTools.Utilities.MiningDutchUtilities.RefreshMiningDutchData();
-    RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergStatusData();
-    RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergCurrencyData();
-    RetroMikeMiningTools.Utilities.ZergUtilities.RefreshZergCoinData();
-    RetroMikeMiningTools.Utilities.ProhashingUtilities.RefreshProhashingData();
-    RetroMikeMiningTools.Utilities.WhatToMineUtilities.RefreshIndividualCoinList();
+    MiningDutchUtilities.RefreshMiningDutchData();
+    ZergUtilities.RefreshZergStatusData();
+    ZergUtilities.RefreshZergCurrencyData();
+    ZergUtilities.RefreshZergCoinData();
+    ZpoolUtilities.RefreshStatusData();
+    ZpoolUtilities.RefreshCurrencyData();
+    ZpoolUtilities.RefreshCoinData();
+    UnmineableUtilities.RefreshPoolData();
+    ProhashingUtilities.RefreshProhashingData();
+    WhatToMineUtilities.RefreshIndividualCoinList();
 }
 catch { }
 

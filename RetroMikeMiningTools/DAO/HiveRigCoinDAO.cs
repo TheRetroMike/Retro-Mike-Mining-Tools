@@ -71,8 +71,10 @@ namespace RetroMikeMiningTools.DAO
                 }
                 var zergAlgoData = ZergUtilities.GetZergAlgoData();
                 var zergCoinData = ZergUtilities.GetZergCoins();
+                var zpoolAlgoData = ZpoolUtilities.GetAlgoData();
                 var proHashingAlgoData = ProhashingUtilities.GetAlgoData();
                 var miningDutchAlgoData = MiningDutchUtilities.GetAlgoData();
+                var unmineableAlgoData = UnmineableUtilities.GetAlgoData();
 
                 foreach (var item in result)
                 {
@@ -88,9 +90,12 @@ namespace RetroMikeMiningTools.DAO
                     if (
                         !String.IsNullOrEmpty(wtmEndPoint) &&
                         !item.Ticker.StartsWith("Zerg-") &&
+                        !item.Ticker.StartsWith("Zpool-") &&
                         !item.Ticker.StartsWith("Prohashing-") &&
                         !item.Ticker.StartsWith("MiningDutch-") &&
-                        !item.Ticker.StartsWith("ZergProvider-")
+                        !item.Ticker.StartsWith("Unmineable-") &&
+                        !item.Ticker.StartsWith("ZergProvider-") &&
+                        !item.Ticker.StartsWith("ZpoolProvider-")
                         )
                     {
                         var coin = wtmCoins.Where(x => x.Ticker.Equals(item.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
@@ -128,6 +133,28 @@ namespace RetroMikeMiningTools.DAO
                             var mBtcPerMhAmount = Convert.ToDecimal(algo.Estimate) / (Convert.ToDecimal(algo.MhFactor) / 1000);
                             var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
                             var btcRevenue = mBtcRevenue / 1000;
+                            primaryRevenue = btcRevenue;
+                        }
+                    }
+                    else if (item.Ticker.StartsWith("Zpool-"))
+                    {
+                        var algo = zpoolAlgoData.Where(x => x.Algo.Equals(item.Algo, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (algo != null && !algo.Algo.Equals("token", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var mBtcPerMhAmount = Convert.ToDecimal(algo.Estimate) / (Convert.ToDecimal(algo.MhFactor) / 1000);
+                            var mBtcRevenue = item.HashRateMH * mBtcPerMhAmount;
+                            var btcRevenue = mBtcRevenue / 1000;
+                            primaryRevenue = btcRevenue;
+                        }
+                    }
+                    else if (item.Ticker.StartsWith("Unmineable-"))
+                    {
+                        var algo = unmineableAlgoData.Where(x => x.Algo.Equals(item.Algo, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (algo != null && !algo.Algo.Equals("token", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var btcPerMhAmount = Convert.ToDecimal(algo.Estimate) * (Convert.ToDecimal(1000000));
+                            var btcRevenue = item.HashRateMH * btcPerMhAmount;
+                            //var btcRevenue = mBtcRevenue / 1000;
                             primaryRevenue = btcRevenue;
                         }
                     }

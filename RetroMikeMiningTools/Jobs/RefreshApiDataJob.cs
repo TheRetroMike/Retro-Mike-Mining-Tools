@@ -13,6 +13,9 @@ namespace RetroMikeMiningTools.Jobs
                 ZergUtilities.RefreshZergStatusData();
                 ZergUtilities.RefreshZergCurrencyData();
                 ZergUtilities.RefreshZergCoinData();
+                ZpoolUtilities.RefreshStatusData();
+                ZpoolUtilities.RefreshCurrencyData();
+                ZpoolUtilities.RefreshCoinData();
                 ProhashingUtilities.RefreshProhashingData();
                 CoinDeskUtilities.RefreshBtcPrice();
                 WhatToMineUtilities.RefreshIndividualCoinList();
