@@ -189,10 +189,9 @@ https://retromike.net
 ## Support Me
 If you would like to support me:
 - Youtube Channel: https://www.youtube.com/retromikecrypto
-- Hosted Version: https://retromike.net
-- Just run the profit switcher
 - Amazon Affiliate Link: https://amzn.to/3hIOvhP
 - Ebay Affiliate Link: https://ebay.us/jvqlUf
+- Donate in Crypto: https://1upcoin.com/donate/youtube/@retromiketech
 
 ## Support
 This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/HsjJPCP2hp
