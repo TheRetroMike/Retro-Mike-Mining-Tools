@@ -75,11 +75,9 @@ There is no Dev Fee as of version 3.0.0.0. If you are running an older version, 
 Another powerful feature is the ability to have the application auto-exchange your mined crypto into the coins you wish to hold. If you are mining to an exchange, this is a great way to mine and exchange at minimal fees. The following exchanges are currently supported
 
 - CoinEx
-- Graviex
 - Kucoin
-- SouthXchange
 - TradeOgre
-- TxBit
+- Xeggex
 
 ### Configuration
 - Destination - This is the ultimate coin that you want to exchange into.
