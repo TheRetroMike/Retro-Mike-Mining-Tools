@@ -27,7 +27,7 @@ namespace RetroMikeMiningTools.Pages
             }
             else
             {
-                using (var client = new DiscordWebhookClient("https://discord.com/api/webhooks/1034249002566299730/QJna8JtFfkWd0sy4K9i35kQghepIwM91Ge1fWdEkQlVMX4hYrgCQRAk8cAGbbn5QWaYW"))
+                using (var client = new DiscordWebhookClient("https://discord.com/api/webhooks/1306482822818824192/EGNX34gnApPRh0Bxy70se77eU02LmLu9DX6HpMNaJZcuH5DGGpTGqZq5YCVtV6smTVxQ"))
                 {
                     var embed = new EmbedBuilder
                     {
