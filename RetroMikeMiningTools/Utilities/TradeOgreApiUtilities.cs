@@ -39,8 +39,6 @@ namespace RetroMikeMiningTools.Utilities
                             }
                         }
                     }
-
-                    //result.Add(new Coin() { ExchangeId = Constants.EXCHANGE_TRADE_OGRE, Ticker = item.Currency.ToString(), Name = String.Format("{0} ({1})", item.CurrencyLong.ToString(), item.Currency.ToString()) });
                 }
             }
             return result;

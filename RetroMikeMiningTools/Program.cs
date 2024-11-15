@@ -134,6 +134,16 @@ builder.Services.AddQuartz(q =>
             .UsingJobData("platform_name", builder.Configuration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME))
             .UsingJobData("multi_user_mode", multiUserMode)
         );
+
+        //ASIC ProfitSwitching
+        q.ScheduleJob<AsicProfitSwitchingJob>(trigger => trigger
+            .WithIdentity("ASIC Profit Switching Trigger")
+            .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(10)))
+            .WithCronSchedule(coreConfig?.ProfitSwitchingCronSchedule ?? "0 0/1 * 1/1 * ? *")
+            .WithDescription("ASIC Profit Switching Trigger")
+            .UsingJobData("platform_name", builder.Configuration.GetValue<string>(Constants.PARAMETER_PLATFORM_NAME))
+            .UsingJobData("multi_user_mode", multiUserMode)
+        );
     }
 
     if (coreConfig.AutoExchangingEnabled && !String.IsNullOrEmpty(coreConfig.AutoExchangingCronSchedule))

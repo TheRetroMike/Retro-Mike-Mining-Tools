@@ -25,8 +25,6 @@ namespace RetroMikeMiningTools.Utilities
             {
                 foreach (var item in responseContent)
                 {
-                    //result.Add(new Coin() { Exchange = Enums.Exchange.Xeggex, Ticker = item.ticker, Name = item.ticker });
-
                     result.Add(new Coin() { Exchange = Enums.Exchange.Xeggex, Ticker = item.ticker.ToString(), Name = String.Format("{0} ({1})", item.name.ToString(), item.ticker.ToString()) });
                 }
             }
@@ -69,7 +67,6 @@ namespace RetroMikeMiningTools.Utilities
         public static List<ExchangeBalance> GetBalances(ExchangeConfig exchange)
         {
             var balances = new List<ExchangeBalance>();
-            //var method = "/account/balances";
             var client = new RestClient(Constants.XEGGEX_API_BASE_PATH);
             client.Authenticator = new HttpBasicAuthenticator(exchange.ApiKey, exchange.ApiSecret);
             var request = new RestRequest("/balances");
@@ -88,31 +85,6 @@ namespace RetroMikeMiningTools.Utilities
         public static string PlaceTradeOrder(ExchangeConfig exchange, bool isSellOrder, string baseCurrency, string marketCurrency, decimal balance, decimal rate, string marketName)
         {
             var result = String.Empty;
-            //var method = String.Empty;
-            //if (isBuyOrder)
-            //{
-            //    method = "/order/sell";
-            //}
-            //else
-            //{
-            //    method = "/order/buy";
-            //}
-
-            //dynamic requestData = new ExpandoObject();
-            //requestData.userProvidedId = "";
-            //requestData.symbol = String.Format("{0}/{1}", baseCurrency, marketCurrency);
-            //requestData.side = isBuyOrder ? "buy" : "sell";
-            //requestData.type = "market";
-            //requestData.quantity = balance;
-            //requestData.price = rate;
-            //requestData.strictValidate = false;
-
-
-            //requestData.market = String.Format("{0}-{1}", baseCurrency, marketCurrency);
-            //requestData.quantity = balance;
-            //requestData.price = rate;
-
-
             var orderClient = new RestClient(Constants.XEGGEX_API_BASE_PATH);
             orderClient.Authenticator = new HttpBasicAuthenticator(exchange.ApiKey, exchange.ApiSecret);
             var orderRequest = new RestRequest("/createorder", Method.Post);
@@ -126,7 +98,6 @@ namespace RetroMikeMiningTools.Utilities
             var orderResponse = orderClient.Post(orderRequest);
             dynamic orderResponseData = JsonConvert.DeserializeObject(orderResponse.Content);
             var id = Convert.ToString(orderResponseData.id);
-            //var apiResult = Convert.ToBoolean(orderResponseData.success);
             if (!String.IsNullOrEmpty(id))
             {
                 if (isSellOrder)

@@ -17,9 +17,15 @@ namespace RetroMikeMiningTools.DAO
                 {
                     Name = record.Name,
                     AsicType = record.AsicType,
+                    DeviceIP = record.DeviceIP,
                     AdditionalPower = record.AdditionalPower,
                     MiningMode = record.MiningMode,
                     Enabled = record.Enabled,
+                    PinnedTicker = record.PinnedTicker,
+                    RigMinProfit = record.RigMinProfit,
+                    SmartPlugHost = record.SmartPlugHost,
+                    SmartPlugType = record.SmartPlugType,
+                    ApiKey = record.ApiKey,
                     Username = record.Username
                 });
             }
@@ -34,9 +40,15 @@ namespace RetroMikeMiningTools.DAO
                 {
                     existingGroup.Name = record.Name;
                     existingGroup.AsicType = record.AsicType;
+                    existingGroup.DeviceIP = record.DeviceIP;
                     existingGroup.Enabled = record.Enabled;
                     existingGroup.MiningMode = record.MiningMode;
                     existingGroup.AdditionalPower = record.AdditionalPower;
+                    existingGroup.RigMinProfit = record.RigMinProfit;
+                    existingGroup.SmartPlugHost = record.SmartPlugHost;
+                    existingGroup.SmartPlugType = record. SmartPlugType;
+                    existingGroup.PinnedTicker = record.PinnedTicker;
+                    existingGroup.ApiKey = record.ApiKey;
                     existingGroup.Username = record.Username;
                     var table = db.GetCollection<AsicConfig>(tableName);
                     table.Update(existingGroup);
@@ -48,9 +60,15 @@ namespace RetroMikeMiningTools.DAO
                     {
                         Name = record.Name,
                         AsicType = record.AsicType,
+                        DeviceIP = record.DeviceIP,
                         Enabled = record.Enabled,
                         MiningMode = record.MiningMode,
                         AdditionalPower = record.AdditionalPower,
+                        RigMinProfit = record.RigMinProfit,
+                        SmartPlugHost = record.SmartPlugHost,
+                        SmartPlugType = record.SmartPlugType,
+                        PinnedTicker = record.PinnedTicker,
+                        ApiKey = record.ApiKey,
                         Username = record.Username
                     });
                 }

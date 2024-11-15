@@ -33,29 +33,39 @@
     }
 </script>
 <div class="k-card-header">
-    <h4>Hive OS Rigs</h4>
-    Configure the rigs that you want to use for coin switching and then select the row to set the coins for that rig
+    <h4>ASIC's</h4>
+    Configure the ASIC's that you want to use for coin switching and then select the row to set the coins for that ASIC
 </div>
 <div class="k-card-body">
-@(Html.Kendo().Grid<AsicConfig>
-    ().Name("asicsGrid")
-    .Selectable()
-    .Sortable()
-    .Editable()
-    .Filterable()
-    .Events(x => x.Change("handleAsicSelection"))
-    .ToolBar(toolbar=> {
-        toolbar.Create();
-    })
-    .Columns(columns =>
-    {
-        columns.Bound(column => column.Name);
-        columns.Bound(column => column.AsicType);
-        columns.Bound(column => column.MiningMode).Width(200);
-        columns.Bound(column => column.AdditionalPower);
-        columns.Bound(column => column.Profit).ClientFooterTemplate("Profit: #=kendo.toString(sum,'c2')#");
-        columns.Bound(column => column.Enabled);
-        columns.Command(column =>
+    @(
+        Html.Kendo().Grid<AsicConfig>
+        ().Name("asicsGrid")
+        .Selectable()
+        .Sortable()
+        .Editable()
+        .Filterable()
+        .Events(x => x.Change("handleAsicSelection"))
+        .ToolBar(toolbar=> {
+            toolbar.Create();
+        })
+        .Columns(columns =>
+        {
+            columns.Bound(column => column.Name);
+            columns.Bound(column => column.AsicType);
+            columns.Bound(column => column.MiningMode).Width(200);
+            columns.Bound(column => column.PinnedTicker);
+            columns.Bound(column => column.DeviceIP);
+            columns.Bound(column => column.ApiKey);
+            columns.Bound(column => column.AdditionalPower);
+            if (!Model.IsMultiUser)
+            {
+                columns.Bound(column => column.Profit).ClientFooterTemplate("Profit: #=kendo.toString(sum,'c2')#");
+                columns.Bound(column => column.SmartPlugType).ClientHeaderTemplate("Smart<br/>Plug<br/>Type");
+                columns.Bound(column => column.SmartPlugHost).ClientHeaderTemplate("Smart<br/>Plug<br/>Host");
+                columns.Bound(column => column.RigMinProfit);
+            }
+            columns.Bound(column => column.Enabled);
+            columns.Command(column =>
         {
             column.Edit();
             column.Destroy();
@@ -74,7 +84,8 @@
         {
             m.Id(id => id.Id);
             m.Field(x => x.Profit).Editable(false);
-        })))
+        }))
+    )
 </div>
 <div class="k-card-footer"></div>
 
