@@ -137,7 +137,7 @@ namespace RetroMikeMiningTools.DAO
                 {
                     foreach (var item in result)
                     {
-                        var coins = HiveRigCoinDAO.GetRecords(item.Id, new List<DO.Flightsheet>(), config, isUi, true, isMultiUser)?.Where(x => x.Enabled);
+                        var coins = AsicCoinDAO.GetRecords(item.Id, config, isUi, true, isMultiUser)?.Where(x => x.Enabled);
                         if (coins != null && coins.Count() > 0)
                         {
                             item.Profit = coins.Max(x => x.Profit);

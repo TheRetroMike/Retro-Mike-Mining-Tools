@@ -21,13 +21,19 @@
     }
     function wtmEndpointTemplate(WtmEndPoint) {
         if (WtmEndPoint) {
-            return WtmEndPoint.substring(0, 10) + '...';
+            return WtmEndPoint.substring(0, 20) + '...';
         }
         return '';
     }
     function tickerTemplate(ticker) {
         if (ticker) {
             return ticker.replace('ZergProvider-', '').replace('ZpoolProvider-', '');
+        }
+        return '';
+    }
+    function maskData(data) {
+        if(data){
+            return data.substring(0,3) + '.......';
         }
         return '';
     }
@@ -55,7 +61,7 @@
             columns.Bound(column => column.MiningMode).Width(200);
             columns.Bound(column => column.PinnedTicker);
             columns.Bound(column => column.DeviceIP);
-            columns.Bound(column => column.ApiKey);
+            columns.Bound(column => column.ApiKey).ClientTemplate("#=maskData(ApiKey)#");
             columns.Bound(column => column.AdditionalPower);
             if (!Model.IsMultiUser)
             {
@@ -113,8 +119,8 @@
                 columns.Bound(column => column.HashRateMH).ClientHeaderTemplate("Hashrate (MH)");
                 columns.Bound(column => column.OverrideEndpoint).ClientHeaderTemplate("WTM<br/>Endpoint").ClientTemplate("#=wtmEndpointTemplate(OverrideEndpoint)#");
                 columns.Bound(column => column.Power);
-                columns.Bound(column => column.Pool);
-                columns.Bound(column => column.PoolUser);
+                columns.Bound(column => column.Pool).ClientTemplate("#=wtmEndpointTemplate(Pool)#"); ;
+                columns.Bound(column => column.PoolUser).ClientTemplate("#=wtmEndpointTemplate(PoolUser)#");
                 columns.Bound(column => column.PoolPassword);
                 columns.Bound(e => e.Groups).ClientTemplate("#=groupsTemplate(Groups)#");
                 columns.Bound(column => column.Enabled);
