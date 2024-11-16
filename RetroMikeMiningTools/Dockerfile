@@ -1,5 +1,5 @@
 ﻿#FROM ubuntu:focal as build
-FROM mcr.microsoft.com/dotnet/sdk as build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 
 WORKDIR /app
 #ARG DEBIAN_FRONTEND=noninteractive
@@ -34,7 +34,7 @@ RUN dotnet restore -s "https://api.nuget.org/v3/index.json" -s "/app/nuget/"
 
 RUN dotnet publish -c Release -o out --no-restore
 
-FROM mcr.microsoft.com/dotnet/aspnet
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 EXPOSE 7000
 EXPOSE 7001

@@ -146,6 +146,9 @@ namespace RetroMikeMiningTools.ProfitSwitching
 
                     if (rig.SmartPlugType != null && rig.RigMinProfit != null && rig.SmartPlugHost != null)
                     {
+                        var isAlreadyOn = false;
+                        TPLinkSmartDevices.Devices.TPLinkSmartStrip? smartStrip = null;
+
                         //Check to see if we should power off rig
                         if (newCoinBestPrice < Convert.ToDouble(rig.RigMinProfit))
                         {
@@ -154,11 +157,59 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                 case SmartPlugType.Kasa:
                                     using (var kasaClient = new Kasa.KasaOutlet(rig.SmartPlugHost))
                                     {
-                                        var isAlreadyOn = await kasaClient.System.IsOutletOn();
+                                        isAlreadyOn = await kasaClient.System.IsOutletOn();
                                         if (isAlreadyOn)
                                         {
                                             await kasaClient.System.SetOutletOn(false);
                                         }
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort1:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[0].On;
+                                    if (isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(false, 1);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort2:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[1].On;
+                                    if (isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(false, 2);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort3:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[2].On;
+                                    if (isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(false, 3);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort4:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[3].On;
+                                    if (isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(false, 4);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort5:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[4].On;
+                                    if (isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(false, 5);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort6:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[5].On;
+                                    if (isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(false, 6);
                                     }
                                     break;
                                 case SmartPlugType.None:
@@ -175,11 +226,59 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                 case SmartPlugType.Kasa:
                                     using (var kasaClient = new Kasa.KasaOutlet(rig.SmartPlugHost))
                                     {
-                                        var isAlreadyOn = await kasaClient.System.IsOutletOn();
+                                        isAlreadyOn = await kasaClient.System.IsOutletOn();
                                         if (!isAlreadyOn)
                                         {
                                             await kasaClient.System.SetOutletOn(true);
                                         }
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort1:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[0].On;
+                                    if (!isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(true, 1);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort2:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[1].On;
+                                    if (!isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(true, 2);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort3:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[2].On;
+                                    if (!isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(true, 3);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort4:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[3].On;
+                                    if (!isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(true, 4);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort5:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[4].On;
+                                    if (!isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(true, 5);
+                                    }
+                                    break;
+                                case SmartPlugType.KasaPowerStripPort6:
+                                    smartStrip = new TPLinkSmartDevices.Devices.TPLinkSmartStrip(rig.SmartPlugHost);
+                                    isAlreadyOn = smartStrip.Plugs[5].On;
+                                    if (!isAlreadyOn)
+                                    {
+                                        smartStrip.ChangeRelayState(true, 6);
                                     }
                                     break;
                                 case SmartPlugType.None:

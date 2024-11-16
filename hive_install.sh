@@ -15,7 +15,7 @@ wget https://packages.microsoft.com/config/ubuntu/$LINUX_VER/packages-microsoft-
 dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 apt-get update
-apt-get install -y dotnet-sdk-9.0
+apt-get install -y dotnet-sdk-8.0
 wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/download/RetroMikeMiningTools.zip
 unzip  -o -d /usr/retro-mike-mining-tools RetroMikeMiningTools.zip
 rm RetroMikeMiningTools.zip

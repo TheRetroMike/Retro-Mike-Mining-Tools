@@ -2,6 +2,7 @@
 {
     public enum AsicType
     {
-        IceRiver_PBFarmer=0
+        IceRiver_PBFarmer=0,
+        ViewOnly=1
     }
 }

@@ -3,4 +3,9 @@
 https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\admin\source\repos\Retro-Mike-Mining-Tools\RetroMikeMiningTools\bin\Release\net9.0\publish\</_PublishTargetUrl>
+    <History>True|2024-11-16T16:39:45.4865070Z||;True|2024-11-16T10:00:33.1307726-06:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
 </Project>

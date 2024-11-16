@@ -11,11 +11,12 @@ EXE_FOLDER=/usr/profit-switcher/HiveProfitSwitcher/bin/Debug/
 CONFIG_PATH="$EXE_FOLDER/HiveProfitSwitcher.exe.config"
 
 
-wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+LINUX_VER=$(lsb_release -r -s)
+wget https://packages.microsoft.com/config/ubuntu/$LINUX_VER/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 apt-get update
-apt-get install -y dotnet-sdk-6.0 
+apt-get install -y dotnet-sdk-8.0 
 apt-get install -y unzip
 wget https://github.com/TheRetroMike/Retro-Mike-Mining-Tools/releases/latest/download/RetroMikeMiningTools.zip
 unzip  -o -d /usr/retro-mike-mining-tools RetroMikeMiningTools.zip
