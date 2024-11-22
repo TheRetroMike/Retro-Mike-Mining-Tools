@@ -9,6 +9,6 @@
         Kucoin=4,
         //Graviex=5,
         Xeggex=6,
-        //SafeTrade=7
+        SafeTrade=7
     }
 }

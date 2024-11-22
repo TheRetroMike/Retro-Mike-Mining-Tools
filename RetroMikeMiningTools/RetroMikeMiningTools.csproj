@@ -14,10 +14,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CoinEx.Net" Version="5.0.15" />
+		<PackageReference Include="CoinEx.Net" Version="7.9.0" />
 		<PackageReference Include="Discord.Net.Webhook" Version="3.8.1" />
 		<PackageReference Include="Kasa" Version="0.0.0" />
-		<PackageReference Include="Kucoin.Net" Version="4.0.17" />
+		<PackageReference Include="Kucoin.Net" Version="5.18.0" />
 		<PackageReference Include="LiteDB" Version="5.0.12" />
 		<PackageReference Include="m4rcus.TuyaCore" Version="1.0.1" />
 		<PackageReference Include="Markdig" Version="0.30.3" />

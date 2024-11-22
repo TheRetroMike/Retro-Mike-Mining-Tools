@@ -3,6 +3,7 @@ using Kucoin.Net.Clients;
 using Kucoin.Net.Objects;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
+using RetroMikeMiningTools.Enums;
 
 namespace RetroMikeMiningTools.Utilities
 {
@@ -11,10 +12,9 @@ namespace RetroMikeMiningTools.Utilities
         public static async Task<List<Coin>> GetTickers()
         {
             List<Coin> result = new List<Coin>();
-            var client = new Kucoin.Net.Clients.KucoinClient(new Kucoin.Net.Objects.KucoinClientOptions()
+            var client = new KucoinRestClient(x =>
             {
-                LogLevel = LogLevel.Error,
-                RequestTimeout = TimeSpan.FromSeconds(60)
+                x.RequestTimeout = TimeSpan.FromSeconds(60);
             });
             var coinData = await client.SpotApi.ExchangeData.GetSymbolsAsync(null);
             if (coinData != null && coinData.Data != null)
@@ -39,11 +39,10 @@ namespace RetroMikeMiningTools.Utilities
         public static async Task<List<ExchangeBalance>> GetBalances(ExchangeConfig exchange)
         {
             List<ExchangeBalance> result = new List<ExchangeBalance>();
-            var client = new KucoinClient(new KucoinClientOptions()
+            var client = new KucoinRestClient(x =>
             {
-                LogLevel = LogLevel.Error,
-                RequestTimeout = TimeSpan.FromSeconds(60),
-                ApiCredentials = new KucoinApiCredentials(exchange.ApiKey, exchange.ApiSecret, exchange.Passphrase),
+                x.ApiCredentials = new Kucoin.Net.Objects.KucoinApiCredentials(exchange.ApiKey, exchange.ApiSecret, exchange.Passphrase);
+                x.RequestTimeout = TimeSpan.FromSeconds(60);
             });
             var balances = await client.SpotApi.Account.GetAccountsAsync();
             foreach (var item in balances.Data)

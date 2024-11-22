@@ -1,4 +1,5 @@
-﻿using RetroMikeMiningTools.DAO;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using RetroMikeMiningTools.DAO;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
 using RetroMikeMiningTools.Enums;
@@ -40,14 +41,17 @@ namespace RetroMikeMiningTools.ProfitSwitching
                 switch (asic.AsicType)
                 {
                     case AsicType.IceRiver_PBFarmer:
-                        //TODO: Get current connected pool info
-                        var iceRiverPool = IceRiverUtilities.GetCurrentPool(asic.DeviceIP, asic.ApiKey);
-                        if (iceRiverPool != null)
+                        try
                         {
-                            currentPool = iceRiverPool.Pool;
-                            currentPoolUser = iceRiverPool.PoolUser;
-                            currentPoolPassword = iceRiverPool.PoolPassword;
+                            var iceRiverPool = IceRiverUtilities.GetCurrentPool(asic.DeviceIP, asic.ApiKey);
+                            if (iceRiverPool != null)
+                            {
+                                currentPool = iceRiverPool.Pool;
+                                currentPoolUser = iceRiverPool.PoolUser;
+                                currentPoolPassword = iceRiverPool.PoolPassword;
+                            }
                         }
+                        catch { }
                         break;
                     default:
                         break;
@@ -131,8 +135,12 @@ namespace RetroMikeMiningTools.ProfitSwitching
                             switch (asic.AsicType)
                             {
                                 case AsicType.IceRiver_PBFarmer:
-                                    IceRiverUtilities.ReplacePools(asic.DeviceIP, asic.ApiKey, newPool);
-                                    Common.Logger.Log(String.Format("Profit Switched Pool on ASIC {0} to {1}", asic.Name, newPool.Ticker), LogType.System, asic.Username);
+                                    try
+                                    {
+                                        IceRiverUtilities.ReplacePools(asic.DeviceIP, asic.ApiKey, newPool);
+                                        Common.Logger.Log(String.Format("Profit Switched Pool on ASIC {0} to {1}", asic.Name, newPool.Ticker), LogType.System, asic.Username);
+                                    }
+                                    catch { }
                                     break;
                                 default:
                                     break;
@@ -155,8 +163,12 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                 switch (asic.AsicType)
                                 {
                                     case AsicType.IceRiver_PBFarmer:
-                                        IceRiverUtilities.ReplacePools(asic.DeviceIP, asic.ApiKey, newPool);
-                                        Common.Logger.Log(String.Format("Profit Switched Pool on ASIC {0} to {1}", asic.Name, newPool.Ticker), LogType.System, asic.Username);
+                                        try
+                                        {
+                                            IceRiverUtilities.ReplacePools(asic.DeviceIP, asic.ApiKey, newPool);
+                                            Common.Logger.Log(String.Format("Profit Switched Pool on ASIC {0} to {1}", asic.Name, newPool.Ticker), LogType.System, asic.Username);
+                                        }
+                                        catch { }
                                         break;
                                     default:
                                         break;
@@ -252,6 +264,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                         if (!isAlreadyOn)
                                         {
                                             await kasaClient.System.SetOutletOn(true);
+                                            Thread.Sleep(30000);
+                                            AsicProcessor.Process(asic, config);
                                         }
                                     }
                                     break;
@@ -261,6 +275,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                     if (!isAlreadyOn)
                                     {
                                         smartStrip.ChangeRelayState(true, 1);
+                                        Thread.Sleep(30000);
+                                        AsicProcessor.Process(asic, config);
                                     }
                                     break;
                                 case SmartPlugType.KasaPowerStripPort2:
@@ -269,6 +285,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                     if (!isAlreadyOn)
                                     {
                                         smartStrip.ChangeRelayState(true, 2);
+                                        Thread.Sleep(30000);
+                                        AsicProcessor.Process(asic, config);
                                     }
                                     break;
                                 case SmartPlugType.KasaPowerStripPort3:
@@ -277,6 +295,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                     if (!isAlreadyOn)
                                     {
                                         smartStrip.ChangeRelayState(true, 3);
+                                        Thread.Sleep(30000);
+                                        AsicProcessor.Process(asic, config);
                                     }
                                     break;
                                 case SmartPlugType.KasaPowerStripPort4:
@@ -285,6 +305,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                     if (!isAlreadyOn)
                                     {
                                         smartStrip.ChangeRelayState(true, 4);
+                                        Thread.Sleep(30000);
+                                        AsicProcessor.Process(asic, config);
                                     }
                                     break;
                                 case SmartPlugType.KasaPowerStripPort5:
@@ -293,6 +315,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                     if (!isAlreadyOn)
                                     {
                                         smartStrip.ChangeRelayState(true, 5);
+                                        Thread.Sleep(30000);
+                                        AsicProcessor.Process(asic, config);
                                     }
                                     break;
                                 case SmartPlugType.KasaPowerStripPort6:
@@ -301,6 +325,8 @@ namespace RetroMikeMiningTools.ProfitSwitching
                                     if (!isAlreadyOn)
                                     {
                                         smartStrip.ChangeRelayState(true, 6);
+                                        Thread.Sleep(30000);
+                                        AsicProcessor.Process(asic, config);
                                     }
                                     break;
                                 case SmartPlugType.None:

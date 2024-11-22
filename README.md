@@ -33,7 +33,8 @@ This app was designed to be installed on a server on a Hive OS Rig on your netwo
 
 ## Features
 - Web based management and monitoring dashboard 
-- Hive OS GPU Rig Profit Switching
+- Hive OS Rig Profit Switching
+- IceRiver Profit Switching when running the PBFarmer OC Firmware
 - Built-In Scheduler that gives you full control over how frequently it tries to profit switch
 - Auto Exchanging of coins utilizing your own exchange accounts
 - Calculations for any combination of up to 2 coins (i.e., GPU+CPU rig or just a mixed GPU rig)
@@ -52,12 +53,14 @@ The following mining modes are supported and can be set on each rig / ASIC
 ### Supported Coins
 - Any coin listed on WhatToMine under the GPU or ASIC sections
 - All algo's on ZergPool
+- All algo's on ZPool
 - All algo's on Nicehash that are also listed on WhatToMine
 - All algo's on Prohashing
 - All algo's on Mining-Dutch
+- All algo's on Unmineable
 
 ### Pinned Coin
-You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanted to mine something like a newly released coin to accumulate as many coins as possible early-on.
+You can pin a coin per rig if you want that coin to over-ride current profitability and always mine. This can be useful for maintaining your configuration, but wanting to mine something like a newly released coin to accumulate as many coins as possible early-on.
 
 ### Additional Power
 When configuring your Hive OS Rig, you can specify an "Additional / Misc Power" in watts. The power cost will then be calculated and factored into profitability of each coin. This is usefull if you have a A/C Unit, Window Fan, Box Fan, or additional items hooked up to your rig and you want to deduct that cost from profitability figures
@@ -171,9 +174,6 @@ sudo docker pull theretromike/miningtools:multi_user && sudo docker run -d -it -
 
 ### Hive OS Rigs
 ![image](https://user-images.githubusercontent.com/1271856/191880644-9307603d-93f6-44b9-9df4-bd0a89cd3ce3.png)
-
-### Goldshell ASICs
-![image](https://user-images.githubusercontent.com/1271856/191880727-3ad72a5d-7039-4bd4-b553-a37298cc7870.png)
 
 ### Auto Exchanging
 ![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)

@@ -3,6 +3,7 @@ using CoinEx.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using RetroMikeMiningTools.DO;
 using RetroMikeMiningTools.DTO;
+using RetroMikeMiningTools.Enums;
 
 namespace RetroMikeMiningTools.Utilities
 {
@@ -11,10 +12,9 @@ namespace RetroMikeMiningTools.Utilities
         public static async Task<List<Coin>> GetTickers()
         {
             List<Coin> result = new List<Coin>();
-            var client = new CoinExClient(new CoinExClientOptions()
+            var client = new CoinExRestClient(x =>
             {
-                LogLevel = LogLevel.Error,
-                RequestTimeout = TimeSpan.FromSeconds(60)
+                x.RequestTimeout = TimeSpan.FromSeconds(60);
             });
             var coinData = await client.SpotApi.ExchangeData.GetSymbolInfoAsync("");
             if (coinData != null && coinData.Data != null)
@@ -39,23 +39,24 @@ namespace RetroMikeMiningTools.Utilities
         public static async Task<List<ExchangeBalance>> GetBalances(ExchangeConfig exchange)
         {
             List<ExchangeBalance> result = new List<ExchangeBalance>();
-            var client = new CoinExClient(new CoinExClientOptions()
+            var client = new CoinExRestClient(x =>
             {
-                LogLevel = LogLevel.Error,
-                RequestTimeout = TimeSpan.FromSeconds(60),
-                ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret),
+                x.ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret);
+                x.RequestTimeout = TimeSpan.FromSeconds(60);
             });
             var markets = await client.SpotApi.ExchangeData.GetSymbolInfoAsync();
-            var balances = await client.SpotApi.Account.GetBalancesAsync();
-
-            foreach (var item in balances.Data)
+            var balances = await client.SpotApiV2.Account.GetBalancesAsync();
+            if (balances != null && balances.Data != null && balances.Data.Count() > 0)
             {
-                var usdtAmount = 0.00;
-                //var currencyRates = await client.SpotApi.ExchangeData.GetTickersAsync();
-                var tickerMarketDirect = markets.Data.Where(x => x.Value.TradingName.Equals(item.Value.Asset, StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals("USDT", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                if (item.Value.Available > 0)
+                foreach (var item in balances.Data)
                 {
-                    result.Add(new ExchangeBalance() { Balance = item.Value.Available, Ticker = item.Value.Asset, BalanceDisplayVal = item.Value.Available.ToString() });
+                    var usdtAmount = 0.00;
+                    //var currencyRates = await client.SpotApi.ExchangeData.GetTickersAsync();
+                    var tickerMarketDirect = markets.Data.Where(x => x.Value.TradingName.Equals(item.Asset, StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals("USDT", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    if (item.Available > 0)
+                    {
+                        result.Add(new ExchangeBalance() { Balance = item.Available, Ticker = item.Asset, BalanceDisplayVal = item.Available.ToString() });
+                    }
                 }
             }
             return result;

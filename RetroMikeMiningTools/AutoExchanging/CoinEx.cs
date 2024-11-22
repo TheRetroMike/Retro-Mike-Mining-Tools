@@ -1,5 +1,6 @@
 ﻿using CoinEx.Net.Clients;
 using CoinEx.Net.Objects;
+using CoinEx.Net.Objects.Options;
 using CryptoExchange.Net.Authentication;
 using RetroMikeMiningTools.DTO;
 using RetroMikeMiningTools.Enums;
@@ -16,18 +17,19 @@ namespace RetroMikeMiningTools.AutoExchanging
             }
             else
             {
-                var client = new CoinExClient(new CoinExClientOptions()
+                var client = new CoinExRestClient(x =>
                 {
-                    ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret),
-                    LogLevel = LogLevel.Trace,
-                    RequestTimeout = TimeSpan.FromSeconds(60)
+
+                    x.ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret);
+                    x.RequestTimeout = TimeSpan.FromSeconds(60);
                 });
-                var balances = await client.SpotApi.Account.GetBalancesAsync();
+
+                var balances = await client.SpotApiV2.Account.GetBalancesAsync();
                 var markets = await client.SpotApi.ExchangeData.GetSymbolInfoAsync();
-                foreach (var balance in balances.Data.Where(x => !exchange.ExcludedSourceCoins.Any(y => y.Ticker.Equals(x.Key, StringComparison.OrdinalIgnoreCase))))
+                foreach (var balance in balances.Data.Where(x => exchange.ExcludedSourceCoins == null || !exchange.ExcludedSourceCoins.Any(y => y.Ticker.Equals(x.Asset, StringComparison.OrdinalIgnoreCase))))
                 {
-                    string ticker = balance.Key;
-                    var balanceVal = balance.Value.Available;
+                    string ticker = balance.Asset;
+                    var balanceVal = balance.Available;
                     if (balanceVal > 0.00m)
                     {
                         if (ticker != exchange.DestinationCoin?.Ticker && ticker != exchange.TradingPairCurrency?.Ticker)
@@ -35,8 +37,8 @@ namespace RetroMikeMiningTools.AutoExchanging
                             var tickerMarketDirect = markets.Data.Where(x => x.Value.TradingName.Equals(ticker,StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals(exchange.DestinationCoin?.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                             if (tickerMarketDirect.Key != null)
                             {
-                                var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketDirect.Key, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderType.Market, balanceVal);
-                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuoteQuantityFilled), LogType.AutoExchanging, exchange.Username);
+                                var orderOperation = await client.SpotApiV2.Trading.PlaceOrderAsync(tickerMarketDirect.Key, CoinEx.Net.Enums.AccountType.Spot, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderTypeV2.Market, balanceVal);
+                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuantityFilled), LogType.AutoExchanging, exchange.Username);
                             }
                             else
                             {
@@ -45,8 +47,8 @@ namespace RetroMikeMiningTools.AutoExchanging
                                 {
                                     if (balanceVal > tickerMarketIntermediate.Value.MinQuantity)
                                     {
-                                        var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(tickerMarketIntermediate.Key, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderType.Market, balanceVal);
-                                        Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuoteQuantityFilled), LogType.AutoExchanging, exchange.Username);
+                                        var orderOperation = await client.SpotApiV2.Trading.PlaceOrderAsync(tickerMarketIntermediate.Key, CoinEx.Net.Enums.AccountType.Spot, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderTypeV2.Market, balanceVal);
+                                        Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuantityFilled), LogType.AutoExchanging, exchange.Username);
                                     }
                                 }
                             }
@@ -54,11 +56,11 @@ namespace RetroMikeMiningTools.AutoExchanging
                     }
                 }
 
-                balances = await client.SpotApi.Account.GetBalancesAsync();
-                var intermediateTradingBalance = balances.Data.Where(x => x.Key.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                if (intermediateTradingBalance.Key != null)
+                balances = await client.SpotApiV2.Account.GetBalancesAsync();
+                var intermediateTradingBalance = balances.Data.Where(x => x.Asset.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                if (intermediateTradingBalance != null && intermediateTradingBalance.Asset != null)
                 {
-                    var balanceVal = intermediateTradingBalance.Value.Available;
+                    var balanceVal = intermediateTradingBalance.Available;
                     var finalMarket = markets.Data.Where(x => x.Value.TradingName.Equals(exchange.DestinationCoin.Ticker,StringComparison.OrdinalIgnoreCase) && x.Value.PricingName.Equals(exchange.TradingPairCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                     if (finalMarket.Key != null)
                     {
@@ -78,17 +80,17 @@ namespace RetroMikeMiningTools.AutoExchanging
 
                 if (exchange.AutoWithdrawl && !String.IsNullOrEmpty(exchange.AutoWithdrawlAddress) && exchange.AutoWithdrawlCurrency != null)
                 {
-                    balances = await client.SpotApi.Account.GetBalancesAsync();
-                    if (balances.Data.ContainsKey(exchange.AutoWithdrawlCurrency.Ticker))
+                    balances = await client.SpotApiV2.Account.GetBalancesAsync();
+                    if (balances.Data.Where(x => x.Asset==exchange.AutoWithdrawlCurrency.Ticker).FirstOrDefault() != null)
                     {
-                        var balanceRecord = balances.Data.Where(x => x.Key.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                        if (balanceRecord.Value.Available > exchange.AutoWithdrawlMin)
+                        var balanceRecord = balances.Data.Where(x => x.Asset.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (balanceRecord.Available > exchange.AutoWithdrawlMin)
                         {
-                            var withdrawlAmount = Convert.ToDecimal(balanceRecord.Value.Available - (exchange.WithdrawlFee ?? 0.00m));
-                            var withdrawOperation = await client.SpotApi.Account.WithdrawAsync(balanceRecord.Key, exchange.AutoWithdrawlAddress, false, withdrawlAmount);
+                            var withdrawlAmount = Convert.ToDecimal(balanceRecord.Available - (exchange.WithdrawlFee ?? 0.00m));
+                            var withdrawOperation = await client.SpotApiV2.Account.WithdrawAsync(balanceRecord.Asset, withdrawlAmount, exchange.AutoWithdrawlAddress);
                             if (withdrawOperation != null && withdrawOperation.Success)
                             {
-                                Common.Logger.Log("CoinEx: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
+                                Common.Logger.Log(String.Format("CoinEx: Auto Withdrawl Submitted for {0} {1}", withdrawlAmount, balanceRecord.Asset), LogType.AutoExchanging, exchange.Username);
                             }
                             else if(withdrawOperation != null && !withdrawOperation.Success)
                             {

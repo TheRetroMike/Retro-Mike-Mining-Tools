@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\admin\source\repos\Retro-Mike-Mining-Tools\RetroMikeMiningTools\bin\Release\net9.0\publish\</_PublishTargetUrl>
-    <History>True|2024-11-16T16:39:45.4865070Z||;True|2024-11-16T10:00:33.1307726-06:00||;</History>
+    <History>True|2024-11-17T16:14:06.2458656Z||;False|2024-11-17T10:13:45.2570305-06:00||;True|2024-11-16T10:39:45.4865070-06:00||;True|2024-11-16T10:00:33.1307726-06:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

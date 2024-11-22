@@ -18,12 +18,12 @@ namespace RetroMikeMiningTools.AutoExchanging
             }
             else
             {
-                var client = new Kucoin.Net.Clients.KucoinClient(new Kucoin.Net.Objects.KucoinClientOptions()
+                var client = new Kucoin.Net.Clients.KucoinRestClient(x =>
                 {
-                    ApiCredentials = new Kucoin.Net.Objects.KucoinApiCredentials(exchange.ApiKey, exchange.ApiSecret, exchange.Passphrase),
-                    LogLevel = LogLevel.Trace,
-                    RequestTimeout = TimeSpan.FromSeconds(60)
+                    x.ApiCredentials = new Kucoin.Net.Objects.KucoinApiCredentials(exchange.ApiKey, exchange.ApiSecret, exchange.Passphrase);
+                    x.RequestTimeout = TimeSpan.FromSeconds(60);
                 });
+
                 var balances = await client.SpotApi.Account.GetAccountsAsync();
 
                 if (exchange.AutoMoveToTradingAccount)
@@ -100,7 +100,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                         if (balanceRecord.Available > exchange.AutoWithdrawlMin)
                         {
                             var withdrawlAmount = Convert.ToDecimal(balanceRecord.Available - (exchange.WithdrawlFee ?? 0.00m));
-                            var withdrawlResult = await client.SpotApi.Account.WithdrawAsync(balanceRecord.Asset, exchange.AutoWithdrawlAddress, withdrawlAmount);
+                            var withdrawlResult = await client.SpotApi.Account.WithdrawAsync(WithdrawType.Address,balanceRecord.Asset, exchange.AutoWithdrawlAddress, withdrawlAmount);
                             Common.Logger.Log("Kucoin: Auto Withdrawl Submitted", LogType.AutoExchanging, exchange.Username);
                         }
                     }
