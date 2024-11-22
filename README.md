@@ -27,7 +27,7 @@
 
 Overview Video: https://youtu.be/Yp5bNBCuqQs
 
-This is a web and service based app that can connect to your Hive OS account, profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
+This is a web and service based app that can connect to your Hive OS account (or ASIC's on your local network), profit switch your mining rigs based on WhatToMine calculations, and auto-exchange coins on your exchange accounts, using a configuration that you setup. 
 
 This app was designed to be installed on a server on a Hive OS Rig on your network (or on any server on your network that is always running). If you are unable to host yourself due to network restrictions, there is a hosted version that can be used.
 
