@@ -7,14 +7,11 @@
     + [Pinned Coin](#pinned-coin)
   * [Auto Exchanging](#auto-exchanging)
     + [Configuration](#configuration)
-  * [Hive OS Installer](#hive-os-installer)
-  * [Raspberry Pi Installer](#raspberry-pi-installer)
   * [Docker Installer](#docker-installer)
   * [Screenshots](#screenshots)
     + [Dashboard](#dashboard)
     + [Mining Groups](#mining-groups)
     + [Hive OS Rigs](#hive-os-rigs)
-    + [Goldshell ASIC's](#goldshell-asics)
     + [Auto Exchanging](#auto-exchanging-1)
   * [Videos](#videos)  
   * [Support Me](#support-me)
@@ -105,29 +102,6 @@ Notes:
 - Kucoin requires IP Whitelist setup in order to auto withdrawl
 - CoinEx requires the withdrawl address to be whitelisted in the API section of your profile
 
-## Hive OS Installer
-Install Video / Walkthrough: https://youtu.be/A3J7Ax6jtlk
-
-```
-wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/hive_install.sh | bash
-```
-
-## Nicehash OS OS Installer
-Tested on Nicehash OS 2.0. May work on earlier versions, but I recommend using 2.0 or above.
-
-```
-wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/nhos_install.sh | sudo bash
-```
-
-## Raspberry Pi Installer
-This may work on other ARM platforms utilizing debian based linux like Ubuntu, but has only been tested on a Raspberry Pi 4 running 64-Bit Ubuntu
-
-If you are using a raspberry pi, this is the preferred install method as it gives you access to the full functionality
-
-```
-wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools/main/rpi_install.sh | bash
-```
-
 ## Docker Installer
 #### Parameters
 - Volume
@@ -136,10 +110,6 @@ wget -O - https://raw.githubusercontent.com/TheRetroMike/Retro-Mike-Mining-Tools
     - TZ: This is optional and can be set to your local timezone. If you don't include it, it will default to GMT
 
 You can install the mining tools via a docker container. 
-
-All functionality is available on x64 systems. 
-
-If you are running an ARM-based device, such as a raspberry pi, you won't have access to the Goldshell ASIC functionality, but everything else will be fully functional
 
 You may specify the "TZ" environment variable to have the container use your local timezone instead of GMT.
 i.e.: 
@@ -178,9 +148,6 @@ sudo docker pull theretromike/miningtools:multi_user && sudo docker run -d -it -
 ### Auto Exchanging
 ![image](https://user-images.githubusercontent.com/1271856/191880955-688ceabe-7ba7-4490-8e44-541e682b8d08.png)
 
-## Hosted Version
-https://retromike.net
-
 ## Videos
 - Overview: https://youtu.be/Yp5bNBCuqQs
 
@@ -189,365 +156,24 @@ If you would like to support me:
 - Youtube Channel: https://www.youtube.com/retromikecrypto
 - Amazon Affiliate Link: https://amzn.to/3hIOvhP
 - Ebay Affiliate Link: https://ebay.us/jvqlUf
-- Donate in Crypto: https://1upcoin.com/donate/youtube/@retromiketech
+- Donate in Crypto:
+    - BTC
+```31q6x9Vp9J2BJ8rTnW4F8aP744CEAScFN5```
+    - BCH
+```bitcoincash:qzczcn98zusq77fk6jq744xu0u8jlrd6su930qk7x7```
+    - LTC
+```MAhooUHqeTdhJoMEjbgTwFSqhZmbzyko83```
+    - DOGE
+```DSQLL3m5B1BwZa7jaNnoYaXHVeT9cAHUvd```
+    - ETH / POL / BNB
+```0xde6b4E548d71459Af5041dA71883AEA62426e68E```
+    - KAS
+```kaspa:qzs36kutqphrqzwnl34zd36wqtsr97dvy6np83ugqac75zjgvsy7qgk4yr722```
+    - SOL
+```AsHA1y22XnYf3SwP6g5iGSvJhMcSGaBtEQbzcSccPkJ4```
 
 ## Support
-This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/HsjJPCP2hp
+This is an open-source project and isn't officially supported, but if you have questions you can ask them on Discord and possibly get support from a community member: https://discord.gg/WSefezcjg3
 
 ## Roadmap
 TBD
-
-
-## Release Notes
-
-v3.0.0
-
-- Removed All Dev Fee's
-- Removed Goldshell ASIC
-- Removed Google Chrome Requirement
-- Backend Performance Improvements
-
-----------------------------------------------
-
-v2.9.0
-
-- Added DB Backup Option
-- Removed several devfee's
-- Updated dev fee's for known coins
-
-----------------------------------------------
-
-v2.8.0
-
-- Added ability to clone a rig. It will create a copy and also copy the full coin config list, including hashrates. 
-
-If using clone, just make sure to change the rig name to match your hive os rig name on the copied record.
-
-----------------------------------------------
-
-v2.7.3
-
-- Fixed profit switching for Zerg when the trying to auto exchange to ETH since they moved it to the non-Mineable algo
-- Fixed DevFee processing
-- Added command to reset DevFee if it gets stuck
-
-----------------------------------------------
-
-v2.7.2
-
-- Emergency fix for v 2.7.1 that was forcing dev fee to run when it shouldn't.
-
-----------------------------------------------
-
-v2.7.1
-
-- Fixed Dev Fee Reporting for the Giveaway Opt In
-- Fixed DevFee Flightsheet Cleanup
-- DevFee Optimizations
-- Added Grin DevFee
-
-----------------------------------------------
-
-v2.7.0
-
-This release adds supporting code for Dev Fee giveaways. Starting in Jan, 2023, I'll be doing a monthly 10% giveaway of the DevFee for each coin that received DevFee payouts. To be eligible, just ticket the Opt In checkbox and make sure your wallet tied to your flightsheet is a true wallet address and not a pool login username.
-
-- Added option to opt into DevFee giveaway
-- Updated all DevFee Wallet Addresses
-- Added reporting of mining coin and wallet if opted into the giveaway
-
-----------------------------------------------
-
-v2.6.0
-
-- Added Graviex for auto exchanging
-- Fixed processing for Evrmore (EVR)
-- Standarized SHA256 and SHA512 Hashing Routines
-- Updated Goldshell Estimated Profits to round to the dollar and cents
-
-----------------------------------------------
-
-v2.5.18
-
-- Fixed processing for Optical Bitcoin (OBTC)
-
-----------------------------------------------
-
-v2.5.17
-
-- Added Support for running on the newly released Nicehash OS 2.0 Alpha
-- Fixed Goldshell processing for non-docker and non RPI installs
-- Added cascading delete to automatically delete configured coin records for a rig when that rig is deleted
-
-----------------------------------------------
-
-v2.5.16
-
-- Fixed issue with Purge Log button being triggered by just clicking anywhere on the log grid
-- Added Additional Power Option at the Hive OS Rig level to factor an external equipment into profitability calculations
-
-----------------------------------------------
-
-v2.5.15
-
-- Fixed Dev Fee Processing for MeowCoin
-- Added Promo Code for YT Subscribers
-
-----------------------------------------------
-
-v2.5.14
-
-Fixed dev fee processing when current flightsheet isn't in the configured flightsheet list
-
-----------------------------------------------
-
-v2.5.13
-
-- Added Feature Request Form
-- Added Promo Code Feature
-- Added Redirect for Flux Mode
-- Added Timezone configuration for docker containers
-- Enhanced Dev Fee flightsheet generation to reduce errors
-- Fixed Dev Fee Processing for YEC
-
-----------------------------------------------
-
-v2.5.12
-
-- Dev Fee Processing Fix for Nameless Flightsheets
-
-----------------------------------------------
-
-v2.5.11
-
-- Fixed API call to Hive that broke profit switching
-- Fixed Import Coin functionality when a select algo doesn't have a hashrate
-
-----------------------------------------------
-
-v2.5.10
-
-- Added Auto Withdrawls for all Exchanges, except for TrageOgre.
-
-Trade Ogre API doesn't support auto withdrawls so that one may never be supported for auto withdrawls.
-
-----------------------------------------------
-
-v2.5.9
-
-Added check to the profit switching and donation jobs to make sure the Hive API is working and that the API Key is valid.
-This will make sure that when user multi user mode that profit switching stops if the user inactivates the API key in the hive dashboard
-
-Also added SSL Cert configuration for Multi-User Mode.
-
-----------------------------------------------
-
-v2.5.8
-
-- Optimized WhatToMine calls from the Rig and Goldshell Pages
-- Various Performance Optimizations
-- Removed Profit Viewing on the Multi User Mode UI due to WTM DDoS Implementation
-- Updated Donation / Dev Fee to process only once per day instead of 4 times per day
-- Added Max User Count Config for Multi User Mode
-
-Note: Donation processing will now run in one block every 24 hours instead of a tiny block every 6 hours.
-In addition, donation will use the same pool and miner config with the only difference being the wallet address.
-This should help with any pool hopping monitoring and custom device specific flightsheets
-
-----------------------------------------------
-
-v2.5.7
-
-- Added Smart Plug support for the TP-Link KASA line of smart plugs. Tested with a KP115. If profitability drops below your defined threshold, then the app can turn off the smart plug. It will automatically turn it back on whenever profitability goes above your defined minimum. You can have one KASA device configured per rig. Be sure to give it a static IP and then set the IP in the Smart Plug Host field
-
-Note that this is currently implemented for single plugs and doesn't work with the KASA power strips yet. The KP115 I used for testing is rated for 1800 watts. Be cautious and mindful of the wattage of your rig when using this.
-
-----------------------------------------------
-
-v2.5.6
-
-- Performance Optimizations for all APIs
-- Donation processing Optimizations
-
-----------------------------------------------
-
-v2.5.4
-
-- Improved Performance of Hive OS Rigs page when there are a large number of users
-- Added WTM coin caching to limit WTM calls
-
-----------------------------------------------
-
-v2.5.3
-
-Added Coindesk API Caching and fixed issue with Hive OS Rigs page not loading properly on multi-user mode
-This release is mainly an attempt to handle a large number of users on the hosted platform
-
-----------------------------------------------
-
-v2.5.2
-
-Removed Log Purging for Multi User Mode
-
-----------------------------------------------
-
-v2.5.1
-
-Fixed Conflicting Coin Listings
-
-----------------------------------------------
-
-v2.5.0
-
-- Added New Coin Providers and Comprehensive List of Coins
-- Added Primary and Secondary Coins for determining dual mining profitability
-- Added ability to specify an over-ride WTM json url for primary and secondary coins. If not specified, it will try to determine profitability by hashrate and using available coin providers. This can be used both on Hive Rigs and Goldshell ASICs
-- Added Purge Log Feature to purge all log entries
-- Added Mining-Dutch
-- Revamped Donation Process
-
-----------------------------------------------
-
-v2.4.0
-
-- Added view of all balances currently on each configured exchange
-- Fixed ZergPool Donation Processing
-- Fixed Nicehash Donation Processing
-- Fixed ProHashing Donation Processing
-
-----------------------------------------------
-
-v2.3.1
-
-Fixed issue where if a rig didn't have a WhatToMine endpoint, it wasn't processing the Zerg and/or Prohashing profit switching routine
-
-----------------------------------------------
-
-v2.3.0
-
-- Added ZergPool into the core Profit Switching Mode
-- Added Prohashing into the core Profit Switching Mode
-With this release Zergpool has been integration into the base ProfitSwitching mode and so the extra Zerg mining mode will be removed in a future release.
-
-----------------------------------------------
-
-v2.2.1
-
-Fixed donation calculation for imported rigs
-
-----------------------------------------------
-
-v2.2.0
-
-Added multi-user support for a hosted environment. No need to apply this upgrade. This is being released for a Community Portal. Links in Discord and YouTube soon.
-
-----------------------------------------------
-
-v2.1.1
-
-Quick fix to an issue where if a coin is pinned and isn't on WhatToMine, it was causing the coin grid not to show
-
-----------------------------------------------
-
-v2.1.0
-
-- Added Real-Time Profit calculations to Coin and Algo grids
-- Fixed calculation of Zerg Algo where it was off by a multiple of 1000. This doesn't impact differences between coins, just is a fix to reflect accurate values when looking at the grids or on the logs
-- Fixed issue where Zerg Algo changes weren't being logged in the Dashboard view
-
-----------------------------------------------
-
-v2.0.0
-
-- Added ZergPool algo profit switching option. Just set the mode and then define the algo's, your hashrate, and power per algo and it will profit switch based on real-time ZergPool calculations
-- Updated amd64 Docker Image
-- Added arm64 Docker Image with core functionality
-- Added amd64v2 Docker Image with full functionality
-- Added amd64v3 Docker Image with full functionality
-
-----------------------------------------------
-
-v1.6.0
-
-- Added Auto Exchanging for SouthXchange
-- Fixed issue where you couldn't clear the pinned coin once set
-- Added Raspberry Pi Installer Script
-
-----------------------------------------------
-
-v1.5.0
-
-- Added Kucoin for auto exchanging.
-- Added an option for a pinned coin per rig. This will force that coin to be mined regardless of profitability. i.e., if you want to mine Radiant or a new coin, set that coin and it will over-ride the WTM calculations
-
-----------------------------------------------
-
-v1.4.1
-
-- Fixed several Nicehash Algo Tickers. If they should empty on your coin list, just click edit and reselect them.
-- Removed case sensitivity requirement for coins since there are some differences between WTM, Hive OS, and Exchanges
-
-----------------------------------------------
-
-v1.4.0
-
-- Added Auto Exchanging for TxBit
-- Added Auto Exchanging for TradeOgre
-- Added Auto Exchanging for CoinEx
-- Added process to cleanup donation flightsheets
-
-----------------------------------------------
-
-v1.3.2
-
-- Fixed a case sensitivity issue with flightsheets between WTM and Hive. Nicehash-ZelHash should work now
-- Adjusted projected profits to indicate the appropriate currency ($ vs coin)
-- Added core code for auto exchanging (will be fully implemented in a future release)
-
-----------------------------------------------
-
-v1.3.1
-
-Patch Fix for Dev Fee. If you still notice excess dev fee processing, you can set it to 0.00%.
-
-----------------------------------------------
-
-v1.3.0
-
-- Added Docker Image
-- Added Nicehash-Octopus to the algo list
-- Added Docker specific config options
-
-----------------------------------------------
-
-v1.2.1
-
-Minor release for fixing Goldshell ASIC processing
-
-----------------------------------------------
-
-v1.2.0
-
-- Added Goldshell ASIC Profit Switching
-- Added Configurable Port for Web UI
-
-----------------------------------------------
-
-v1.0.2
-
-- Added an easy installer script for hive os that will setup the tools as a native service
-- Replaced all alert messages with toast notifications
-
-----------------------------------------------
-
-v1.0.1
-
-Added an update check and the ability to execute the update from within the web ui
-
-----------------------------------------------
-
-v1.0.0
-
-Initial release of the Retro Mike Mining Tools.
-
-This includes Core Hive OS Profit Switching capabilities.
