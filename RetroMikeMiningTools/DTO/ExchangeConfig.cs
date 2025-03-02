@@ -42,5 +42,7 @@ namespace RetroMikeMiningTools.DTO
         public string? AutoWithdrawlAddress { get; set; }
         public decimal? AutoWithdrawlMin { get; set; }
         public decimal? WithdrawlFee { get; set; }
+
+        public string? WithdrawlNetwork { get; set; }
     }
 }

@@ -29,7 +29,8 @@ namespace RetroMikeMiningTools.DAO
                     AutoWithdrawlAddress = record.AutoWithdrawlAddress,
                     AutoWithdrawlCurrency = record.AutoWithdrawlCurrency,
                     AutoWithdrawlMin = record.AutoWithdrawlMin,
-                    WithdrawlFee = record.WithdrawlFee
+                    WithdrawlFee = record.WithdrawlFee,
+                    WithdrawlNetwork = record.WithdrawlNetwork,
                 });
             }
         }
@@ -89,6 +90,7 @@ namespace RetroMikeMiningTools.DAO
                     existingRecord.AutoWithdrawlCurrency = record.AutoWithdrawlCurrency;
                     existingRecord.AutoWithdrawlMin = record.AutoWithdrawlMin;
                     existingRecord.WithdrawlFee = record.WithdrawlFee;
+                    existingRecord.WithdrawlNetwork = record.WithdrawlNetwork;
                     table.Update(existingRecord);
                 }
                 else
@@ -109,7 +111,8 @@ namespace RetroMikeMiningTools.DAO
                         AutoWithdrawlAddress = record.AutoWithdrawlAddress,
                         AutoWithdrawlCurrency = record.AutoWithdrawlCurrency,
                         AutoWithdrawlMin = record.AutoWithdrawlMin,
-                        WithdrawlFee = record.WithdrawlFee
+                        WithdrawlFee = record.WithdrawlFee,
+                        WithdrawlNetwork = record.WithdrawlNetwork
                     });
                 }
 

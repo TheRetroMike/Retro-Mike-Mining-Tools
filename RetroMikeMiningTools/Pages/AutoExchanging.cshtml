@@ -69,9 +69,10 @@
         columns.Bound(column => column.Passphrase).ClientTemplate("#=maskData(Passphrase)#").Width(100);
         columns.Bound(column => column.AutoMoveToTradingAccount).ClientHeaderTemplate("Auto Move to Trading Account").Width(200);
         columns.Bound(column => column.AutoWithdrawl).ClientHeaderTemplate("Auto Withdrawl").Width(150);
-        columns.Bound(column => column.AutoWithdrawlAddress).ClientHeaderTemplate("Auto Withdrawl Address").Width(200);
-        columns.Bound(column => column.AutoWithdrawlCurrency).ClientTemplate("#=cleanText(AutoWithdrawlCurrency?.Ticker)#").ClientHeaderTemplate("Withdrawl Coin").Width(200);
-        columns.Bound(column => column.AutoWithdrawlMin).ClientHeaderTemplate("Auto Widthdrawl Min").Width(200);
+        columns.Bound(column => column.WithdrawlNetwork).ClientHeaderTemplate("Withdrawl Network").Width(150);
+        columns.Bound(column => column.AutoWithdrawlAddress).ClientHeaderTemplate("Auto Withdrawl Address").Width(150);
+        columns.Bound(column => column.AutoWithdrawlCurrency).ClientTemplate("#=cleanText(AutoWithdrawlCurrency?.Ticker)#").ClientHeaderTemplate("Withdrawl Coin").Width(150);
+        columns.Bound(column => column.AutoWithdrawlMin).ClientHeaderTemplate("Auto Widthdrawl Min").Width(150);
         columns.Bound(column => column.WithdrawlFee).ClientHeaderTemplate("Widthdrawl Fee").Width(150);
         columns.Bound(column => column.Enabled).ClientHeaderTemplate("Enabled").Width(150);
         columns.Command(column =>

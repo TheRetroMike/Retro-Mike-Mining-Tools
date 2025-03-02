@@ -167,12 +167,15 @@ namespace RetroMikeMiningTools.Pages
                         foreach (var item in responseData.data)
                         {
                             var responseHeader = item.Name;
-                            var ticker = item.Value[0].symbol.Value;
-                            var price = item.Value[0].quote["USD"].price.Value;
-                            var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                            if (balanceRecord != null)
+                            if (item != null && item.Value.Count > 0)
                             {
-                                balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
+                                var ticker = item.Value[0].symbol.Value;
+                                var price = item.Value[0].quote["USD"].price.Value;
+                                var balanceRecord = balanceData.Where(x => x.Ticker.Equals(ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                                if (balanceRecord != null)
+                                {
+                                    balanceRecord.UsdDisplayVal = Convert.ToDecimal(price) * balanceRecord.Balance;
+                                }
                             }
                         }
                     }

@@ -38,7 +38,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                             if (tickerMarketDirect.Key != null)
                             {
                                 var orderOperation = await client.SpotApiV2.Trading.PlaceOrderAsync(tickerMarketDirect.Key, CoinEx.Net.Enums.AccountType.Spot, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderTypeV2.Market, balanceVal);
-                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuantityFilled), LogType.AutoExchanging, exchange.Username);
+                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal), LogType.AutoExchanging, exchange.Username);
                             }
                             else
                             {
@@ -48,7 +48,7 @@ namespace RetroMikeMiningTools.AutoExchanging
                                     if (balanceVal > tickerMarketIntermediate.Value.MinQuantity)
                                     {
                                         var orderOperation = await client.SpotApiV2.Trading.PlaceOrderAsync(tickerMarketIntermediate.Key, CoinEx.Net.Enums.AccountType.Spot, CoinEx.Net.Enums.OrderSide.Sell, CoinEx.Net.Enums.OrderTypeV2.Market, balanceVal);
-                                        Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal, orderOperation?.Data?.QuantityFilled), LogType.AutoExchanging, exchange.Username);
+                                        Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {1}", ticker, exchange.TradingPairCurrency.Ticker, balanceVal), LogType.AutoExchanging, exchange.Username);
                                     }
                                 }
                             }
@@ -71,8 +71,8 @@ namespace RetroMikeMiningTools.AutoExchanging
                             var convertedBuyAmount = balanceVal / projectedMarketPrice;
                             if (convertedBuyAmount >= finalMarket.Value.MinQuantity)
                             {
-                                var orderOperation = await client.SpotApi.Trading.PlaceOrderAsync(finalMarket.Key, CoinEx.Net.Enums.OrderSide.Buy, CoinEx.Net.Enums.OrderType.Market, balanceVal);
-                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {3} {1}", exchange.TradingPairCurrency.Ticker, exchange.DestinationCoin.Ticker, orderOperation?.Data?.Quantity, convertedBuyAmount), LogType.AutoExchanging, exchange.Username);
+                                var orderOperation = await client.SpotApiV2.Trading.PlaceOrderAsync(finalMarket.Key, CoinEx.Net.Enums.AccountType.Spot, CoinEx.Net.Enums.OrderSide.Buy, CoinEx.Net.Enums.OrderTypeV2.Market, balanceVal);
+                                Common.Logger.Log(String.Format("CoinEx: Auto Exchanged {2} {0} for {1}", exchange.TradingPairCurrency.Ticker, exchange.DestinationCoin.Ticker, orderOperation?.Data?.Quantity), LogType.AutoExchanging, exchange.Username);
                             }
                         }
                     }
@@ -84,10 +84,29 @@ namespace RetroMikeMiningTools.AutoExchanging
                     if (balances.Data.Where(x => x.Asset==exchange.AutoWithdrawlCurrency.Ticker).FirstOrDefault() != null)
                     {
                         var balanceRecord = balances.Data.Where(x => x.Asset.Equals(exchange.AutoWithdrawlCurrency.Ticker, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                        if (balanceRecord.Available > exchange.AutoWithdrawlMin)
+                        string network = exchange.WithdrawlNetwork ?? exchange.AutoWithdrawlCurrency.Ticker;
+                        int withdrawlDecimals = 10;
+                        var withdrawlConfig = await client.SpotApiV2.Account.GetDepositWithdrawalConfigAsync(balanceRecord.Asset);
+                        if (withdrawlConfig != null && withdrawlConfig.Data != null && withdrawlConfig.Data.Networks != null)
                         {
-                            var withdrawlAmount = Convert.ToDecimal(balanceRecord.Available - (exchange.WithdrawlFee ?? 0.00m));
-                            var withdrawOperation = await client.SpotApiV2.Account.WithdrawAsync(balanceRecord.Asset, withdrawlAmount, exchange.AutoWithdrawlAddress);
+                            var networkData = withdrawlConfig.Data.Networks.Where(x => x.Network.Equals(network, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                            if (networkData != null)
+                            {
+                                exchange.AutoWithdrawlMin = networkData.MinWithdrawQuantity;
+                                exchange.WithdrawlFee = networkData.WithdrawalFee;
+                                network = networkData.Network;
+                                withdrawlDecimals = networkData.WithdrawalPrecision.HasValue ? networkData.WithdrawalPrecision.Value : 10;
+                            }
+                            else
+                            {
+                                Common.Logger.Log("CoinEx: Withdraw Error: Invalid Network for Coin", LogType.AutoExchanging);
+                            }
+                        }
+                        var withdrawlAmount = Math.Round(balanceRecord.Available - (exchange.WithdrawlFee.HasValue ? exchange.WithdrawlFee.Value : 0.00m), withdrawlDecimals, MidpointRounding.ToZero);
+                        if (withdrawlAmount > exchange.AutoWithdrawlMin)
+                        {
+                            //var withdrawlAmount = Convert.ToDecimal(balanceRecord.Available - exchange.WithdrawlFee);
+                            var withdrawOperation = await client.SpotApiV2.Account.WithdrawAsync(balanceRecord.Asset, withdrawlAmount, exchange.AutoWithdrawlAddress, method: CoinEx.Net.Enums.MovementMethod.OnChain, network: network);
                             if (withdrawOperation != null && withdrawOperation.Success)
                             {
                                 Common.Logger.Log(String.Format("CoinEx: Auto Withdrawl Submitted for {0} {1}", withdrawlAmount, balanceRecord.Asset), LogType.AutoExchanging, exchange.Username);

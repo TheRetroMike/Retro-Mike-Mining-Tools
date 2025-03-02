@@ -87,26 +87,55 @@ namespace RetroMikeMiningTools.Utilities
             var result = String.Empty;
             var orderClient = new RestClient(Constants.XEGGEX_API_BASE_PATH);
             orderClient.Authenticator = new HttpBasicAuthenticator(exchange.ApiKey, exchange.ApiSecret);
-            var orderRequest = new RestRequest("/createorder", Method.Post);
-            orderRequest.AddParameter("userProvidedId", "");
-            orderRequest.AddParameter("symbol", String.Format("{0}/{1}", baseCurrency, marketCurrency));
-            orderRequest.AddParameter("side", !isSellOrder ? "buy" : "sell");
-            orderRequest.AddParameter("type", "market");
-            orderRequest.AddParameter("quantity", balance);
-            orderRequest.AddParameter("price", rate);
-            orderRequest.AddParameter("strictValidate", false);
-            var orderResponse = orderClient.Post(orderRequest);
-            dynamic orderResponseData = JsonConvert.DeserializeObject(orderResponse.Content);
-            var id = Convert.ToString(orderResponseData.id);
-            if (!String.IsNullOrEmpty(id))
+            
+            try
             {
-                if (isSellOrder)
+                var orderRequest = new RestRequest("/createorder", Method.Post);
+                orderRequest.AddParameter("userProvidedId", "");
+                orderRequest.AddParameter("symbol", String.Format("{0}/{1}", baseCurrency, marketCurrency));
+                orderRequest.AddParameter("side", !isSellOrder ? "buy" : "sell");
+                orderRequest.AddParameter("type", "market");
+                orderRequest.AddParameter("price", rate);
+                orderRequest.AddParameter("strictValidate", false);
+                orderRequest.AddParameter("quantity", balance);
+                var orderResponse = orderClient.Post(orderRequest);
+                dynamic orderResponseData = JsonConvert.DeserializeObject(orderResponse.Content);
+                var id = Convert.ToString(orderResponseData.id);
+                if (!String.IsNullOrEmpty(id))
                 {
-                    result = String.Format("Created Sell Order on Xeggex for {0}", marketName);
+                    if (isSellOrder)
+                    {
+                        result = String.Format("Created Sell Order on Xeggex for {0}", marketName);
+                    }
+                    else
+                    {
+                        result = String.Format("Created Buy Order on Xeggex for {0}", marketName);
+                    }
                 }
-                else
+            }
+            catch(Exception ex)
+            {
+                var orderRequest = new RestRequest("/createorder", Method.Post);
+                orderRequest.AddParameter("userProvidedId", "");
+                orderRequest.AddParameter("symbol", String.Format("{0}/{1}", baseCurrency, marketCurrency));
+                orderRequest.AddParameter("side", !isSellOrder ? "buy" : "sell");
+                orderRequest.AddParameter("type", "market");
+                orderRequest.AddParameter("price", rate);
+                orderRequest.AddParameter("strictValidate", false);
+                orderRequest.AddParameter("quantity", balance * 0.75m); //Spread too much so lets try doing 75% of the buy amount
+                var orderResponse = orderClient.Post(orderRequest);
+                dynamic orderResponseData = JsonConvert.DeserializeObject(orderResponse.Content);
+                var id = Convert.ToString(orderResponseData.id);
+                if (!String.IsNullOrEmpty(id))
                 {
-                    result = String.Format("Created Buy Order on Xeggex for {0}", marketName);
+                    if (isSellOrder)
+                    {
+                        result = String.Format("Created Sell Order on Xeggex for {0}", marketName);
+                    }
+                    else
+                    {
+                        result = String.Format("Created Buy Order on Xeggex for {0}", marketName);
+                    }
                 }
             }
 
