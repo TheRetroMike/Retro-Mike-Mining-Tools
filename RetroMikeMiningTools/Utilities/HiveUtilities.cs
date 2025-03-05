@@ -214,7 +214,7 @@ namespace RetroMikeMiningTools.Utilities
                     RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
                     RestRequest request = new RestRequest(String.Format("/farms/{0}/workers/{1}", farmId, workerId));
                     request.AddHeader("Authorization", "Bearer " + hiveApiKey);
-                    var requestBody = new HiveWorkerPatchRequest() { fs_id = flightSheetId };
+                    var requestBody = new HiveWorkerPatchRequest() { fs_id = Convert.ToInt32(flightSheetId) };
                     request.AddJsonBody(requestBody);
                     var response = client.Patch(request);
                     if (response.StatusCode == HttpStatusCode.OK)

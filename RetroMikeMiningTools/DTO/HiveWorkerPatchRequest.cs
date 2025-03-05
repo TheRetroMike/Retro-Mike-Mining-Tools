@@ -2,6 +2,6 @@
 {
     public class HiveWorkerPatchRequest
     {
-        public string fs_id { get; set; }
+        public int fs_id { get; set; }
     }
 }
